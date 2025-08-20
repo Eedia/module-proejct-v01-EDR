@@ -133,27 +133,22 @@ class EventLogCollector:
             
             logger.debug(f"Executing: {' '.join(cmd)}")
             
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                # encoding='utf-8',
-                encoding='utf-16',
-                errors='ignore',
-                timeout=300  # 5분 타임아웃
-            )
+            result = subprocess.run(cmd, capture_output=True, timeout=300)
+
+            stdout = result.stdout.decode("utf-16le", errors="ignore") if result.stdout else ""
+            stderr = result.stderr.decode("utf-16le", errors="ignore") if result.stderr else ""
             
             if result.returncode != 0:
-                logger.warning(f"wevtutil returned error for {channel}: {result.stderr}")
+                logger.warning(f"wevtutil returned error for {channel}: {stderr or None}")
                 return []
             
-            if not result.stdout.strip():
+            if not stdout.strip():
                 logger.info(f"No events found in {channel}")
                 return []
             
             # XML 파싱
-            events = self._parse_events_xml(result.stdout, channel)
-            
+            events = self._parse_events_xml(stdout, channel)
+
             logger.info(f"Collected {len(events)} events from {channel}")
             
         except subprocess.TimeoutExpired:
