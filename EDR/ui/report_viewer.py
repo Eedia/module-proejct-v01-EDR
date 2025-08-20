@@ -37,7 +37,7 @@ class ReportViewer:
         lbl_weak   = win.findChild(QtWidgets.QLabel, "lblWeakCount")
         lbl_unable = win.findChild(QtWidgets.QLabel, "lblUnableCount")
 
-        safe_pct = safe_bar.value() if safe_bar else 90
+        safe_pct = safe_bar.value() if safe_bar else 0
         ctx = {
             "now": datetime.now().strftime("%Y. %m. %d. %H:%M (결과 전송 완료)"),
             "safe_pct": max(0, min(100, int(safe_pct))),
