@@ -139,7 +139,7 @@ class EventLogCollector:
             # wevtutil 명령어 실행
             cmd = [
                 'wevtutil', 'qe', channel,
-                f'/q:"{query}"',
+                f'/q:{query}',
                 '/f:xml',
                 '/rd:true'
             ]
@@ -148,14 +148,17 @@ class EventLogCollector:
 
             logger.debug(f"Executing: {' '.join(cmd)}")
             
-            result = subprocess.run(cmd,stdout=subprocess.PIPE, stderr=subprocess.PIPE,shell=True, text=True, timeout=300)
+            result = subprocess.run(cmd,stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=300)
 
             # stdout = result.stdout.decode("utf-16le", errors="ignore") if result.stdout else ""
             # stderr = result.stderr.decode("utf-16le", errors="ignore") if result.stderr else ""
-            print("stdout:", result.stdout)
-            print("stderr:", result.stderr)
+            # print("stdout:", result.stdout)
+            # print("stderr:", result.stderr)
             stdout = self._decode_output(result.stdout)
             stderr = self._decode_output(result.stderr)
+            # stdout = result.stdout
+            # stderr = result.stderr
+
             if result.returncode != 0:
                 logger.warning(f"wevtutil returned error for {channel}: {stderr or None}")
                 return []
