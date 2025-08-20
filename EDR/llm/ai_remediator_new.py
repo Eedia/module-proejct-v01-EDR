@@ -56,9 +56,24 @@ class AIRemediator(LLMBaseModule):
         # Finding의 증거 데이터 수집
         evidence_data = {}
         if finding.evidence:
-            for evidence in finding.evidence:
-                evidence_data.update(evidence.data)
-        
+            # Finding.evidence는 dict 형식으로 제공될 수 있음
+            if isinstance(finding.evidence, dict):
+                for item in finding.evidence.values():
+                    # 각 항목은 리스트 또는 단일 dict일 수 있음
+                    if isinstance(item, list):
+                        for ev in item:
+                            if isinstance(ev, dict):
+                                evidence_data.update(ev)
+                    elif isinstance(item, dict):
+                        evidence_data.update(item)
+            elif isinstance(finding.evidence, list):
+                # 리스트로 전달될 경우 각 증거 객체 처리
+                for ev in finding.evidence:
+                    if hasattr(ev, "data"):
+                        evidence_data.update(getattr(ev, "data", {}))
+                    elif isinstance(ev, dict):
+                        evidence_data.update(ev)
+                        
         prompt = f"""
 당신은 Windows 보안 전문가입니다.
 아래 보안 이슈를 해결하는 안전한 PowerShell 명령어를 생성해 주세요.
