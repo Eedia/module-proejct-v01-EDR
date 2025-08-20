@@ -6,7 +6,7 @@
 import logging
 from typing import Dict, List, Any, Optional
 
-from rule_engine import RuleEngine
+from rules.rule_engine import RuleEngine
 from utils.data_structures import Finding
 
 class LegacyAdapter:

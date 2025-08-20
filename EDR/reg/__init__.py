@@ -10,17 +10,17 @@ from .registry_collector import (
 
 from .autorun_analyzer import (
     AutoRunAnalyzer, autorun_analyzer,
-    analyze_autorun_entries, get_all_autorun_locations
+    analyze_autorun_entries
 )
 
 from .service_analyzer import (
     ServiceAnalyzer, service_analyzer,
-    analyze_services, get_suspicious_services
+    analyze_services
 )
 
 from .security_settings import (
     SecuritySettingsAnalyzer, security_settings_analyzer,
-    analyze_security_settings, check_critical_settings
+    analyze_security_settings
 )
 
 __all__ = [

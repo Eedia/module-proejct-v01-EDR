@@ -10,8 +10,21 @@ from .collector import (
 )
 
 from .analyzer import (
-    EventAnalyzer, event_analyzer,
-    analyze_events
+    EventAnalyzer,
+    get_event_analyzer,
+    analyze_events,
+    analyze_single_event,
+    analyze_lolbin_activity,
+    analyze_powershell_activity,
+    analyze_rdp_activity,
+    analyze_service_installation,
+    check_rundll32_js_execution,
+    check_regsvr32_url_execution,
+    check_powershell_encoded_command,
+    check_rdp_nonbusiness_hours,
+    get_rule_statistics,
+    reload_detection_rules,
+    validate_detection_rules,
 )
 
 __all__ = [
