@@ -1,8 +1,4 @@
-<<<<<<< HEAD
+
 __pycache__
 .venv
 output
-=======
-output/*
-__pycache__*
->>>>>>> ab46359218ebcdc52b0c12c235fbed4bccc72cf0
