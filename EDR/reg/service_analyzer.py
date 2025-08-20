@@ -178,7 +178,7 @@ class ServiceAnalyzer:
             "finding_id": finding.finding_id,
             "rule_id": finding.rule_id,
             "severity": finding.severity,
-            "score_impact": -finding.score,
+            "score_impact": -finding.score_impact,
             "category": finding.category,
             "title": finding.title,
             "description": finding.description,

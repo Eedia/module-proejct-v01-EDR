@@ -118,7 +118,7 @@ class LegacyAdapter:
         rule = self.rule_engine.get_rule_by_id(finding.rule_id)
         if rule:
             return self.rule_engine._calculate_score(rule)
-        return finding.score
+        return finding.score_impact
     
     # ========== 통계 및 유틸리티 ==========
     

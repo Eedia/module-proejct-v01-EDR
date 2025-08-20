@@ -85,7 +85,7 @@ class EventAnalyzer:
             "finding_id": finding.finding_id,
             "rule_id": finding.rule_id,
             "severity": finding.severity,
-            "score_impact": -finding.score,  # 기존 형식에 맞춰 음수로 변환
+            "score_impact": -finding.score_impact,  # 기존 형식에 맞춰 음수로 변환
             "category": finding.category,
             "title": finding.title,
             "description": finding.description,

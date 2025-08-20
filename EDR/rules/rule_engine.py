@@ -197,7 +197,7 @@ class RuleEngine:
                 severity=rule['severity'],
                 category=rule['category'],
                 confidence=rule.get('confidence', 70),
-                score=score,
+                score_impact=score,
                 timestamp=datetime.now().isoformat(),
                 evidence={
                     'primary_event': data,

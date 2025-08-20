@@ -93,6 +93,7 @@ class Finding:
     category: str
     title: str
     description: str
+    timestamp : str = ""
     status: str = "active"
     confidence: int = 50
     
