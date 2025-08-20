@@ -1,7 +1,7 @@
 import threading
 import os
-from utils.main_parser import export_event_log_to_csv as export_by_event_id
-from utils.main_evtx_all_parser import export_event_log_to_csv as export_all_logs
+from main_parser import export_event_log_to_csv as export_by_event_id
+from main_evtx_all_parser import export_event_log_to_csv as export_all_logs
 import time
 # from elevate import elevate
 
