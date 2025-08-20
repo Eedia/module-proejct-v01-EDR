@@ -1,177 +1,299 @@
 """
 utils/scoring_engine.py
-EDR 스캔 결과 점수화 엔진 (100점 만점 감점형)
+EDR 스캔 결과 점수화 엔진 - 새로운 룰 엔진 기반
+JSON 설정 파일을 사용한 동적 점수 계산
 """
 
-from typing import List, Dict, Any
-from .data_structures import Finding, Severity
+import os
+import json
+import logging
+from typing import List, Dict, Any, Optional
+
+# 새로운 룰 엔진 연동
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from data_structures import Finding, Severity
+
+logger = logging.getLogger(__name__)
 
 class ScoringEngine:
-    """EDR 스캔 결과 점수화 엔진"""
+    """EDR 스캔 결과 점수화 엔진 - 룰 엔진 기반"""
     
-    def __init__(self):
-        # 심각도별 기본 점수
-        self.severity_scores = {
-            "critical": -20,
-            "high": -15,
-            "medium": -10,
-            "low": -5,
-            "info": -1
-        }
+    def __init__(self, rules_dir: str = "rules"):
+        """
+        점수화 엔진 초기화
         
-        # 카테고리별 가중치 (곱셈 계수)
-        self.category_weights = {
-            "execution": 1.5,        # 실행 관련 (LOLBin 등)
-            "persistence": 1.3,      # 지속성 (서비스, 자동실행)
-            "remote_access": 1.2,    # 원격 접근 (RDP 등)
-            "account_logon": 1.1,    # 계정/로그온
-            "security_settings": 1.0  # 보안 설정
-        }
+        Args:
+            rules_dir: 룰 파일들이 있는 디렉토리
+        """
+        self.rules_dir = rules_dir
+        self.scoring_weights = self._load_scoring_weights()
         
-        # 특정 룰 ID에 대한 추가 가중치
-        self.rule_weights = {
-            "R_LOLBIN_RUNDLL32": 1.3,
-            "R_LOLBIN_REGSVR32": 1.3,
-            "R_LOLBIN_MSHTA": 1.3,
-            "R_POWERSHELL_ENCODED": 1.2,
-            "R_SERVICE_TEMP_PATH": 1.1,
-            "R_RDP_NONBUSINESS_HOURS": 1.1
+        logger.info("점수화 엔진 초기화 완료 - 룰 엔진 기반")
+    
+    def _load_scoring_weights(self) -> Dict[str, Any]:
+        """점수 가중치 설정 로드"""
+        weights_file = os.path.join(self.rules_dir, "scoring_weights.json")
+        
+        try:
+            with open(weights_file, 'r', encoding='utf-8') as f:
+                weights = json.load(f)
+                logger.info(f"점수 가중치 로드 완료: {weights_file}")
+                return weights
+        except Exception as e:
+            logger.warning(f"점수 가중치 로드 실패 ({weights_file}): {e}")
+            # 기본 가중치 반환
+            return self._get_default_weights()
+    
+    def _get_default_weights(self) -> Dict[str, Any]:
+        """기본 점수 가중치 반환"""
+        return {
+            "severity_base_scores": {
+                "critical": 20,
+                "high": 15,
+                "medium": 10,
+                "low": 5,
+                "info": 1
+            },
+            "category_multipliers": {
+                "execution": 1.5,
+                "persistence": 1.3,
+                "access": 1.2,
+                "configuration": 1.0,
+                "default": 1.0
+            },
+            "rule_specific_multipliers": {},
+            "confidence_adjustment": {
+                "enabled": True,
+                "min_confidence": 0,
+                "max_confidence": 100
+            }
         }
     
-    def calculate_finding_score(self, finding: Finding) -> int:
-        """개별 Finding의 점수 계산"""
+    def calculate_finding_score(self, finding: Any) -> int:
+        """
+        개별 Finding의 점수 계산
+        
+        Args:
+            finding: Finding 객체 또는 딕셔너리
+            
+        Returns:
+            계산된 점수 (음수, 감점형)
+        """
+        # Finding 정보 추출
         if isinstance(finding, dict):
-            # dict 형태로 전달된 경우
             severity = finding.get("severity", "info")
-            category = finding.get("category", "security_settings") 
+            category = finding.get("category", "configuration")
             rule_id = finding.get("rule_id", "")
             confidence = finding.get("confidence", 50)
         else:
-            # Finding 객체로 전달된 경우
+            # Finding 객체
             severity = finding.severity
             category = finding.category
             rule_id = finding.rule_id
             confidence = finding.confidence
         
-        # 기본 점수 (음수)
-        base_score = self.severity_scores.get(severity, -5)
+        # 기본 심각도 점수
+        base_score = self.scoring_weights["severity_base_scores"].get(severity, 1)
         
         # 카테고리 가중치 적용
-        category_weight = self.category_weights.get(category, 1.0)
+        category_multiplier = self.scoring_weights["category_multipliers"].get(
+            category, 
+            self.scoring_weights["category_multipliers"]["default"]
+        )
         
         # 룰별 가중치 적용
-        rule_weight = self.rule_weights.get(rule_id, 1.0)
+        rule_multiplier = self.scoring_weights["rule_specific_multipliers"].get(rule_id, 1.0)
         
-        # 신뢰도 보정 (신뢰도가 낮으면 점수 영향 감소)
-        confidence_factor = confidence / 100.0
+        # 신뢰도 조정
+        confidence_adjustment = self._calculate_confidence_adjustment(confidence)
         
-        # 최종 점수 계산
-        final_score = int(base_score * category_weight * rule_weight * confidence_factor)
+        # 최종 점수 계산 (감점형이므로 음수)
+        final_score = -(base_score * category_multiplier * rule_multiplier * confidence_adjustment)
         
-        return final_score
+        return int(final_score)
     
-    def calculate_total_score(self, findings: List[Dict[str, Any]]) -> int:
-        """전체 Finding 목록의 총점 계산"""
-        base_score = 100
+    def _calculate_confidence_adjustment(self, confidence: int) -> float:
+        """신뢰도 기반 점수 조정"""
+        if not self.scoring_weights["confidence_adjustment"]["enabled"]:
+            return 1.0
+        
+        # 신뢰도를 0.5 ~ 1.0 범위로 정규화
+        min_conf = self.scoring_weights["confidence_adjustment"]["min_confidence"]
+        max_conf = self.scoring_weights["confidence_adjustment"]["max_confidence"]
+        
+        normalized_confidence = max(0, min(100, confidence))
+        adjustment = 0.5 + (normalized_confidence / max_conf) * 0.5
+        
+        return adjustment
+    
+    def calculate_total_score(self, findings: List[Any]) -> Dict[str, Any]:
+        """
+        전체 Finding들의 종합 점수 계산
+        
+        Args:
+            findings: Finding 객체들 또는 딕셔너리들의 리스트
+            
+        Returns:
+            종합 점수 및 세부 정보
+        """
+        if not findings:
+            return {
+                "total_score": 100,
+                "grade": "양호",
+                "finding_count": 0,
+                "category_breakdown": {},
+                "severity_breakdown": {},
+                "deduction_total": 0
+            }
+        
         total_deduction = 0
+        category_scores = {}
+        severity_counts = {}
         
         for finding in findings:
-            deduction = abs(self.calculate_finding_score(finding))
-            total_deduction += deduction
+            # 개별 점수 계산
+            finding_score = self.calculate_finding_score(finding)
+            total_deduction += abs(finding_score)
+            
+            # 카테고리별 집계
+            if isinstance(finding, dict):
+                category = finding.get("category", "configuration")
+                severity = finding.get("severity", "info")
+            else:
+                category = finding.category
+                severity = finding.severity
+            
+            category_scores[category] = category_scores.get(category, 0) + abs(finding_score)
+            severity_counts[severity] = severity_counts.get(severity, 0) + 1
         
-        # 최종 점수 (0점 미만으로 내려가지 않음)
-        final_score = max(0, base_score - total_deduction)
+        # 최종 점수 계산 (100점에서 감점)
+        final_score = max(0, 100 - total_deduction)
         
-        return final_score
+        # 등급 결정
+        grade = self._determine_grade(final_score)
+        
+        return {
+            "total_score": final_score,
+            "grade": grade,
+            "finding_count": len(findings),
+            "category_breakdown": category_scores,
+            "severity_breakdown": severity_counts,
+            "deduction_total": total_deduction
+        }
     
-    def calculate_category_scores(self, findings: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
-        """카테고리별 점수 및 통계 계산"""
-        category_stats = {}
-        
-        for finding in findings:
-            category = finding.get("category", "security_settings")
-            
-            if category not in category_stats:
-                category_stats[category] = {
-                    "count": 0,
-                    "total_deduction": 0,
-                    "severities": {"critical": 0, "high": 0, "medium": 0, "low": 0, "info": 0}
-                }
-            
-            category_stats[category]["count"] += 1
-            category_stats[category]["total_deduction"] += abs(self.calculate_finding_score(finding))
-            
-            severity = finding.get("severity", "info")
-            if severity in category_stats[category]["severities"]:
-                category_stats[category]["severities"][severity] += 1
-        
-        return category_stats
-    
-    def get_risk_level(self, score: int) -> str:
-        """점수를 기반으로 위험도 반환"""
+    def _determine_grade(self, score: int) -> str:
+        """점수에 따른 등급 결정"""
         if score >= 90:
             return "양호"
         elif score >= 70:
             return "주의"
-        else:
+        elif score >= 50:
             return "경고"
-    
-    def get_risk_color(self, score: int) -> str:
-        """점수를 기반으로 색상 코드 반환 (UI용)"""
-        if score >= 90:
-            return "#28a745"  # 녹색
-        elif score >= 70:
-            return "#ffc107"  # 노랑
         else:
-            return "#dc3545"  # 빨강
+            return "위험"
     
-    def generate_score_summary(self, findings: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """점수 요약 정보 생성"""
-        total_score = self.calculate_total_score(findings)
-        risk_level = self.get_risk_level(total_score)
-        category_stats = self.calculate_category_scores(findings)
+    def get_category_analysis(self, findings: List[Any]) -> Dict[str, Any]:
+        """카테고리별 상세 분석"""
+        category_analysis = {}
         
-        # 심각도별 통계
-        severity_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0, "info": 0}
         for finding in findings:
-            severity = finding.get("severity", "info")
-            if severity in severity_counts:
-                severity_counts[severity] += 1
-        
-        # 상위 3개 위험 항목
-        top_risks = sorted(findings, 
-                          key=lambda x: abs(self.calculate_finding_score(x)), 
-                          reverse=True)[:3]
-        
-        return {
-            "total_score": total_score,
-            "risk_level": risk_level,
-            "risk_color": self.get_risk_color(total_score),
-            "total_findings": len(findings),
-            "findings_by_severity": severity_counts,
-            "findings_by_category": {cat: stats["count"] for cat, stats in category_stats.items()},
-            "category_details": category_stats,
-            "top_risks": [
-                {
-                    "title": finding.get("title", ""),
-                    "severity": finding.get("severity", ""),
-                    "score_impact": self.calculate_finding_score(finding)
+            if isinstance(finding, dict):
+                category = finding.get("category", "configuration")
+                severity = finding.get("severity", "info")
+                rule_id = finding.get("rule_id", "")
+            else:
+                category = finding.category
+                severity = finding.severity
+                rule_id = finding.rule_id
+            
+            if category not in category_analysis:
+                category_analysis[category] = {
+                    "count": 0,
+                    "total_score": 0,
+                    "severities": {},
+                    "rules": {}
                 }
-                for finding in top_risks
-            ]
+            
+            # 통계 업데이트
+            category_analysis[category]["count"] += 1
+            category_analysis[category]["total_score"] += abs(self.calculate_finding_score(finding))
+            category_analysis[category]["severities"][severity] = \
+                category_analysis[category]["severities"].get(severity, 0) + 1
+            category_analysis[category]["rules"][rule_id] = \
+                category_analysis[category]["rules"].get(rule_id, 0) + 1
+        
+        return category_analysis
+    
+    def get_scoring_statistics(self) -> Dict[str, Any]:
+        """점수화 엔진 통계 정보"""
+        return {
+            "severity_scores": self.scoring_weights["severity_base_scores"],
+            "category_multipliers": self.scoring_weights["category_multipliers"],
+            "rule_count": len(self.scoring_weights["rule_specific_multipliers"]),
+            "confidence_enabled": self.scoring_weights["confidence_adjustment"]["enabled"]
         }
+    
+    def update_rule_weight(self, rule_id: str, weight: float) -> bool:
+        """특정 룰의 가중치 업데이트"""
+        try:
+            self.scoring_weights["rule_specific_multipliers"][rule_id] = weight
+            self._save_scoring_weights()
+            logger.info(f"룰 가중치 업데이트: {rule_id} = {weight}")
+            return True
+        except Exception as e:
+            logger.error(f"룰 가중치 업데이트 실패: {e}")
+            return False
+    
+    def _save_scoring_weights(self) -> bool:
+        """점수 가중치 설정 저장"""
+        weights_file = os.path.join(self.rules_dir, "scoring_weights.json")
+        
+        try:
+            with open(weights_file, 'w', encoding='utf-8') as f:
+                json.dump(self.scoring_weights, f, indent=2, ensure_ascii=False)
+                logger.info(f"점수 가중치 저장 완료: {weights_file}")
+                return True
+        except Exception as e:
+            logger.error(f"점수 가중치 저장 실패: {e}")
+            return False
+    
+    def reload_weights(self) -> bool:
+        """점수 가중치 다시 로드"""
+        try:
+            self.scoring_weights = self._load_scoring_weights()
+            logger.info("점수 가중치 다시 로드 완료")
+            return True
+        except Exception as e:
+            logger.error(f"점수 가중치 다시 로드 실패: {e}")
+            return False
 
-# 전역 스코어링 엔진 인스턴스
-scoring_engine = ScoringEngine()
+# 전역 점수화 엔진 인스턴스
+_global_scoring_engine = None
 
-def calculate_total_score(findings: List[Dict[str, Any]]) -> int:
-    """전역 함수로 총점 계산"""
-    return scoring_engine.calculate_total_score(findings)
+def get_scoring_engine() -> ScoringEngine:
+    """전역 점수화 엔진 인스턴스 반환"""
+    global _global_scoring_engine
+    if _global_scoring_engine is None:
+        _global_scoring_engine = ScoringEngine()
+    return _global_scoring_engine
 
-def determine_risk_level(score: int) -> str:
-    """전역 함수로 위험도 결정"""
-    return scoring_engine.get_risk_level(score)
+# 기존 호환성을 위한 전역 함수들
+def calculate_total_score(findings: List[Any]) -> Dict[str, Any]:
+    """전역 함수로 총 점수 계산 (기존 호환성 유지)"""
+    engine = get_scoring_engine()
+    return engine.calculate_total_score(findings)
 
-def generate_score_summary(findings: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """전역 함수로 점수 요약 생성"""
-    return scoring_engine.generate_score_summary(findings)
+def calculate_finding_score(finding: Any) -> int:
+    """전역 함수로 개별 Finding 점수 계산"""
+    engine = get_scoring_engine()
+    return engine.calculate_finding_score(finding)
+
+def get_category_analysis(findings: List[Any]) -> Dict[str, Any]:
+    """전역 함수로 카테고리 분석"""
+    engine = get_scoring_engine()
+    return engine.get_category_analysis(findings)
+
+# 기존 호환성
+scoring_engine = get_scoring_engine()

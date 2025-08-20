@@ -1,218 +1,260 @@
 """
 reg/security_settings.py
-보안 설정 상태 점검 분석기
+보안 설정 상태 점검 분석기 - 새로운 룰 엔진 기반
 """
 
 import logging
 import subprocess
 from typing import Dict, List, Any, Optional
 
-# utils 모듈에서 공통 구조 import
-from utils.data_structures import ( 
-    generate_finding_id, get_current_timestamp,
-    RegistryEvidence, Category, Severity
-)
+# 새로운 룰 엔진 임포트
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from rules.rule_engine import RuleEngine
+from rules.legacy_adapter import LegacyAdapter
+from utils.data_structures import Finding, generate_finding_id, get_current_timestamp
 from .registry_collector import registry_collector
 
-# 로깅 설정
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class SecuritySettingsAnalyzer:
-    """보안 설정 상태 점검 분석 클래스"""
+    """보안 설정 상태 점검 분석 클래스 - 룰 엔진 기반"""
     
-    def __init__(self):
+    def __init__(self, rules_dir: str = "rules"):
         """초기화"""
-        # 중요한 보안 설정들과 기대값
-        self.security_checks = {
-            'windows_defender': {
-                'path': ('HKLM', r'SOFTWARE\Microsoft\Windows Defender\Real-Time Protection'),
-                'checks': [
-                    ('DisableRealtimeMonitoring', 0, '실시간 보호가 비활성화됨'),
-                    ('DisableBehaviorMonitoring', 0, '행동 모니터링이 비활성화됨'),
-                    ('DisableOnAccessProtection', 0, '액세스 보호가 비활성화됨'),
-                ]
-            },
-            'uac_settings': {
-                'path': ('HKLM', r'SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'),
-                'checks': [
-                    ('EnableLUA', 1, 'UAC가 비활성화됨'),
-                    ('ConsentPromptBehaviorAdmin', [2, 5], 'UAC 관리자 승인 모드가 약함'),
-                    ('PromptOnSecureDesktop', 1, 'UAC 보안 데스크톱이 비활성화됨')
-                ]
-            },
-            'rdp_settings': {
-                'path': ('HKLM', r'SYSTEM\CurrentControlSet\Control\Terminal Server'),
-                'checks': [
-                    ('fDenyTSConnections', 1, 'RDP가 활성화됨'),
-                ]
-            },
-            'firewall_domain': {
-                'path': ('HKLM', r'SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile'),
-                'checks': [
-                    ('EnableFirewall', 1, '도메인 방화벽이 비활성화됨'),
-                ]
-            },
+        self.rule_engine = RuleEngine(rules_dir)
+        self.legacy_adapter = LegacyAdapter(rules_dir)
+        
+        # 중요한 보안 설정들과 경로
+        self.security_settings_paths = {
+            'windows_defender': ('HKLM', r'SOFTWARE\Microsoft\Windows Defender\Real-Time Protection'),
+            'uac_settings': ('HKLM', r'SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'),
+            'rdp_settings': ('HKLM', r'SYSTEM\CurrentControlSet\Control\Terminal Server'),
+            'firewall_settings': ('HKLM', r'SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy'),
+            'smb_settings': ('HKLM', r'SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters'),
+            'update_settings': ('HKLM', r'SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update'),
         }
         
-        # 심각도별 가중치
-        self.severity_weights = {
-            'critical': 30,
-            'high': 20,
-            'medium': 10,
-            'low': 5
-        }
+        logger.info("보안 설정 분석기 초기화 완료 - 룰 엔진 기반")
     
     def analyze_security_settings(self) -> List[Dict[str, Any]]:
-        """보안 설정 분석 및 취약점 탐지"""
+        """보안 설정 상태 점검 및 취약점 탐지"""
         logger.info("보안 설정 분석 시작")
         
+        all_findings = []
+        
+        # 레지스트리 기반 보안 설정 분석
+        all_findings.extend(self._analyze_registry_settings())
+        
+        # PowerShell 기반 추가 설정 분석
+        all_findings.extend(self._analyze_powershell_settings())
+        
+        logger.info(f"보안 설정 분석 완료: {len(all_findings)}개 탐지")
+        return all_findings
+    
+    def _analyze_registry_settings(self) -> List[Dict[str, Any]]:
+        """레지스트리 기반 보안 설정 분석"""
         findings = []
         
-        # 각 보안 설정 카테고리별로 검사
-        for category_name, category_config in self.security_checks.items():
-            category_findings = self._analyze_security_category(category_name, category_config)
-            findings.extend(category_findings)
+        for setting_name, (hive, subkey) in self.security_settings_paths.items():
+            try:
+                # 레지스트리 값 수집
+                registry_values = registry_collector.get_registry_values(hive, subkey)
+                
+                for value_name, value_data in registry_values.items():
+                    # 룰 엔진용 데이터 구조 생성
+                    security_data = {
+                        'key_path': f"{hive}\\{subkey}",
+                        'value_name': value_name,
+                        'value_data': str(value_data),
+                        'setting_category': setting_name,
+                        'timestamp': get_current_timestamp()
+                    }
+                    
+                    # 룰 엔진으로 분석
+                    setting_findings = self.rule_engine.analyze_registry_data(security_data)
+                    
+                    # Finding 객체를 딕셔너리로 변환
+                    for finding in setting_findings:
+                        finding_dict = self._finding_to_dict(finding)
+                        findings.append(finding_dict)
+                        
+            except Exception as e:
+                logger.debug(f"보안 설정 분석 중 오류 ({setting_name}): {e}")
+                continue
         
-        logger.info(f"보안 설정 분석 완료: {len(findings)}개 취약점 발견")
         return findings
     
-    def _analyze_security_category(self, category_name: str, config: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """개별 보안 설정 카테고리 분석"""
+    def _analyze_powershell_settings(self) -> List[Dict[str, Any]]:
+        """PowerShell 기반 추가 보안 설정 분석"""
         findings = []
-        hive, reg_path = config['path']
-        checks = config['checks']
+        
+        # Windows Defender 상태 확인
+        findings.extend(self._check_windows_defender())
+        
+        # 방화벽 상태 확인
+        findings.extend(self._check_firewall_status())
+        
+        # Windows Update 상태 확인
+        findings.extend(self._check_windows_update())
+        
+        return findings
+    
+    def _check_windows_defender(self) -> List[Dict[str, Any]]:
+        """Windows Defender 상태 확인"""
+        findings = []
         
         try:
-            # 레지스트리 값들 조회
-            registry_values = registry_collector.enumerate_registry_values(hive, reg_path)
-            if not registry_values:
-                return findings
+            # Get-MpComputerStatus PowerShell 명령어
+            result = subprocess.run(
+                ['powershell', '-Command', 'Get-MpComputerStatus | ConvertTo-Json'],
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
             
-            # 값을 딕셔너리로 변환
-            values_dict = {}
-            for value in registry_values:
-                values_dict[value.get('name', '')] = value.get('data')
-            
-            # 각 체크 항목 검사
-            for check_name, expected_value, issue_description in checks:
-                current_value = values_dict.get(check_name)
+            if result.returncode == 0:
+                import json
+                defender_status = json.loads(result.stdout)
                 
-                if current_value is not None and not self._check_value_compliance(current_value, expected_value):
-                    # 값이 기대값과 다른 경우
-                    finding = self._create_non_compliant_finding(
-                        category_name, hive, reg_path, check_name, 
-                        current_value, expected_value, issue_description
-                    )
-                    if finding:
-                        findings.append(finding)
-                        
+                # 룰 엔진용 데이터 구조 생성
+                defender_data = {
+                    'setting_type': 'windows_defender_status',
+                    'real_time_protection': str(defender_status.get('RealTimeProtectionEnabled', False)),
+                    'behavior_monitor': str(defender_status.get('BehaviorMonitorEnabled', False)),
+                    'antivirus_enabled': str(defender_status.get('AntivirusEnabled', False)),
+                    'signature_version': str(defender_status.get('AntivirusSignatureVersion', 'Unknown')),
+                    'timestamp': get_current_timestamp()
+                }
+                
+                # 룰 엔진으로 분석
+                defender_findings = self.rule_engine.analyze_registry_data(defender_data)
+                
+                # Finding 객체를 딕셔너리로 변환
+                for finding in defender_findings:
+                    finding_dict = self._finding_to_dict(finding)
+                    findings.append(finding_dict)
+                    
         except Exception as e:
-            logger.error(f"Error analyzing security category {category_name}: {e}")
+            logger.debug(f"Windows Defender 상태 확인 중 오류: {e}")
         
         return findings
     
-    def _check_value_compliance(self, current_value: Any, expected_value: Any) -> bool:
-        """값이 기대값과 일치하는지 확인"""
-        if isinstance(expected_value, list):
-            return current_value in expected_value
-        else:
-            return current_value == expected_value
-    
-    def _create_non_compliant_finding(self, category_name: str, hive: str, reg_path: str,
-                                     value_name: str, current_value: Any, expected_value: Any,
-                                     issue_description: str) -> Optional[Dict[str, Any]]:
-        """값이 기대값과 다른 경우 Finding 생성"""
-        severity = self._determine_setting_severity(category_name, issue_description)
+    def _check_firewall_status(self) -> List[Dict[str, Any]]:
+        """방화벽 상태 확인"""
+        findings = []
         
-        finding = {
-            'finding_id': generate_finding_id(),
-            'rule_id': f'R_SECURITY_{category_name.upper()}_NON_COMPLIANT',
-            'severity': severity,
-            'score_impact': -self.severity_weights.get(severity, 10),
-            'category': Category.SECURITY_SETTINGS.value,
-            'title': f'보안 설정 취약: {value_name}',
-            'description': f'보안 설정이 권장값과 다릅니다: {issue_description}',
-            'timestamp': get_current_timestamp(),
-            'confidence': 95,
-            'evidence': {
-                'registry_evidence': [{
-                    'source': 'registry',
-                    'hive': hive,
-                    'key': reg_path,
-                    'value': value_name,
-                    'current_value': current_value,
-                    'expected_value': expected_value,
-                    'issue': issue_description,
+        try:
+            # netsh advfirewall show allprofiles 명령어
+            result = subprocess.run(
+                ['netsh', 'advfirewall', 'show', 'allprofiles', 'state'],
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            
+            if result.returncode == 0:
+                firewall_output = result.stdout
+                
+                # 룰 엔진용 데이터 구조 생성
+                firewall_data = {
+                    'setting_type': 'firewall_status',
+                    'firewall_output': firewall_output,
+                    'domain_profile': 'ON' if 'Domain Profile' in firewall_output and 'ON' in firewall_output else 'OFF',
+                    'private_profile': 'ON' if 'Private Profile' in firewall_output and 'ON' in firewall_output else 'OFF',
+                    'public_profile': 'ON' if 'Public Profile' in firewall_output and 'ON' in firewall_output else 'OFF',
                     'timestamp': get_current_timestamp()
-                }]
-            },
-            'mitre_attack': {
-                'tactics': ['Defense Evasion'],
-                'techniques': ['T1562.001'],  # Disable or Modify Tools
-                'sub_techniques': []
+                }
+                
+                # 룰 엔진으로 분석
+                firewall_findings = self.rule_engine.analyze_registry_data(firewall_data)
+                
+                # Finding 객체를 딕셔너리로 변환
+                for finding in firewall_findings:
+                    finding_dict = self._finding_to_dict(finding)
+                    findings.append(finding_dict)
+                    
+        except Exception as e:
+            logger.debug(f"방화벽 상태 확인 중 오류: {e}")
+        
+        return findings
+    
+    def _check_windows_update(self) -> List[Dict[str, Any]]:
+        """Windows Update 상태 확인"""
+        findings = []
+        
+        try:
+            # Get-WUList PowerShell 명령어 (PSWindowsUpdate 모듈 필요)
+            # 대신 wuauclt 상태 확인
+            result = subprocess.run(
+                ['powershell', '-Command', 'Get-Service -Name wuauserv | Select-Object Status, StartType | ConvertTo-Json'],
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            
+            if result.returncode == 0:
+                import json
+                update_service = json.loads(result.stdout)
+                
+                # 룰 엔진용 데이터 구조 생성
+                update_data = {
+                    'setting_type': 'windows_update_status',
+                    'service_status': str(update_service.get('Status', 'Unknown')),
+                    'start_type': str(update_service.get('StartType', 'Unknown')),
+                    'timestamp': get_current_timestamp()
+                }
+                
+                # 룰 엔진으로 분석
+                update_findings = self.rule_engine.analyze_registry_data(update_data)
+                
+                # Finding 객체를 딕셔너리로 변환
+                for finding in update_findings:
+                    finding_dict = self._finding_to_dict(finding)
+                    findings.append(finding_dict)
+                    
+        except Exception as e:
+            logger.debug(f"Windows Update 상태 확인 중 오류: {e}")
+        
+        return findings
+    
+    def _finding_to_dict(self, finding: Finding) -> Dict[str, Any]:
+        """Finding 객체를 기존 형식의 딕셔너리로 변환"""
+        rule = self.rule_engine.get_rule_by_id(finding.rule_id)
+        
+        return {
+            "finding_id": finding.finding_id,
+            "rule_id": finding.rule_id,
+            "severity": finding.severity,
+            "score_impact": -finding.score,
+            "category": finding.category,
+            "title": finding.title,
+            "description": finding.description,
+            "confidence": finding.confidence,
+            "timestamp": finding.timestamp,
+            "evidence": finding.evidence,
+            "mitre_attack": {
+                "tactics": rule.get('tactics', []) if rule else [],
+                "techniques": rule.get('techniques', []) if rule else []
             }
         }
-        return finding
-    
-    def _determine_setting_severity(self, category_name: str, issue_description: str) -> str:
-        """보안 설정 심각도 결정"""
-        # 카테고리와 이슈 설명에 따른 심각도 결정
-        high_risk_keywords = ['비활성화', 'RDP가 활성화', '방화벽이 비활성화', 'UAC가 비활성화']
-        medium_risk_keywords = ['약함', '필수가 아님', '제한이 비활성화']
-        
-        issue_lower = issue_description.lower()
-        
-        if any(keyword in issue_lower for keyword in high_risk_keywords):
-            return Severity.HIGH.value
-        elif any(keyword in issue_lower for keyword in medium_risk_keywords):
-            return Severity.MEDIUM.value
-        elif 'defender' in category_name.lower() or 'uac' in category_name.lower():
-            return Severity.HIGH.value
-        elif 'firewall' in category_name.lower() or 'rdp' in category_name.lower():
-            return Severity.MEDIUM.value
-        else:
-            return Severity.LOW.value
-    
-    def check_critical_settings(self) -> Dict[str, Any]:
-        """중요 보안 설정만 빠르게 체크"""
-        critical_results = {
-            'total_issues': 0,
-            'critical_issues': 0,
-            'high_issues': 0,
-            'issues': []
-        }
-        
-        critical_checks = ['windows_defender', 'uac_settings', 'firewall_domain']
-        
-        for check_name in critical_checks:
-            if check_name in self.security_checks:
-                findings = self._analyze_security_category(check_name, self.security_checks[check_name])
-                for finding in findings:
-                    critical_results['issues'].append({
-                        'category': check_name,
-                        'severity': finding['severity'],
-                        'title': finding['title'],
-                        'description': finding['description']
-                    })
-                    
-                    critical_results['total_issues'] += 1
-                    if finding['severity'] == Severity.CRITICAL.value:
-                        critical_results['critical_issues'] += 1
-                    elif finding['severity'] == Severity.HIGH.value:
-                        critical_results['high_issues'] += 1
-        
-        return critical_results
 
-# 전역 인스턴스
-security_settings_analyzer = SecuritySettingsAnalyzer()
+# 전역 분석기 인스턴스
+_global_analyzer = None
 
-# 편의 함수들
+def get_security_settings_analyzer() -> SecuritySettingsAnalyzer:
+    """전역 보안 설정 분석기 인스턴스 반환"""
+    global _global_analyzer
+    if _global_analyzer is None:
+        _global_analyzer = SecuritySettingsAnalyzer()
+    return _global_analyzer
+
 def analyze_security_settings() -> List[Dict[str, Any]]:
-    """전역 함수로 보안 설정 분석"""
-    return security_settings_analyzer.analyze_security_settings()
+    """전역 함수로 보안 설정 분석 (기존 호환성 유지)"""
+    analyzer = get_security_settings_analyzer()
+    return analyzer.analyze_security_settings()
 
-def check_critical_settings() -> Dict[str, Any]:
-    """전역 함수로 중요 보안 설정 체크"""
-    return security_settings_analyzer.check_critical_settings()
+# 기존 호환성
+security_settings_analyzer = get_security_settings_analyzer()
