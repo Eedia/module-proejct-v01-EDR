@@ -136,7 +136,7 @@ class IntegratedEDRAnalyzer:
         """AI 통합 분석 실행"""
         try:
             ai_result = self.ai_analyzer.analyze_raw_data(ai_data)
-            return ai_result.to_dict()
+            return ai_result.to_dict() if hasattr(ai_result, 'to_dict') else ai_result
         except Exception as e:
             logger.error(f"AI 분석 실패: {e}")
             return {

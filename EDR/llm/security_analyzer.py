@@ -68,7 +68,14 @@ class AISecurityAnalyzer:
         
         # 5단계: AI 요약 생성
         self.logger.info("4️⃣ AI 요약 생성 실행...")
-        summary_findings = {"alerts": [issue.to_dict() for issue in detected_issues]}
+        summary_findings = {"alerts": []}
+        for issue in detected_issues:
+            if hasattr(issue, 'to_dict'):
+                summary_findings["alerts"].append(issue.to_dict())
+            elif isinstance(issue, dict):
+                summary_findings["alerts"].append(issue)
+            else:
+                self.logger.warning(f"예상치 못한 이슈 타입: {type(issue)}")
         analysis_result.executive_summary = self.summarizer.generate_executive_summary(
             summary_findings, analysis_result.to_dict()
         )
@@ -86,7 +93,14 @@ class AISecurityAnalyzer:
         
         # 컨텍스트 데이터 변환
         if isinstance(context_data, AnalysisResult):
-            detected_issues = [issue.to_dict() for issue in context_data.detected_issues]
+            detected_issues = []
+            for issue in context_data.detected_issues:
+                if hasattr(issue, 'to_dict'):
+                    detected_issues.append(issue.to_dict())
+                elif isinstance(issue, dict):
+                    detected_issues.append(issue)
+                else:
+                    self.logger.warning(f"예상치 못한 이슈 타입: {type(issue)}")
             hostname = context_data.hostname
         else:
             detected_issues = context_data.get('detected_issues', [])
@@ -118,7 +132,14 @@ class AISecurityAnalyzer:
     def get_detailed_analysis(self, analysis_result: AnalysisResult) -> Dict:
         """상세 분석 정보 제공"""
         
-        findings_data = {"alerts": [issue.to_dict() for issue in analysis_result.detected_issues]}
+        findings_data = {"alerts": []}
+        for issue in analysis_result.detected_issues:
+            if hasattr(issue, 'to_dict'):
+                findings_data["alerts"].append(issue.to_dict())
+            elif isinstance(issue, dict):
+                findings_data["alerts"].append(issue)
+            else:
+                self.logger.warning(f"예상치 못한 이슈 타입: {type(issue)}")
         ai_results = analysis_result.to_dict()
         
         return self.summarizer.generate_technical_report(findings_data, ai_results)

@@ -3,7 +3,7 @@ AI 모듈 공통 데이터 모델
 dataclass 기반 표준화된 데이터 구조
 """
 from dataclasses import dataclass, asdict
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Union
 
 @dataclass
 class SecurityIssue:
@@ -50,8 +50,8 @@ class AnalysisResult:
     """전체 분석 결과 데이터 구조"""
     timestamp: str
     hostname: str
-    detected_issues: List[SecurityIssue]
-    ai_remediation: List[RemediationScript]
+    detected_issues: List[Union[SecurityIssue, Dict]]
+    ai_remediation: List[Union[RemediationScript, Dict]]
     total_issues: int
     statistics: Dict
     executive_summary: str = ""
@@ -60,11 +60,17 @@ class AnalysisResult:
         return {
             "timestamp": self.timestamp,
             "hostname": self.hostname,
-            "detected_issues": [issue.to_dict() for issue in self.detected_issues],
-            "ai_remediation": [script.to_dict() for script in self.ai_remediation],
+            "detected_issues": [
+                issue.to_dict() if hasattr(issue, "to_dict") else issue
+                for issue in self.detected_issues
+            ],
+            "ai_remediation": [
+                script.to_dict() if hasattr(script, "to_dict") else script
+                for script in self.ai_remediation
+            ],
             "total_issues": self.total_issues,
             "statistics": self.statistics,
-            "executive_summary": self.executive_summary
+            "executive_summary": self.executive_summary,
         }
 
 @dataclass 

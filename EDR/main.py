@@ -32,7 +32,7 @@ def main():
 
     # 초기 점수
     score_label = win.findChild(QtWidgets.QLabel, "scoreValue")
-    value = parse_score_from_label(score_label.text(), 90) if score_label else 90
+    value = parse_score_from_label(score_label.text(), 0) if score_label else 0
 
     # Donut
     donut_holder = win.findChild(QtWidgets.QWidget, "donutHolder")
