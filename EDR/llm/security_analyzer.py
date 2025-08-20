@@ -145,13 +145,31 @@ class AISecurityAnalyzer:
         
         return validated_scripts
     
+    def _extract_confidence(self, script) -> float:
+        """스크립트에서 신뢰도 값을 안전하게 추출"""
+        if hasattr(script, 'confidence'):
+            confidence = script.confidence
+        elif isinstance(script, dict):
+            confidence = script.get('confidence', 0)
+        else:
+            confidence = 0
+
+        if isinstance(confidence, dict):
+            confidence = confidence.get('value', 0)
+
+        try:
+            return float(confidence)
+        except (TypeError, ValueError):
+            return 0.0
+        
     def _calculate_statistics(self, issues: List, scripts: List) -> Dict:
         """AI 통계 계산"""
         if not scripts:
             return {"total_scripts": 0, "avg_confidence": 0, "validation_stats": {}}
         
         total = len(scripts)
-        avg_conf = sum(s.confidence if hasattr(s, 'confidence') else s.get('confidence', 0) for s in scripts) / total
+        confidences = [self._extract_confidence(s) for s in scripts]
+        avg_conf = sum(confidences) / total
         
         # 검증 통계
         safe_scripts = sum(1 for s in scripts if s.get('validation', {}).get('risk_level') == 'safe')
@@ -161,7 +179,7 @@ class AISecurityAnalyzer:
         return {
             "total_scripts": total,
             "avg_confidence": avg_conf,
-            "high_confidence": len([s for s in scripts if (s.confidence if hasattr(s, 'confidence') else s.get('confidence', 0)) >= 0.8]),
+            "high_confidence": len([c for c in confidences if c >= 0.8]),
             "validation_stats": {
                 "safe": safe_scripts,
                 "caution": caution_scripts,

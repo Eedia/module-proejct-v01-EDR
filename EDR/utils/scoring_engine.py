@@ -99,6 +99,9 @@ class ScoringEngine:
             rule_id = finding.rule_id
             confidence = finding.confidence
         
+        # 신뢰도 값 정규화 (dict/문자열 대비)
+        confidence = self._normalize_confidence(confidence)
+
         # 기본 점수 및 가중치 로드
         base_score = self.scoring_weights.get("scoring_formula", {}).get("base_score", 10)
         severity_weight = self.scoring_weights.get("severity_weights", {}).get(severity, 1.0)
@@ -118,8 +121,10 @@ class ScoringEngine:
         
         return int(final_score)
     
-    def _calculate_confidence_adjustment(self, confidence: int) -> float:
+    # def _calculate_confidence_adjustment(self, confidence: int) -> float:
+    def _calculate_confidence_adjustment(self, confidence: Any) -> float:
         """신뢰도 기반 점수 조정"""
+        confidence = self._normalize_confidence(confidence)  
         settings = self.scoring_weights.get("confidence_settings", {})
         min_conf = settings.get("min_confidence", 0)
         max_conf = settings.get("max_confidence", 100)
@@ -130,6 +135,26 @@ class ScoringEngine:
         
         return adjustment
     
+    # 신뢰도 값 정규화 추가 
+    def _normalize_confidence(self, confidence: Any) -> float:
+        """신뢰도 값을 숫자로 정규화"""
+        if isinstance(confidence, dict):
+            # 일반적으로 {'value': 85} 형태를 예상
+            if 'value' in confidence:
+                confidence = confidence.get('value')
+            else:
+                # 첫 번째 숫자형 값을 선택
+                for v in confidence.values():
+                    if isinstance(v, (int, float)):
+                        confidence = v
+                        break
+                else:
+                    confidence = 0
+        try:
+            return float(confidence)
+        except (TypeError, ValueError):
+            return 0.0
+        
     def calculate_total_score(self, findings: List[Any]) -> Dict[str, Any]:
         """
         전체 Finding들의 종합 점수 계산

@@ -99,10 +99,11 @@ class SecuritySummarizer(AIBaseModule):
             categories[category].append(alert)
         
         # AI 해결책 통계
+        confidences = [self._extract_confidence(s) for s in remediation_scripts]
         script_stats = {
             'total_scripts': len(remediation_scripts),
-            'high_confidence': len([s for s in remediation_scripts if s.get('confidence', 0) >= 0.8]),
-            'avg_confidence': sum(s.get('confidence', 0) for s in remediation_scripts) / len(remediation_scripts) if remediation_scripts else 0
+            'high_confidence': len([c for c in confidences if c >= 0.8]),
+            'avg_confidence': sum(confidences) / len(confidences) if confidences else 0
         }
         
         return {
@@ -113,6 +114,21 @@ class SecuritySummarizer(AIBaseModule):
             "recommendations": self._generate_recommendations(categories)
         }
     
+    def _extract_confidence(self, script) -> float:
+        """스크립트에서 신뢰도 값을 안전하게 추출"""
+        if isinstance(script, dict):
+            confidence = script.get('confidence', 0)
+        else:
+            confidence = getattr(script, 'confidence', 0)
+
+        if isinstance(confidence, dict):
+            confidence = confidence.get('value', 0)
+
+        try:
+            return float(confidence)
+        except (TypeError, ValueError):
+            return 0.0
+        
     def _generate_recommendations(self, categories: Dict) -> List[str]:
         """카테고리별 권장사항 생성"""
         recommendations = []
