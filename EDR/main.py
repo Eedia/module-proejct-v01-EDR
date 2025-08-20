@@ -13,12 +13,19 @@ from pathlib import Path
 # 프로젝트 루트 경로 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from evtx import collect_all_target_events, analyze_events
-from utils import (
-    generate_scan_id, get_current_timestamp, 
+from evtx.collector import collect_all_target_events
+from evtx.analyzer import analyze_events
+from utils.scoring_engine import (
     calculate_total_score, determine_risk_level, generate_score_summary,
+)
+from utils.data_structures import ( 
+    generate_scan_id, get_current_timestamp
+)
+from utils.file_handler import (
     save_findings_json, generate_html_report
 )
+
+
 
 # 로깅 설정
 logging.basicConfig(
