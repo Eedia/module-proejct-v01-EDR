@@ -6,6 +6,7 @@ from typing import List, Dict, Optional
 from ai.base import AIBaseModule
 from ai.models import RemediationScript, SecurityIssue
 
+
 class RemediationEngine(AIBaseModule):
     def __init__(self, config: Dict):
         super().__init__(config, "remediation")
@@ -64,32 +65,26 @@ ID: {finding.issue_id}
 }}
 
 중요한 규칙:
-1. 모든 키와 문자열 값은 쌍따옴표(")로 감싸세요
+1. 모든 키와 문자열 값은 쌍따옴표로 감싸세요
 2. 마지막 항목 뒤에는 쉼표를 붙이지 마세요
 3. 레지스트리 경로는 HKLM:/ 형태로 슬래시 사용
-4. 파일 경로는 C:/ 형태로 슬래시 사용  
-5. JSON 문자열에 역슬래시(\) 절대 금지
+4. 파일 경로는 C:/ 형태로 슬래시 사용  
+5. JSON 문자열에 역슬래시 절대 금지
 6. 다른 텍스트 없이 JSON만 응답하세요
-7. confidence는 반드시 0.0부터 1.0 사이의 숫자로만 입력하세요.
-    예: 0.95, 0.8, 0.75 등 (문자열 금지: "High", "Medium" 등 사용 금지)
+7. confidence는 반드시 0.0부터 1.0 사이의 숫자로만 입력하세요
+8. 한국어로 답변하세요
 
-
-레지스트리 경로 예시 (올바른 형식):
+레지스트리 경로 예시:
 - "HKLM:/SOFTWARE/Microsoft/Windows" (슬래시 사용)
-- PowerShell에서 Get-ItemProperty -Path "HKLM:/SOFTWARE/Microsoft/Windows"
-
-
-절대 사용하지 말 것: HKLM:/SOFTWARE/Microsoft (역슬래시 대신 슬래시)슬래시 금지)
-
 
 다른 설명은 하지 말고 위 JSON만 응답하세요.
 """
         
-        # 🔧 공통 API 호출 사용
+        # 공통 API 호출 사용
         response_content = self._safe_api_call(prompt, "remediation")
         
         if response_content:
-            # 🔧 공통 JSON 처리 사용
+            # 공통 JSON 처리 사용
             result = self._clean_and_parse_json(response_content, "object")
             
             if result and all(key in result for key in ['fix_command', 'validation_command', 'rollback_command']):
@@ -123,12 +118,19 @@ ID: {finding.issue_id}
                 'rollback': 'Set-ItemProperty -Path "HKLM:/SYSTEM/CurrentControlSet/Control/Terminal Server" -Name "fDenyTSConnections" -Value 0',
                 'description': 'RDP 원격 연결 비활성화',
                 'warnings': ['관리자 권한 필요', '원격 연결이 차단됩니다']
+            },
+            'persistence': {
+                'fix': 'Remove-ItemProperty -Path "HKLM:/SOFTWARE/Microsoft/Windows/CurrentVersion/Run" -Name "SuspiciousApp"',
+                'validation': 'Get-ItemProperty -Path "HKLM:/SOFTWARE/Microsoft/Windows/CurrentVersion/Run" -Name "SuspiciousApp" -ErrorAction SilentlyContinue',
+                'rollback': 'Set-ItemProperty -Path "HKLM:/SOFTWARE/Microsoft/Windows/CurrentVersion/Run" -Name "SuspiciousApp" -Value "원래값"',
+                'description': '의심스러운 자동실행 항목 제거',
+                'warnings': ['관리자 권한 필요', '레지스트리 백업 권장']
             }
         }
     
     def _get_fallback_script(self, finding: SecurityIssue) -> RemediationScript:
         """AI 실패 시 폴백 스크립트 생성"""
-        template_key = finding.category if finding.category in self.fallback_templates else 'antivirus'
+        template_key = finding.category if finding.category in self.fallback_templates else 'persistence'
         template = self.fallback_templates[template_key]
         
         return RemediationScript(

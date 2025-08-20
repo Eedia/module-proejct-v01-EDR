@@ -1,5 +1,5 @@
 """
-AI Issue Detector - 이벤트로그와 레지스트리 데이터 전문 분석 (리팩토링 버전)
+AI Issue Detector - 이벤트로그와 레지스트리 데이터 전문 분석
 """
 import json
 from typing import Dict, List
@@ -43,59 +43,44 @@ class AIIssueDetector(AIBaseModule):
     def _build_analysis_prompt(self, event_logs: List, registry_data: Dict) -> str:
         """보안 분석용 프롬프트 생성"""
         return f"""
-당신은 Windows 보안 전문가입니다.
+=== 🚨 EDR 스캔 결과 재분석 임무 ===
 
-=== 🚨 중요한 응답 규칙 (반드시 준수) ===
-1. 응답은 반드시 JSON 배열만 작성하세요
-2. 모든 경로는 슬래시(/) 사용: "HKLM:/SOFTWARE/Microsoft"
-3. 역슬래시(\\) 절대 사용 금지
-4. 실제 문제가 있는 항목만 포함
-5. 최대 10개 이슈까지만 보고
+당신은 Windows 보안 전문가입니다. 기존 EDR 시스템이 탐지한 결과를 재분석하여 
+추가적인 보안 위험이나 연관성을 찾아주세요.
 
-=== 이벤트 로그 데이터 ===
-{json.dumps(event_logs, ensure_ascii=False, indent=2)}
+=== 기존 EDR 탐지 결과 ===
+{json.dumps(event_logs[:10], ensure_ascii=False, indent=2)}  # 처음 10개만
 
-=== 레지스트리 데이터 ===  
-{json.dumps(registry_data, ensure_ascii=False, indent=2)}
+=== 레지스트리 분석 데이터 ===
+{json.dumps(dict(list(registry_data.items())[:5]), ensure_ascii=False, indent=2)}  # 처음 5개만
 
-=== 분석 우선순위 ===
+=== AI 재분석 관점 ===
+1. **연관성 분석**: 여러 발견사항 간의 연결고리 찾기
+2. **위험도 재평가**: 기존 평가의 적절성 검토  
+3. **추가 위험 요소**: EDR이 놓친 부분 발견
+4. **MITRE ATT&CK 매핑**: 공격 기법과의 연관성
 
-**🔍 이벤트 로그 중점 분석:**
-- Event ID 4688: 의심스러운 프로세스 (powershell.exe, cmd.exe)
-  * 명령어에 "-EncodedCommand", "Bypass", "DownloadString" 포함
-  * 새벽/휴일 시간대 실행
-- Event ID 4624: 비정상 로그인 (Type 10=RDP, 새벽 시간)
-- Event ID 4104: PowerShell 스크립트 블록 (악성 명령어)
-- Event ID 1102: 보안 로그 삭제 시도
+=== 응답 규칙 ===
+- JSON 배열만 응답 (설명 없이)
+- 모든 경로는 슬래시(/) 사용
+- 기존 finding_id가 있다면 포함
+- 신뢰도는 0.0~1.0 범위
 
-**🔍 레지스트리 중점 분석:**
-- HKLM:/SOFTWARE/Microsoft/Windows Defender/Real-Time Protection
-  * DisableRealtimeMonitoring=1 (위험)
-- HKLM:/SYSTEM/CurrentControlSet/Control/Terminal Server  
-  * fDenyTSConnections=0 (RDP 활성화)
-- HKLM:/SOFTWARE/Microsoft/Windows/CurrentVersion/Run
-  * 의심스러운 자동실행 (Public, Downloads 폴더)
-
-=== 응답 형식 (정확히 따르세요) ===
 [
   {{
-    "issue_id": "evt-001",
-    "title": "의심스러운 PowerShell 실행",
+    "issue_id": "ai-analysis-001",
+    "title": "연관된 persistence 공격 패턴",
     "severity": "high",
-    "category": "suspicious_activity", 
-    "description": "관리자 권한으로 인코딩된 PowerShell 명령어 실행됨",
+    "category": "persistence_cluster", 
+    "description": "여러 자동실행 위치에서 연관된 의심 활동 탐지",
     "evidence": {{
-      "type": "event_log",
-      "event_id": 4688,
-      "command": "powershell -ExecutionPolicy Bypass",
-      "user": "Administrator",
-      "time": "2025-08-20T02:30:00"
+      "related_findings": ["F9CC0352A", "FFD95F8A2"],
+      "pattern": "multiple_autoruns",
+      "registry_keys": ["HKCU:/SOFTWARE/Microsoft/Windows/CurrentVersion/Run"]
     }},
-    "confidence": 0.9
+    "confidence": 0.85
   }}
 ]
-
-다시 한번 강조: JSON 배열만 응답하고, 경로는 슬래시(/)만 사용하세요!
 """
     
     def _create_security_issue(self, issue_data: Dict, findings_data: Dict, index: int) -> SecurityIssue:
