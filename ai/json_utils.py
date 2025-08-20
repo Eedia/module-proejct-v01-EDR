@@ -15,15 +15,6 @@ class JSONCleaner:
         if not content:
             return JSONCleaner._get_fallback_json(fallback_type)
         
-        # 원본 응답 저장
-        try:
-            with open('debug_ai_response.txt', 'w', encoding='utf-8') as f:
-                f.write(f"=== AI 원본 응답 ({len(content)} 문자) ===\n")
-                f.write(content)
-                f.write("\n=== 응답 끝 ===\n")
-        except:
-            pass
-        
         content = content.strip()
         logger.info(f"AI 응답 길이: {len(content)} 문자")
         
@@ -47,28 +38,11 @@ class JSONCleaner:
         
         json_str = content[start_idx:end_idx+1]
         
-        # 추출된 JSON 저장
-        try:
-            with open('debug_extracted_json.txt', 'w', encoding='utf-8') as f:
-                f.write(f"=== 추출된 JSON ({len(json_str)} 문자) ===\n")
-                f.write(json_str)
-                f.write("\n=== 추출 끝 ===\n")
-        except:
-            pass
         
         try:
             # 1단계: json-repair로 자동 수정 시도
             repaired_json = repair_json(json_str)
             logger.info("json-repair로 JSON 자동 수정 완료")
-            
-            # 수정된 JSON 저장
-            try:
-                with open('debug_repaired_json.txt', 'w', encoding='utf-8') as f:
-                    f.write(f"=== json-repair 수정 결과 ===\n")
-                    f.write(repaired_json)
-                    f.write("\n=== 수정 완료 ===\n")
-            except:
-                pass
             
             # 2단계: Windows 경로 정리 (필요시)
             repaired_json = repaired_json.replace('\\\\', '/')
