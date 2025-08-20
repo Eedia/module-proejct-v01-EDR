@@ -25,7 +25,10 @@ from utils.file_handler import (
     save_findings_json, generate_html_report
 )
 
-
+from reg.autorun_analyzer import analyze_autorun_entries
+from reg.service_analyzer import analyze_services
+from reg.security_settings import analyze_security_settings
+   
 
 # 로깅 설정
 logging.basicConfig(
@@ -97,6 +100,15 @@ def run_full_scan(time_range_hours: int = 24) -> dict:
         findings = analyze_events(events)
         logger.info(f"생성된 탐지 항목: {len(findings)}개")
         
+        logger.info("레지스트리 분석 중...")
+        registry_findings = (
+            analyze_autorun_entries()
+            + analyze_services()
+            + analyze_security_settings()
+        )
+        logger.info(f"레지스트리 기반 탐지: {len(registry_findings)}개")
+        findings.extend(registry_findings)    
+
         # 4. 점수 계산
         logger.info("점수 계산 중...")
         score_summary = generate_score_summary(findings)
@@ -133,7 +145,13 @@ def run_full_scan(time_range_hours: int = 24) -> dict:
                         ]
                     },
                     "registry": {
-                        "enabled": False
+                        "enabled": True,
+                        "analyzers": [
+                            "autoruns",
+                            "services",
+                            "security_settings",
+                        ],
+                        "findings_count": len(registry_findings),
                     },
                     "system_info": {
                         "enabled": True
