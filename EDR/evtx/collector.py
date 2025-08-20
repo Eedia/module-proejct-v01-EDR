@@ -12,6 +12,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional
 import logging
+import locale
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -105,7 +106,19 @@ class EventLogCollector:
         except Exception as e:
             logger.error(f"Error collecting events: {e}")
             return []
-    
+    def _decode_output(self, data: bytes) -> str:
+        """wevtutil 출력의 인코딩을 자동으로 감지하여 문자열로 반환"""
+        if not data:
+            return ""
+
+        encodings = ["utf-16le", locale.getpreferredencoding(False), "utf-8"]
+        for enc in encodings:
+            try:
+                return data.decode(enc)
+            except UnicodeDecodeError:
+                continue
+        return data.decode("utf-8", errors="ignore")
+
     def _collect_events_by_channel(self, channel: str, event_ids: List[int]) -> List[Dict[str, Any]]:
         """특정 채널에서 이벤트 ID 목록으로 이벤트 수집"""
         if not event_ids:
@@ -135,8 +148,10 @@ class EventLogCollector:
             
             result = subprocess.run(cmd, capture_output=True, timeout=300)
 
-            stdout = result.stdout.decode("utf-16le", errors="ignore") if result.stdout else ""
-            stderr = result.stderr.decode("utf-16le", errors="ignore") if result.stderr else ""
+            # stdout = result.stdout.decode("utf-16le", errors="ignore") if result.stdout else ""
+            # stderr = result.stderr.decode("utf-16le", errors="ignore") if result.stderr else ""
+            stdout = self._decode_output(result.stdout)
+            stderr = self._decode_output(result.stderr)
             
             if result.returncode != 0:
                 logger.warning(f"wevtutil returned error for {channel}: {stderr or None}")

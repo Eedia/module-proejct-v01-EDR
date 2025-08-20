@@ -32,7 +32,7 @@ class ServiceAnalyzer:
         # 서비스 관련 레지스트리 경로
         self.service_registry_paths = {
             'services': ('HKLM', r'SYSTEM\CurrentControlSet\Services'),
-            'services_wow64': ('HKLM', r'SYSTEM\CurrentControlSet\Services\WOW6432Node')
+            # 'services_wow64': ('HKLM', r'SYSTEM\CurrentControlSet\Services\WOW6432Node')
         }
         
         logger.info("서비스 분석기 초기화 완료 - 룰 엔진 기반")
