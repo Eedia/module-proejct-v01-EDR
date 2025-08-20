@@ -1,20 +1,20 @@
 """
 AI 응답 JSON 처리 유틸리티
-json-repair 라이브러리를 사용한 강력한 JSON 정리 기능
+json-repair 라이브러리 활용한 강화된 JSON 처리
 """
 import json
 import re
 import logging
 
-logger = logging.getLogger(__name__)
-
-# json-repair가 없는 경우 기본 처리
+# json-repair 라이브러리가 없다면 기본 처리 사용
 try:
     from json_repair import repair_json
     HAS_JSON_REPAIR = True
 except ImportError:
-    logger.warning("json-repair 라이브러리가 없습니다. 기본 JSON 처리를 사용합니다.")
     HAS_JSON_REPAIR = False
+    logging.warning("json-repair 라이브러리가 없습니다. 기본 JSON 처리를 사용합니다.")
+
+logger = logging.getLogger(__name__)
 
 class JSONCleaner:
     @staticmethod
@@ -29,9 +29,8 @@ class JSONCleaner:
         # ANSI 이스케이프 코드 제거
         content = re.sub(r'\x1b\[[0-9;]*m', '', content)
         
-        # 마크다운 코드블록 제거
-        content = re.sub(r'```(?:json)?\s*', '', content)
-        content = content.replace('```', '').strip()
+        # 마크다운 제거
+        content = content.replace('```json', '').replace('```', '').strip()
         
         # JSON 추출
         if fallback_type == "array":
@@ -53,11 +52,8 @@ class JSONCleaner:
                 repaired_json = repair_json(json_str)
                 logger.info("json-repair로 JSON 자동 수정 완료")
                 
-                # 2단계: Windows 경로 정리 (필요시)
-                repaired_json = repaired_json.replace('\\\\', '/')
-                repaired_json = re.sub(r'HKLM:\\?', 'HKLM:/', repaired_json)
-                repaired_json = re.sub(r'HKCU:\\?', 'HKCU:/', repaired_json)
-                repaired_json = re.sub(r'C:\\([^"]*)', r'C:/\1', repaired_json)
+                # 2단계: Windows 경로 정리
+                repaired_json = JSONCleaner._normalize_paths(repaired_json)
                 
                 # 3단계: 최종 검증
                 json.loads(repaired_json)
@@ -67,9 +63,10 @@ class JSONCleaner:
             except Exception as e:
                 logger.error(f"json-repair 실패: {e}, 수동 수정 시도")
         
+        # 수동 수정 시도
         try:
-            # 수동 수정 시도
             fixed_json = JSONCleaner._fix_json_syntax(json_str)
+            fixed_json = JSONCleaner._normalize_paths(fixed_json)
             json.loads(fixed_json)
             logger.info("수동 JSON 수정 성공")
             return fixed_json.strip()
@@ -78,8 +75,18 @@ class JSONCleaner:
             return JSONCleaner._get_fallback_json(fallback_type)
     
     @staticmethod
+    def _normalize_paths(json_str: str) -> str:
+        """Windows 경로 정리"""
+        # 백슬래시를 슬래시로 변경
+        json_str = json_str.replace('\\\\', '/')
+        json_str = re.sub(r'HKLM:\\?', 'HKLM:/', json_str)
+        json_str = re.sub(r'HKCU:\\?', 'HKCU:/', json_str)
+        json_str = re.sub(r'C:\\([^"]*)', r'C:/\1', json_str)
+        return json_str
+    
+    @staticmethod
     def _fix_json_syntax(json_str: str) -> str:
-        """수동 JSON 구문 수정 (백업용)"""
+        """수동 JSON 구문 수정"""
         # 객체 간 쉼표 누락 수정
         json_str = re.sub(r'}\s*{', '}, {', json_str)
         # 배열-객체 간 쉼표 누락

@@ -6,10 +6,10 @@ EDR 스캔 결과에 대한 자연어 질의응답 시스템
 import json
 import logging
 from typing import Dict, List, Any
-from .base import LLMBaseModule
+from .base import AIBaseModule
 from utils.data_structures import Finding
 
-class AskYourScanUpgraded(LLMBaseModule):
+class AskYourScanUpgraded(AIBaseModule):
     """자연어 질의응답 처리기"""
     
     def __init__(self):

@@ -1,14 +1,13 @@
 """
-LLM 모듈 공통 데이터 모델
-EDR 프로젝트의 Finding 구조와 연동되는 AI 특화 모델들
+AI 모듈 공통 데이터 모델
+dataclass 기반 표준화된 데이터 구조
 """
 from dataclasses import dataclass, asdict
 from typing import List, Dict, Optional
-from utils.data_structures import Finding
 
 @dataclass
 class SecurityIssue:
-    """AI가 탐지한 보안 이슈 데이터 구조"""
+    """보안 이슈 데이터 구조"""
     issue_id: str
     title: str
     severity: str
@@ -25,21 +24,6 @@ class SecurityIssue:
     
     def to_dict(self) -> Dict:
         return asdict(self)
-    
-    @classmethod
-    def from_finding(cls, finding: Finding) -> 'SecurityIssue':
-        """Finding 객체로부터 SecurityIssue 생성"""
-        return cls(
-            issue_id=finding.finding_id,
-            title=finding.title,
-            severity=finding.severity.value if hasattr(finding.severity, 'value') else str(finding.severity),
-            category=finding.category.value if hasattr(finding.category, 'value') else str(finding.category),
-            description=finding.description,
-            confidence=finding.confidence,
-            evidence=finding.evidence[0].data if finding.evidence else {},
-            detected_at=finding.timestamp,
-            rule_name=finding.rule_id
-        )
 
 @dataclass
 class RemediationScript:
@@ -65,6 +49,7 @@ class RemediationScript:
 class AnalysisResult:
     """전체 분석 결과 데이터 구조"""
     timestamp: str
+    hostname: str
     detected_issues: List[SecurityIssue]
     ai_remediation: List[RemediationScript]
     total_issues: int
@@ -74,9 +59,22 @@ class AnalysisResult:
     def to_dict(self) -> Dict:
         return {
             "timestamp": self.timestamp,
+            "hostname": self.hostname,
             "detected_issues": [issue.to_dict() for issue in self.detected_issues],
             "ai_remediation": [script.to_dict() for script in self.ai_remediation],
             "total_issues": self.total_issues,
             "statistics": self.statistics,
             "executive_summary": self.executive_summary
         }
+
+@dataclass 
+class QueryResponse:
+    """자연어 질의 응답 데이터 구조"""
+    answer: str
+    confidence: float
+    source: str
+    query: str
+    error: bool = False
+    
+    def to_dict(self) -> Dict:
+        return asdict(self)

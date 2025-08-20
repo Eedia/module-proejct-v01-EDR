@@ -1,8 +1,7 @@
 """
-Google Gemini API 클라이언트
-llmtest/api_client.py 기반으로 구현
+Google Gemini API 공통 클라이언트
+EDR 보안 분석용으로 최적화된 API 클라이언트
 """
-
 import google.generativeai as genai
 import os
 import logging

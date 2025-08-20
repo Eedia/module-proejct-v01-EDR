@@ -1,23 +1,26 @@
 """
-LLM 모듈 공통 기반 클래스
-기존 AI 모듈을 EDR 프로젝트 구조에 맞게 업그레이드
+AI 모듈 공통 기반 클래스
+모든 AI 모듈이 상속받는 기본 클래스
 """
 import logging
-from typing import Dict, Any
-from .api_client import GeminiClient
-from .json_utils import JSONCleaner
+from typing import Dict
+from .api_client_new import GeminiClient
+from .json_utils_new import JSONCleaner
 
-class LLMBaseModule:
-    """모든 LLM 모듈의 기반 클래스"""
+class AIBaseModule:
+    """모든 AI 모듈의 기반 클래스"""
     
-    def __init__(self, module_name: str = None):
+    def __init__(self, config: Dict, module_name: str = None):
+        self.config = config
+        self.ai_config = config.get('ai', {})
+        
         # 공통 컴포넌트 초기화
         self.api_client = GeminiClient()
         self.json_cleaner = JSONCleaner()
         
         # 로깅 설정
         if module_name:
-            self.logger = logging.getLogger(f"llm.{module_name}")
+            self.logger = logging.getLogger(f"ai.{module_name}")
         else:
             self.logger = logging.getLogger(__name__)
         
