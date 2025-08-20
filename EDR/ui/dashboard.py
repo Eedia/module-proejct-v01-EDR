@@ -7,7 +7,7 @@ from PyQt6.QtCharts import QChart, QChartView, QLineSeries, QDateTimeAxis, QValu
 # Donut Gauge
 # ---------------------------
 class DonutGauge(QtWidgets.QWidget):
-    def __init__(self, value=90, maximum=100, thickness=16,
+    def __init__(self, value=0, maximum=100, thickness=16,
                  fg="#22c55e", track="#3f4147", text="#e5e7eb", parent=None):
         super().__init__(parent)
         self._value = int(value)
@@ -164,7 +164,7 @@ class TimeSeriesChart(QtWidgets.QWidget):
 # ---------------------------
 # Utils
 # ---------------------------
-def parse_score_from_label(text: str, default: int = 90) -> int:
+def parse_score_from_label(text: str, default: int = 0) -> int:
     import re
     m = re.search(r'\d+', text or '')
     return max(0, min(100, int(m.group()))) if m else default
