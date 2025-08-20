@@ -45,30 +45,30 @@ class IntegratedEDRAnalyzer:
         logger.info(f"🚀 통합 EDR 분석 시작 (ID: {scan_id})")
         
         # 1단계: 기존 EDR 데이터 수집
-        logger.info("1️⃣ 이벤트 로그 및 레지스트리 데이터 수집...")
+        logger.info("1. 이벤트 로그 및 레지스트리 데이터 수집...")
         raw_edr_data = self._collect_edr_data()
         
         # 2단계: 기존 룰 기반 분석
-        logger.info("2️⃣ 룰 기반 탐지 및 점수 계산...")
+        logger.info("2. 룰 기반 탐지 및 점수 계산...")
         rule_based_results = self._run_rule_based_analysis(raw_edr_data)
         
         # 3단계: AI 분석을 위한 데이터 변환
-        logger.info("3️⃣ AI 분석용 데이터 변환...")
+        logger.info("3. AI 분석용 데이터 변환...")
         ai_compatible_data = self._prepare_ai_data(raw_edr_data, rule_based_results)
         
         # 4단계: AI 통합 분석
-        logger.info("4️⃣ AI 통합 분석 실행...")
+        logger.info("4. AI 통합 분석 실행...")
         ai_results = self._run_ai_analysis(ai_compatible_data)
         
         # 5단계: 결과 통합
-        logger.info("5️⃣ 분석 결과 통합...")
+        logger.info("5. 분석 결과 통합...")
         integrated_results = self._merge_results(rule_based_results, ai_results, analysis_start)
         
         # 6단계: 결과 저장
-        logger.info("6️⃣ 결과 저장...")
+        logger.info("6. 결과 저장...")
         self._save_integrated_results(integrated_results, scan_id)
         
-        logger.info("✅ 통합 EDR 분석 완료")
+        logger.info("통합 EDR 분석 완료")
         return integrated_results
     
     def _collect_edr_data(self) -> Dict:
