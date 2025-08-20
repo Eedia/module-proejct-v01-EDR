@@ -102,9 +102,28 @@ class AISecurityAnalyzer:
                 else:
                     self.logger.warning(f"예상치 못한 이슈 타입: {type(issue)}")
             hostname = context_data.hostname
+            
+            ai_remediation = []
+            for script in getattr(context_data, 'ai_remediation', []):
+                if hasattr(script, 'to_dict'):
+                    ai_remediation.append(script.to_dict())
+                else:
+                    ai_remediation.append(script)
         else:
-            detected_issues = context_data.get('detected_issues', [])
-            hostname = context_data.get('hostname', 'Unknown')
+            if 'detected_issues' in context_data:
+                detected_issues = context_data.get('detected_issues', [])
+            else:
+                detected_issues = context_data.get('ai_analysis', {}).get('detected_issues', [])
+
+            hostname = context_data.get(
+                'hostname',
+                context_data.get('integration_metadata', {}).get('hostname', 'Unknown')
+            )
+
+            ai_remediation = context_data.get(
+                'ai_remediation',
+                context_data.get('ai_analysis', {}).get('ai_remediation', [])
+            )
         
         # QueryHandler가 기대하는 형식으로 변환
         findings_data = {
@@ -112,7 +131,7 @@ class AISecurityAnalyzer:
             'collection_period': '스캔 완료',
             'hostname': hostname,
             'total_issues': len(detected_issues),
-            'ai_remediation': context_data.get('ai_remediation', [])
+            'ai_remediation': ai_remediation
         }
         
         try:
