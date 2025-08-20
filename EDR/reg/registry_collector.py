@@ -3,7 +3,10 @@ reg/registry_collector.py
 레지스트리 데이터 수집기
 """
 
-import winreg
+try:
+    import winreg  # type: ignore
+except ImportError:  # pragma: no cover - 플랫폼 의존성
+    winreg = None  # type: ignore
 import logging
 from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
@@ -24,13 +27,17 @@ class RegistryCollector:
     
     def __init__(self):
         """초기화"""
-        self.hives = {
-            'HKLM': winreg.HKEY_LOCAL_MACHINE,
-            'HKCU': winreg.HKEY_CURRENT_USER,
-            'HKCR': winreg.HKEY_CLASSES_ROOT,
-            'HKU': winreg.HKEY_USERS,
-            'HKCC': winreg.HKEY_CURRENT_CONFIG
-        }
+        if winreg is None:
+            logger.warning("winreg 모듈을 사용할 수 없습니다. 레지스트리 기능이 비활성화됩니다.")
+            self.hives: Dict[str, Any] = {}
+        else:
+            self.hives = {
+                'HKLM': winreg.HKEY_LOCAL_MACHINE,
+                'HKCU': winreg.HKEY_CURRENT_USER,
+                'HKCR': winreg.HKEY_CLASSES_ROOT,
+                'HKU': winreg.HKEY_USERS,
+                'HKCC': winreg.HKEY_CURRENT_CONFIG
+            }
         
         # 보안 관련 주요 레지스트리 경로들
         self.security_keys = {
@@ -64,6 +71,9 @@ class RegistryCollector:
     
     def get_registry_value(self, hive: str, key_path: str, value_name: str = None) -> Optional[Any]:
         """레지스트리 값 조회"""
+        if winreg is None:
+            logger.warning("winreg 모듈이 없어 레지스트리 값을 조회할 수 없습니다.")
+            return None
         try:
             hive_key = self.hives.get(hive.upper())
             if not hive_key:
@@ -95,6 +105,9 @@ class RegistryCollector:
     
     def enumerate_registry_keys(self, hive: str, key_path: str) -> List[str]:
         """레지스트리 서브키 열거"""
+        if winreg is None:
+            logger.warning("winreg 모듈이 없어 레지스트리 키를 열거할 수 없습니다.")
+            return []
         try:
             hive_key = self.hives.get(hive.upper())
             if not hive_key:
@@ -119,6 +132,9 @@ class RegistryCollector:
     
     def enumerate_registry_values(self, hive: str, key_path: str) -> List[Dict[str, Any]]:
         """레지스트리 값들 열거"""
+        if winreg is None:
+            logger.warning("winreg 모듈이 없어 레지스트리 값을 열거할 수 없습니다.")
+            return []
         try:
             hive_key = self.hives.get(hive.upper())
             if not hive_key:
@@ -148,6 +164,9 @@ class RegistryCollector:
     
     def get_registry_values(self, hive: str, key_path: str) -> Dict[str, Any]:
         """레지스트리 값들을 딕셔너리 형태로 반환"""
+        if winreg is None:
+            logger.warning("winreg 모듈이 없어 레지스트리 값을 가져올 수 없습니다.")
+            return {}
         try:
             hive_key = self.hives.get(hive.upper())
             if not hive_key:
@@ -188,6 +207,9 @@ class RegistryCollector:
     
     def _collect_key_info(self, hive: str, key_path: str) -> Optional[Dict[str, Any]]:
         """특정 키의 전체 정보 수집"""
+        if winreg is None:
+            logger.warning("winreg 모듈이 없어 레지스트리 정보를 수집할 수 없습니다.")
+            return None
         try:
             # 키 존재 여부 확인
             hive_key = self.hives.get(hive.upper())
@@ -256,6 +278,8 @@ class RegistryCollector:
     
     def _get_reg_type_name(self, reg_type: int) -> str:
         """레지스트리 타입 번호를 이름으로 변환"""
+        if winreg is None:
+            return f'UNKNOWN_TYPE_{reg_type}'
         type_map = {
             winreg.REG_NONE: 'REG_NONE',
             winreg.REG_SZ: 'REG_SZ', 
