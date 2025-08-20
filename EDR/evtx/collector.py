@@ -280,10 +280,12 @@ class EventLogCollector:
             # UserData 추출 (일부 이벤트에서 사용)
             user_data_elem = event_elem.find('.//UserData')
             if user_data_elem is not None:
-                for child in user_data_elem:
-                    if child.tag and child.text:
-                        event_data[child.tag] = child.text
-            
+                for node in user_data_elem.iter():
+                    if node is user_data_elem:
+                        continue
+                    if node.tag and (node.text is not None):
+                        event_data[node.tag] = node.text
+                        
             # 정규화된 이벤트 객체 생성
             normalized_event = {
                 "channel": channel,
