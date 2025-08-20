@@ -1,0 +1,41 @@
+{
+  "collection_timestamp": "2025-08-20T13:25:00",
+  "system_info": {
+    "hostname": "DESKTOP-TEST",
+    "os_version": "Windows 11"
+  },
+  "event_logs": [
+    {
+      "event_id": 4688,
+      "process_name": "powershell.exe",
+      "command_line": "powershell -ExecutionPolicy Bypass -EncodedCommand aWVhIGZvbGRlciBjYWxsZWQgSGVsbG8gV29ybGQ=",
+      "user": "Administrator",
+      "time_created": "2025-08-20T02:30:00",
+      "process_id": "1234"
+    },
+    {
+      "event_id": 4624,
+      "logon_type": 10,
+      "account": "Administrator", 
+      "time_created": "2025-08-20T03:45:00"
+    },
+    {
+      "event_id": 1102,
+      "source": "Microsoft-Windows-Eventlog",
+      "user": "SYSTEM",
+      "time_created": "2025-08-20T04:15:00"
+    }
+  ],
+  "registry_data": {
+    "HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Real-Time Protection": {
+      "DisableRealtimeMonitoring": 1
+    },
+    "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server": {
+      "fDenyTSConnections": 0
+    },
+    "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run": {
+      "WindowsUpdate": "C:\\Windows\\System32\\svchost.exe",
+      "CryptoMiner": "C:\\Users\\Public\\Downloads\\miner.exe"
+    }
+  }
+}
