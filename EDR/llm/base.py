@@ -4,8 +4,8 @@ AI 모듈 공통 기반 클래스
 """
 import logging
 from typing import Dict
-from .api_client_new import GeminiClient
-from .json_utils_new import JSONCleaner
+from .api_client import GeminiClient
+from .json_utils import JSONCleaner
 
 class AIBaseModule:
     """모든 AI 모듈의 기반 클래스"""

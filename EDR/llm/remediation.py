@@ -4,8 +4,8 @@ AI Remediator - 해결책 생성 AI
 """
 import json
 from typing import List, Dict, Optional
-from .base_new import AIBaseModule
-from .models_new import RemediationScript, SecurityIssue
+from .base import AIBaseModule
+from .models import RemediationScript, SecurityIssue
 
 
 class RemediationEngine(AIBaseModule):

@@ -83,7 +83,7 @@ def test_llm_with_real_structure():
         
         # 3. AI Remediator 테스트
         try:
-            from llm.ai_remediator_new import AIRemediator
+            from llm.ai_remediator import AIRemediator
             
             print("   🔧 AI Remediator 테스트 시작...")
             remediator = AIRemediator()
@@ -104,7 +104,7 @@ def test_llm_with_real_structure():
         
         # 4. Ask Your Scan 테스트
         try:
-            from llm.ask_your_scan_upgraded import AskYourScanUpgraded
+            from llm.ask_your_scan import AskYourScanUpgraded
             
             print("   🔍 Ask Your Scan 테스트 시작...")
             query_handler = AskYourScanUpgraded()

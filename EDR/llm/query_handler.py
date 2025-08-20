@@ -4,8 +4,8 @@ Ask your Scan - 자연어 질문 처리기
 """
 import json
 from typing import Dict, List
-from .base_new import AIBaseModule
-from .models_new import QueryResponse
+from .base import AIBaseModule
+from .models import QueryResponse
 
 class QueryHandler(AIBaseModule):
     def __init__(self, config: Dict):

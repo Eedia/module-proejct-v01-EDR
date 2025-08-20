@@ -3,7 +3,7 @@ AI Security Summarizer - 보안 이슈 요약 생성기
 경영진용 요약, 기술적 분석, AI 인사이트 제공
 """
 from typing import Dict, List
-from .base_new import AIBaseModule
+from .base import AIBaseModule
 
 class SecuritySummarizer(AIBaseModule):
     def __init__(self, config: Dict):
