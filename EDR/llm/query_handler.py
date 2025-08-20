@@ -18,7 +18,7 @@ class QueryHandler(AIBaseModule):
             summary = self._create_findings_summary(findings_data)
             
             # 🔧 강제 데이터 검증 및 수정
-            alerts = findings_data.get('alerts', [])
+            alerts = findings_data.get('detected_issues', findings_data.get('alerts', []))  # 키 이름 변경 대응
             total_real_issues = len(alerts)
             hostname = findings_data.get('hostname', 'Unknown')
             
