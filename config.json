@@ -1,0 +1,12 @@
+{
+    "ai": {
+        "provider": "gemini",
+        "model": "gemini-1.5-flash",
+        "timeout": 30,
+        "max_tokens": 1000
+    },
+    "security": {
+        "enable_validation": true,
+        "confidence_threshold": 0.7
+    }
+}
