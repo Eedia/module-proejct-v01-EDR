@@ -23,8 +23,8 @@ from utils.data_structures import generate_scan_id, get_current_timestamp
 from utils.file_handler import save_findings_json, generate_html_report
 
 # 새로운 통합 LLM
-from llm.security_analyzer_new import AISecurityAnalyzer
-from llm.utils_new import normalize_findings_data, convert_to_alerts_format
+from llm.security_analyzer import AISecurityAnalyzer
+from llm.utils import normalize_findings_data, convert_to_alerts_format
 
 logger = logging.getLogger(__name__)
 
