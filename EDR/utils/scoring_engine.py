@@ -20,14 +20,18 @@ logger = logging.getLogger(__name__)
 class ScoringEngine:
     """EDR 스캔 결과 점수화 엔진 - 룰 엔진 기반"""
     
-    def __init__(self, rules_dir: str = "rules"):
+    DEFAULT_RULES_DIR = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "rules"
+    )
+
+    def __init__(self, rules_dir: Optional[str] = None):
         """
         점수화 엔진 초기화
         
         Args:
             rules_dir: 룰 파일들이 있는 디렉토리
         """
-        self.rules_dir = rules_dir
+        self.rules_dir = rules_dir or self.DEFAULT_RULES_DIR
         self.scoring_weights = self._load_scoring_weights()
         
         logger.info("점수화 엔진 초기화 완료 - 룰 엔진 기반")
@@ -49,26 +53,27 @@ class ScoringEngine:
     def _get_default_weights(self) -> Dict[str, Any]:
         """기본 점수 가중치 반환"""
         return {
-            "severity_base_scores": {
-                "critical": 20,
-                "high": 15,
-                "medium": 10,
-                "low": 5,
-                "info": 1
+            "severity_weights": {
+                "critical": 3.0,
+                "high": 2.0,
+                "medium": 1.0,
+                "low": 0.5,
+                "info": 0.2,
             },
-            "category_multipliers": {
+            "category_weights": {
                 "execution": 1.5,
                 "persistence": 1.3,
                 "access": 1.2,
-                "configuration": 1.0,
-                "default": 1.0
+                "configuration": 0.8,
+                "default": 1.0,
             },
-            "rule_specific_multipliers": {},
-            "confidence_adjustment": {
-                "enabled": True,
+            "rule_specific_weights": {},
+            "confidence_settings": {
                 "min_confidence": 0,
-                "max_confidence": 100
-            }
+                "max_confidence": 100,
+                "weight_factor": 0.01,
+            },
+            "scoring_formula": {"base_score": 10, "max_score": 100, "min_score": 1},
         }
     
     def calculate_finding_score(self, finding: Any) -> int:
@@ -94,37 +99,34 @@ class ScoringEngine:
             rule_id = finding.rule_id
             confidence = finding.confidence
         
-        # 기본 심각도 점수
-        base_score = self.scoring_weights["severity_base_scores"].get(severity, 1)
-        
-        # 카테고리 가중치 적용
-        category_multiplier = self.scoring_weights["category_multipliers"].get(
-            category, 
-            self.scoring_weights["category_multipliers"]["default"]
+        # 기본 점수 및 가중치 로드
+        base_score = self.scoring_weights.get("scoring_formula", {}).get("base_score", 10)
+        severity_weight = self.scoring_weights.get("severity_weights", {}).get(severity, 1.0)
+        category_weight = self.scoring_weights.get("category_weights", {}).get(
+            category,
+            self.scoring_weights.get("category_weights", {}).get("default", 1.0),
         )
-        
+
         # 룰별 가중치 적용
-        rule_multiplier = self.scoring_weights["rule_specific_multipliers"].get(rule_id, 1.0)
+        rule_weight = self.scoring_weights.get("rule_specific_weights", {}).get(rule_id, 1.0)
         
         # 신뢰도 조정
-        confidence_adjustment = self._calculate_confidence_adjustment(confidence)
-        
-        # 최종 점수 계산 (감점형이므로 음수)
-        final_score = -(base_score * category_multiplier * rule_multiplier * confidence_adjustment)
+        confidence_factor = self._calculate_confidence_adjustment(confidence)
+
+        # 최종 점수 계산
+        final_score = base_score * severity_weight * category_weight * rule_weight * confidence_factor
         
         return int(final_score)
     
     def _calculate_confidence_adjustment(self, confidence: int) -> float:
         """신뢰도 기반 점수 조정"""
-        if not self.scoring_weights["confidence_adjustment"]["enabled"]:
-            return 1.0
-        
-        # 신뢰도를 0.5 ~ 1.0 범위로 정규화
-        min_conf = self.scoring_weights["confidence_adjustment"]["min_confidence"]
-        max_conf = self.scoring_weights["confidence_adjustment"]["max_confidence"]
-        
-        normalized_confidence = max(0, min(100, confidence))
-        adjustment = 0.5 + (normalized_confidence / max_conf) * 0.5
+        settings = self.scoring_weights.get("confidence_settings", {})
+        min_conf = settings.get("min_confidence", 0)
+        max_conf = settings.get("max_confidence", 100)
+        factor = settings.get("weight_factor", 0.01)
+
+        clamped = max(min_conf, min(max_conf, confidence))
+        adjustment = 1 + (clamped - min_conf) * factor
         
         return adjustment
     
@@ -229,16 +231,16 @@ class ScoringEngine:
     def get_scoring_statistics(self) -> Dict[str, Any]:
         """점수화 엔진 통계 정보"""
         return {
-            "severity_scores": self.scoring_weights["severity_base_scores"],
-            "category_multipliers": self.scoring_weights["category_multipliers"],
-            "rule_count": len(self.scoring_weights["rule_specific_multipliers"]),
-            "confidence_enabled": self.scoring_weights["confidence_adjustment"]["enabled"]
+            "severity_scores": self.scoring_weights.get("severity_weights", {}),
+            "category_multipliers": self.scoring_weights.get("category_weights", {}),
+            "rule_count": len(self.scoring_weights.get("rule_specific_weights", {})),
+            "confidence_enabled": True,
         }
     
     def update_rule_weight(self, rule_id: str, weight: float) -> bool:
         """특정 룰의 가중치 업데이트"""
         try:
-            self.scoring_weights["rule_specific_multipliers"][rule_id] = weight
+            self.scoring_weights.setdefault("rule_specific_weights", {})[rule_id] = weight
             self._save_scoring_weights()
             logger.info(f"룰 가중치 업데이트: {rule_id} = {weight}")
             return True
