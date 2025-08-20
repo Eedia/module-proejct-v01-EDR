@@ -56,7 +56,7 @@ def main():
                 print(f"  {i}. [{severity}] {desc}")
         
         if ai_analysis['detected_issues']:
-            print(f"\n🤖 주요 AI 탐지 이슈 (상위 3개):")
+            print(f"\n🤖주요 AI 탐지 이슈 (상위 3개):")
             for i, issue in enumerate(ai_analysis['detected_issues'][:3], 1):
                 severity = issue.get('severity', 'unknown').upper()
                 title = issue.get('title', '제목 없음')
@@ -65,7 +65,7 @@ def main():
         
         # 4. AI 해결책 출력
         if ai_analysis['ai_remediation']:
-            print(f"\n🛠️ AI 추천 해결책 (상위 2개):")
+            print(f"\nAI 추천 해결책 (상위 2개):")
             for i, script in enumerate(ai_analysis['ai_remediation'][:2], 1):
                 desc = script.get('description', '해결책')
                 fix_cmd = script.get('fix_command', '명령어 없음')
@@ -100,10 +100,10 @@ def main():
         print(f"📁 결과는 output/ 폴더에 저장되었습니다.")
         
     except KeyboardInterrupt:
-        print("\n⏹️ 사용자에 의해 중단되었습니다.")
+        print("\n⏹사용자에 의해 중단되었습니다.")
     except Exception as e:
         logger.error(f"시스템 오류: {e}")
-        print(f"\n❌ 시스템 오류: {e}")
+        print(f"\n시스템 오류: {e}")
         print("자세한 내용은 로그를 확인하세요.")
 
 if __name__ == "__main__":
