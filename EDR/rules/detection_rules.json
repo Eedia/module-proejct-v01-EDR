@@ -1,0 +1,260 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created_at": "2025-08-20T15:30:00",
+    "description": "EDR 보안 탐지 룰 정의",
+    "total_rules": 12,
+    "categories": ["execution", "persistence", "access", "configuration"]
+  },
+  "rules": [
+    {
+      "rule_id": "R_LOLBIN_RUNDLL32_JS",
+      "category": "execution",
+      "subcategory": "lolbin",
+      "title": "rundll32.exe JavaScript 실행",
+      "description": "rundll32.exe가 JavaScript 코드를 실행하여 악성 페이로드 다운로드 가능성",
+      "severity": "high",
+      "confidence": 85,
+      "tactics": ["execution", "defense_evasion"],
+      "techniques": ["T1218.011"],
+      "data_source": "event_log",
+      "log_channels": ["Security", "Microsoft-Windows-PowerShell/Operational"],
+      "event_ids": [4688],
+      "conditions": {
+        "process_name": ["rundll32.exe"],
+        "command_line_contains": ["javascript:", "vbscript:"],
+        "logic": "AND"
+      },
+      "weight": 1.5,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_LOLBIN_RUNDLL32_URL",
+      "category": "execution",
+      "subcategory": "lolbin",
+      "title": "rundll32.exe URL 호출",
+      "description": "rundll32.exe가 URL을 통해 원격 콘텐츠에 접근",
+      "severity": "high",
+      "confidence": 80,
+      "tactics": ["execution", "defense_evasion"],
+      "techniques": ["T1218.011"],
+      "data_source": "event_log",
+      "log_channels": ["Security"],
+      "event_ids": [4688],
+      "conditions": {
+        "process_name": ["rundll32.exe"],
+        "command_line_contains": ["http://", "https://"],
+        "logic": "OR"
+      },
+      "weight": 1.4,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_LOLBIN_REGSVR32_URL",
+      "category": "execution",
+      "subcategory": "lolbin",
+      "title": "regsvr32.exe URL 기반 실행",
+      "description": "regsvr32.exe가 URL을 통해 원격 스크립트를 다운로드하고 실행",
+      "severity": "high",
+      "confidence": 90,
+      "tactics": ["execution", "defense_evasion"],
+      "techniques": ["T1218.010"],
+      "data_source": "event_log",
+      "log_channels": ["Security"],
+      "event_ids": [4688],
+      "conditions": {
+        "process_name": ["regsvr32.exe"],
+        "command_line_contains": ["http://", "https://", "/u"],
+        "logic": "AND"
+      },
+      "weight": 1.5,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_POWERSHELL_ENCODED",
+      "category": "execution",
+      "subcategory": "powershell",
+      "title": "PowerShell 인코딩된 명령어",
+      "description": "PowerShell에서 Base64 인코딩된 명령어 실행 탐지",
+      "severity": "medium",
+      "confidence": 75,
+      "tactics": ["execution", "defense_evasion"],
+      "techniques": ["T1059.001", "T1027"],
+      "data_source": "event_log",
+      "log_channels": ["Microsoft-Windows-PowerShell/Operational"],
+      "event_ids": [4104, 4103],
+      "conditions": {
+        "process_name": ["powershell.exe", "pwsh.exe"],
+        "command_line_contains": ["-enc", "-EncodedCommand", "FromBase64String"],
+        "logic": "OR"
+      },
+      "weight": 1.2,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_POWERSHELL_BYPASS_POLICY",
+      "category": "execution",
+      "subcategory": "powershell",
+      "title": "PowerShell 실행 정책 우회",
+      "description": "PowerShell 실행 정책을 우회하려는 시도 탐지",
+      "severity": "medium",
+      "confidence": 80,
+      "tactics": ["execution", "defense_evasion"],
+      "techniques": ["T1059.001"],
+      "data_source": "event_log",
+      "log_channels": ["Microsoft-Windows-PowerShell/Operational"],
+      "event_ids": [4104, 4103],
+      "conditions": {
+        "command_line_contains": ["-ExecutionPolicy", "Bypass", "Unrestricted", "-ep"],
+        "logic": "OR"
+      },
+      "weight": 1.1,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_POWERSHELL_AMSI_BYPASS",
+      "category": "execution",
+      "subcategory": "powershell",
+      "title": "PowerShell AMSI 우회",
+      "description": "AMSI(Antimalware Scan Interface) 우회 시도 탐지",
+      "severity": "high",
+      "confidence": 85,
+      "tactics": ["defense_evasion"],
+      "techniques": ["T1562.001"],
+      "data_source": "event_log",
+      "log_channels": ["Microsoft-Windows-PowerShell/Operational"],
+      "event_ids": [4104],
+      "conditions": {
+        "command_line_contains": ["AmsiUtils", "amsiInitFailed", "AMSI"],
+        "logic": "OR"
+      },
+      "weight": 1.4,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_RDP_NONBUSINESS_HOURS",
+      "category": "access",
+      "subcategory": "remote_access",
+      "title": "비업무시간 RDP 접속",
+      "description": "업무시간 외(18시-09시) RDP 로그온 탐지",
+      "severity": "medium",
+      "confidence": 70,
+      "tactics": ["lateral_movement", "persistence"],
+      "techniques": ["T1021.001"],
+      "data_source": "event_log",
+      "log_channels": ["Security"],
+      "event_ids": [4624],
+      "conditions": {
+        "logon_type": [10],
+        "time_range": {"exclude": "09:00-18:00"},
+        "logic": "AND"
+      },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_ADMIN_RDP_LOGON",
+      "category": "access",
+      "subcategory": "remote_access",
+      "title": "관리자 계정 RDP 로그온",
+      "description": "관리자 권한 계정의 RDP 로그온 탐지",
+      "severity": "medium",
+      "confidence": 75,
+      "tactics": ["lateral_movement"],
+      "techniques": ["T1021.001"],
+      "data_source": "event_log",
+      "log_channels": ["Security"],
+      "event_ids": [4624],
+      "conditions": {
+        "logon_type": [10],
+        "privilege_list": ["SeDebugPrivilege", "SeTcbPrivilege"],
+        "logic": "AND"
+      },
+      "weight": 1.1,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_SERVICE_TEMP_PATH",
+      "category": "persistence",
+      "subcategory": "service",
+      "title": "임시 경로 서비스 설치",
+      "description": "임시 디렉토리에 서비스가 설치되어 지속성 확보 시도",
+      "severity": "high",
+      "confidence": 80,
+      "tactics": ["persistence"],
+      "techniques": ["T1543.003"],
+      "data_source": "event_log",
+      "log_channels": ["System"],
+      "event_ids": [7045, 4697],
+      "conditions": {
+        "service_image_path_contains": ["\\temp\\", "\\tmp\\", "\\users\\", "\\appdata\\"],
+        "logic": "OR"
+      },
+      "weight": 1.3,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "category": "persistence",
+      "subcategory": "service",
+      "title": "의심스러운 서비스",
+      "description": "알려진 악성 서비스나 의심스러운 패턴의 서비스 탐지",
+      "severity": "medium",
+      "confidence": 70,
+      "tactics": ["persistence"],
+      "techniques": ["T1543.003"],
+      "data_source": "registry",
+      "registry_keys": ["HKLM\\SYSTEM\\CurrentControlSet\\Services"],
+      "conditions": {
+        "service_name_contains": ["temp", "update", "svchost"],
+        "logic": "OR"
+      },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "category": "persistence",
+      "subcategory": "autorun",
+      "title": "의심스러운 자동실행 항목",
+      "description": "임시 경로나 사용자 디렉토리의 자동실행 항목 탐지",
+      "severity": "medium",
+      "confidence": 75,
+      "tactics": ["persistence"],
+      "techniques": ["T1547.001"],
+      "data_source": "registry",
+      "registry_keys": [
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+      ],
+      "conditions": {
+        "value_contains": ["\\temp\\", "\\tmp\\", "\\users\\", "\\appdata\\"],
+        "logic": "OR"
+      },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_SECURITY_SETTINGS_NON_COMPLIANT",
+      "category": "configuration",
+      "subcategory": "security_settings",
+      "title": "보안 설정 미준수",
+      "description": "Windows 보안 설정이 권장 기준에 미치지 못함",
+      "severity": "low",
+      "confidence": 90,
+      "tactics": ["defense_evasion"],
+      "techniques": ["T1112"],
+      "data_source": "registry",
+      "registry_keys": [
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies",
+        "HKLM\\SYSTEM\\CurrentControlSet\\Control"
+      ],
+      "conditions": {
+        "check_settings": ["UAC", "Defender", "Firewall", "SMB", "RDP"],
+        "logic": "OR"
+      },
+      "weight": 0.8,
+      "enabled": true
+    }
+  ]
+}

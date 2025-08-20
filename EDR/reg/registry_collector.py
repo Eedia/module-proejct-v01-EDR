@@ -146,6 +146,30 @@ class RegistryCollector:
             logger.error(f"Error enumerating values in {hive}\\{key_path}: {e}")
             return []
     
+    def get_registry_values(self, hive: str, key_path: str) -> Dict[str, Any]:
+        """레지스트리 값들을 딕셔너리 형태로 반환"""
+        try:
+            hive_key = self.hives.get(hive.upper())
+            if not hive_key:
+                return {}
+
+            values = {}
+            with winreg.OpenKey(hive_key, key_path, 0, winreg.KEY_READ) as key:
+                index = 0
+                while True:
+                    try:
+                        value_name, value_data, _ = winreg.EnumValue(key, index)
+                        values[value_name] = value_data
+                        index += 1
+                    except OSError:
+                        break
+
+            return values
+
+        except Exception as e:
+            logger.error(f"Error getting registry values in {hive}\\{key_path}: {e}")
+            return {}
+        
     def collect_security_registry_data(self) -> Dict[str, Any]:
         """보안 관련 레지스트리 데이터 수집"""
         logger.info("보안 관련 레지스트리 데이터 수집 중...")
@@ -263,3 +287,7 @@ def get_registry_value(hive: str, key_path: str, value_name: str = None) -> Opti
 def enumerate_registry_keys(hive: str, key_path: str) -> List[str]:
     """전역 함수로 레지스트리 키 열거"""
     return registry_collector.enumerate_registry_keys(hive, key_path)
+
+def get_registry_values(hive: str, key_path: str) -> Dict[str, Any]:
+    """전역 함수로 레지스트리 값들 조회"""
+    return registry_collector.get_registry_values(hive, key_path)

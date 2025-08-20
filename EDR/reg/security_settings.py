@@ -112,6 +112,8 @@ class SecuritySettingsAnalyzer:
                 ['powershell', '-Command', 'Get-MpComputerStatus | ConvertTo-Json'],
                 capture_output=True,
                 text=True,
+                encoding='utf-8',
+                errors='ignore',
                 timeout=30
             )
             
@@ -152,6 +154,8 @@ class SecuritySettingsAnalyzer:
                 ['netsh', 'advfirewall', 'show', 'allprofiles', 'state'],
                 capture_output=True,
                 text=True,
+                encoding='utf-8',
+                errors='ignore',
                 timeout=30
             )
             
@@ -192,6 +196,8 @@ class SecuritySettingsAnalyzer:
                 ['powershell', '-Command', 'Get-Service -Name wuauserv | Select-Object Status, StartType | ConvertTo-Json'],
                 capture_output=True,
                 text=True,
+                encoding='utf-8',
+                errors='ignore',
                 timeout=30
             )
             

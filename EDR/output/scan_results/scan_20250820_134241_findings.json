@@ -1,0 +1,5246 @@
+{
+  "scan_metadata": {
+    "scan_id": "scan_20250820_134241",
+    "timestamp": "2025-08-20T13:42:41.636146Z",
+    "hostname": "JUNSEO",
+    "scan_duration_seconds": 0.17,
+    "scanner_version": "1.0.0",
+    "scan_scope": {
+      "event_logs": {
+        "enabled": true,
+        "time_range_hours": 24,
+        "channels": [
+          "Security",
+          "System",
+          "Microsoft-Windows-PowerShell/Operational",
+          "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
+          "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational"
+        ]
+      },
+      "registry": {
+        "enabled": true,
+        "analyzers": [
+          "autoruns",
+          "services",
+          "security_settings"
+        ],
+        "findings_count": 102
+      },
+      "system_info": {
+        "enabled": true
+      }
+    }
+  },
+  "scan_summary": {
+    "total_score": 0,
+    "risk_level": "경고",
+    "total_findings": 102,
+    "findings_by_severity": {
+      "critical": 11,
+      "high": 51,
+      "medium": 40,
+      "low": 0,
+      "info": 0
+    },
+    "findings_by_category": {
+      "persistence": 102
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "F46EDB3B5",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: OneDrive",
+      "description": "레지스트리 자동실행 위치(current_user_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKCU",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "OneDrive",
+            "data": "\"C:\\Program Files\\Microsoft OneDrive\\OneDrive.exe\" /background",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FAC62AA95",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: RiotClient",
+      "description": "레지스트리 자동실행 위치(current_user_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKCU",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "RiotClient",
+            "data": "C:\\Riot Games\\Riot Client\\RiotClientServices.exe --launch-background-mode",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F35C3F641",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: WallpaperEngine",
+      "description": "레지스트리 자동실행 위치(current_user_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKCU",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "WallpaperEngine",
+            "data": "\"C:\\Program Files (x86)\\Steam\\steamapps\\common\\wallpaper_engine\\wallpaper32.exe\" -silent",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F9F418231",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: LGHUB",
+      "description": "레지스트리 자동실행 위치(current_user_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKCU",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "LGHUB",
+            "data": "\"C:\\Program Files\\LGHUB\\system_tray\\lghub_system_tray.exe\" --minimized",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F53FA50FF",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: KakaoTalk",
+      "description": "레지스트리 자동실행 위치(current_user_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKCU",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "KakaoTalk",
+            "data": "\"C:\\Program Files (x86)\\Kakao\\KakaoTalk\\KakaoTalk.exe\" -bystartup",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F0AAA66A6",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: GoogleDriveFS",
+      "description": "레지스트리 자동실행 위치(current_user_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKCU",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "GoogleDriveFS",
+            "data": "\"C:\\Program Files\\Google\\Drive File Stream\\112.0.3.0\\GoogleDriveFS.exe\" --startup_mode",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F796E21C8",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: PolarisOffice",
+      "description": "레지스트리 자동실행 위치(current_user_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKCU",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "PolarisOffice",
+            "data": "C:\\Program Files (x86)\\Polaris Office\\Office8\\Binary\\POSyncCenter.exe",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F36D374C2",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: Docker Desktop",
+      "description": "레지스트리 자동실행 위치(current_user_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKCU",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "Docker Desktop",
+            "data": "C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe -Autostart",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F0830B98C",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: MicrosoftEdgeAutoLaunch_60FA3CADCFAA93E42C184CC3E385A20C",
+      "description": "레지스트리 자동실행 위치(current_user_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKCU",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "MicrosoftEdgeAutoLaunch_60FA3CADCFAA93E42C184CC3E385A20C",
+            "data": "\"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe\" --no-startup-window --win-session-start",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F8307D16E",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: electron.app.LM Studio",
+      "description": "레지스트리 자동실행 위치(current_user_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKCU",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "electron.app.LM Studio",
+            "data": "C:\\Users\\naidj\\AppData\\Local\\Programs\\LM Studio\\LM Studio.exe --run-as-service",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F3E0CACC0",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: Riot Vanguard",
+      "description": "레지스트리 자동실행 위치(local_machine_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "Riot Vanguard",
+            "data": "\"C:\\Program Files\\Riot Vanguard\\vgtray.exe\"",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F7AAEA192",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: wizvera-veraport-x64",
+      "description": "레지스트리 자동실행 위치(local_machine_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "wizvera-veraport-x64",
+            "data": "\"C:\\Program Files\\Wizvera\\Veraport20\\veraport-x64.exe\" wizvera-veraport://exec/x86/16105/",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F5623F780",
+      "rule_id": "R_AUTORUN_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -15,
+      "category": "persistence",
+      "title": "의심스러운 자동실행 항목: AhnLab Safe Transaction Application",
+      "description": "레지스트리 자동실행 위치(local_machine_run)에서 의심스러운 항목이 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.724296Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            "value": "AhnLab Safe Transaction Application",
+            "data": "\"C:\\Program Files\\AhnLab\\Safe Transaction\\stsess.exe\" /tray",
+            "type": "REG_SZ",
+            "timestamp": "2025-08-20T13:42:41.724296Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 15,
+          "reasons": [
+            "참조된 파일이 존재하지 않음"
+          ],
+          "file_exists": false,
+          "location_type": "registry_autorun"
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence"
+        ],
+        "techniques": [
+          "T1547.001"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F22D3E63E",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: 1394ohci",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.746008Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\1394ohci",
+            "service_info": {
+              "name": "1394ohci",
+              "display_name": "@1394.inf,%PCI\\CC_0C0010.DeviceDesc%;1394 OHCI Compliant Host Controller",
+              "image_path": "\\SystemRoot\\System32\\drivers\\1394ohci.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.746008Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F57129C0F",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "critical",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: 3ware",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.746008Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\3ware",
+            "service_info": {
+              "name": "3ware",
+              "display_name": "",
+              "image_path": "System32\\drivers\\3ware.sys",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.746008Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 60,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "Display Name이 없음",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FDAFE82FA",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -20,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AarSvc",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.746008Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AarSvc",
+            "service_info": {
+              "name": "AarSvc",
+              "display_name": "@%SystemRoot%\\system32\\AarSvc.dll,-100",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k AarSvcGroup -p",
+              "start_type": "Manual",
+              "service_type": "Unknown(96)",
+              "description": "@%SystemRoot%\\system32\\AarSvc.dll,-101",
+              "object_name": "NT Authority\\LocalService",
+              "error_control": "Normal",
+              "dependencies": [
+                "Audiosrv"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.746008Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 20,
+          "reasons": [
+            "비정상적인 서비스 경로"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F49EF9928",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -20,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AarSvc_8f3aa",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.746008Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AarSvc_8f3aa",
+            "service_info": {
+              "name": "AarSvc_8f3aa",
+              "display_name": "Agent Activation Runtime_8f3aa",
+              "image_path": "C:\\WINDOWS\\system32\\svchost.exe -k AarSvcGroup -p",
+              "start_type": "Manual",
+              "service_type": "Unknown(224)",
+              "description": "@%SystemRoot%\\system32\\AarSvc.dll,-101",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.746008Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 20,
+          "reasons": [
+            "비정상적인 서비스 경로"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FCC933798",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: ACPI",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.746008Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\ACPI",
+            "service_info": {
+              "name": "ACPI",
+              "display_name": "@acpi.inf,%ACPI.SvcDesc%;Microsoft ACPI Driver",
+              "image_path": "System32\\drivers\\ACPI.sys",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Critical",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.746008Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FB9124CC8",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AcpiDev",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.746008Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AcpiDev",
+            "service_info": {
+              "name": "AcpiDev",
+              "display_name": "@acpidev.inf,%AcpiDev.SvcDesc%;ACPI Devices driver",
+              "image_path": "\\SystemRoot\\System32\\drivers\\AcpiDev.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.746008Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F12E2D4CE",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: acpiex",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.746008Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\acpiex",
+            "service_info": {
+              "name": "acpiex",
+              "display_name": "Microsoft ACPIEx Driver",
+              "image_path": "System32\\Drivers\\acpiex.sys",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Critical",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.746008Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FF56D34D9",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: acpipagr",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.746008Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\acpipagr",
+            "service_info": {
+              "name": "acpipagr",
+              "display_name": "@acpipagr.inf,%SvcDesc%;ACPI Processor Aggregator Driver",
+              "image_path": "\\SystemRoot\\System32\\DriverStore\\FileRepository\\acpipagr.inf_amd64_d1093347a27ff89c\\acpipagr.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.746008Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F77604F40",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AcpiPmi",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.746008Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AcpiPmi",
+            "service_info": {
+              "name": "AcpiPmi",
+              "display_name": "@acpipmi.inf,%AcpiPmi.SvcDesc%;ACPI Power Meter Driver",
+              "image_path": "\\SystemRoot\\System32\\DriverStore\\FileRepository\\acpipmi.inf_amd64_3ced06eb61dcc792\\acpipmi.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.746008Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F9851969E",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: acpitime",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.746008Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\acpitime",
+            "service_info": {
+              "name": "acpitime",
+              "display_name": "@acpitime.inf,%AcpiTime.SvcDesc%;ACPI Wake Alarm Driver",
+              "image_path": "\\SystemRoot\\System32\\drivers\\acpitime.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.746008Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F4FA42F14",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: Acx01000",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.746008Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\Acx01000",
+            "service_info": {
+              "name": "Acx01000",
+              "display_name": "@%SystemRoot%\\system32\\drivers\\Acx01000.sys,-1000",
+              "image_path": "system32\\drivers\\Acx01000.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.746008Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FFBEDE06A",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "critical",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: ADP80XX",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\ADP80XX",
+            "service_info": {
+              "name": "ADP80XX",
+              "display_name": "",
+              "image_path": "System32\\drivers\\ADP80XX.SYS",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 60,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "Display Name이 없음",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F09BC37BB",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -20,
+      "category": "persistence",
+      "title": "의심스러운 서비스: ADPSvc",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\ADPSvc",
+            "service_info": {
+              "name": "ADPSvc",
+              "display_name": "@%SystemRoot%\\system32\\adpsvc.dll,-102",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k LocalServiceAndNoImpersonation -p",
+              "start_type": "Manual",
+              "service_type": "Win32 Share Process",
+              "description": "@%SystemRoot%\\system32\\adpsvc.dll,-103",
+              "object_name": "NT AUTHORITY\\LocalService",
+              "error_control": "Normal",
+              "dependencies": [
+                "RpcSs"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 20,
+          "reasons": [
+            "비정상적인 서비스 경로"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F440E72C2",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: aehd",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\aehd",
+            "service_info": {
+              "name": "aehd",
+              "display_name": "Android Emulator hypervisor driver Service",
+              "image_path": "\\SystemRoot\\system32\\DRIVERS\\aehd.sys",
+              "start_type": "System",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F6B5D3B8F",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "critical",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AFD",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AFD",
+            "service_info": {
+              "name": "AFD",
+              "display_name": "@%systemroot%\\system32\\drivers\\afd.sys,-1000",
+              "image_path": "\\SystemRoot\\system32\\drivers\\afd.sys",
+              "start_type": "System",
+              "service_type": "Kernel Driver",
+              "description": "@%systemroot%\\system32\\drivers\\afd.sys,-1000",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 70,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 이름이 너무 짧음",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F936ACAFB",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: afunix",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\afunix",
+            "service_info": {
+              "name": "afunix",
+              "display_name": "afunix",
+              "image_path": "\\SystemRoot\\system32\\drivers\\afunix.sys",
+              "start_type": "System",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F9386D60B",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: ahcache",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\ahcache",
+            "service_info": {
+              "name": "ahcache",
+              "display_name": "@%systemroot%\\system32\\drivers\\ahcache.sys,-102",
+              "image_path": "system32\\DRIVERS\\ahcache.sys",
+              "start_type": "System",
+              "service_type": "Kernel Driver",
+              "description": "@%systemroot%\\system32\\drivers\\ahcache.sys,-101",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F77ECAD19",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AhnRghNt",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 90,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AhnRghNt",
+            "service_info": {
+              "name": "AhnRghNt",
+              "display_name": "AhnRghNt",
+              "image_path": "\\??\\C:\\Windows\\system32\\drivers\\AhnRghNt.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 30,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F66A1EB1A",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: ALG",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\ALG",
+            "service_info": {
+              "name": "ALG",
+              "display_name": "@%SystemRoot%\\system32\\Alg.exe,-112",
+              "image_path": "%SystemRoot%\\System32\\alg.exe",
+              "start_type": "Manual",
+              "service_type": "Win32 Own Process",
+              "description": "@%SystemRoot%\\system32\\Alg.exe,-113",
+              "object_name": "NT AUTHORITY\\LocalService",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 35,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "서비스 이름이 너무 짧음"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F87F69777",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: amdgpio2",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\amdgpio2",
+            "service_info": {
+              "name": "amdgpio2",
+              "display_name": "@amdgpio2.inf,%GPIO.SvcDesc%;AMD GPIO Client Driver",
+              "image_path": "\\SystemRoot\\System32\\drivers\\amdgpio2.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F73EC1FFF",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: amdi2c",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\amdi2c",
+            "service_info": {
+              "name": "amdi2c",
+              "display_name": "@amdi2c.inf,%amdi2c.SVCDESC%;AMD I2C Controller Service",
+              "image_path": "\\SystemRoot\\System32\\drivers\\amdi2c.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": [
+                "SpbCx"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F19AE2237",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AmdK8",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AmdK8",
+            "service_info": {
+              "name": "AmdK8",
+              "display_name": "@cpu.inf,%AmdK8.SvcDesc%;AMD K8 Processor Driver",
+              "image_path": "\\SystemRoot\\System32\\drivers\\amdk8.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F25E32EE2",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AmdPPM",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AmdPPM",
+            "service_info": {
+              "name": "AmdPPM",
+              "display_name": "@cpu.inf,%AmdPPM.SvcDesc%;AMD Processor Driver",
+              "image_path": "\\SystemRoot\\System32\\drivers\\amdppm.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F8BD2AD0B",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "critical",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: amdsata",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\amdsata",
+            "service_info": {
+              "name": "amdsata",
+              "display_name": "",
+              "image_path": "System32\\drivers\\amdsata.sys",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 60,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "Display Name이 없음",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F8CE1FD8E",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "critical",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: amdsbs",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\amdsbs",
+            "service_info": {
+              "name": "amdsbs",
+              "display_name": "",
+              "image_path": "System32\\drivers\\amdsbs.sys",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 60,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "Display Name이 없음",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F5BF072A1",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: amdwps",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\amdwps",
+            "service_info": {
+              "name": "amdwps",
+              "display_name": "@amdwps.inf,%SvcDesc%;AMD Workload Profiling Scheduling Driver",
+              "image_path": "System32\\drivers\\amdwps.sys",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F432BE438",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "critical",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: amdxata",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\amdxata",
+            "service_info": {
+              "name": "amdxata",
+              "display_name": "",
+              "image_path": "System32\\drivers\\amdxata.sys",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 60,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "Display Name이 없음",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F639AEC89",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AMonCDW8",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AMonCDW8",
+            "service_info": {
+              "name": "AMonCDW8",
+              "display_name": "AMonCDW8",
+              "image_path": "\\??\\C:\\Windows\\system32\\Drivers\\AMonCDW8.sys",
+              "start_type": "System",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 35,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FC924FA1B",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AntiStealth_SafeTransaction",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AntiStealth_SafeTransaction",
+            "service_info": {
+              "name": "AntiStealth_SafeTransaction",
+              "display_name": "AntiStealth_SafeTransaction",
+              "image_path": "\\??\\C:\\Program Files\\AhnLab\\Safe Transaction\\AHAWKENT.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F5A03BEB3",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AntiStealth_SafeTransactionF",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AntiStealth_SafeTransactionF",
+            "service_info": {
+              "name": "AntiStealth_SafeTransactionF",
+              "display_name": "AntiStealth_SafeTransactionF",
+              "image_path": "\\??\\C:\\Program Files\\AhnLab\\Safe Transaction\\TfFRegNt.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "AntiStealth_SafeTransactionF mini-filter driver",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": [
+                "FltMgr"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FAB26F96C",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AntiStealth_V3LITE40",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AntiStealth_V3LITE40",
+            "service_info": {
+              "name": "AntiStealth_V3LITE40",
+              "display_name": "AntiStealth_V3LITE40",
+              "image_path": "\\??\\C:\\Program Files\\AhnLab\\V3Lite40\\AHAWKENT.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F3D9D4B33",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AntiStealth_V3LITE40F",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AntiStealth_V3LITE40F",
+            "service_info": {
+              "name": "AntiStealth_V3LITE40F",
+              "display_name": "AntiStealth_V3LITE40F",
+              "image_path": "\\??\\C:\\Program Files\\AhnLab\\V3Lite40\\TfFRegNt.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "AntiStealth_V3LITE40F mini-filter driver",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": [
+                "FltMgr"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FF880A904",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AppID",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AppID",
+            "service_info": {
+              "name": "AppID",
+              "display_name": "@%systemroot%\\system32\\srpapi.dll,-100",
+              "image_path": "system32\\drivers\\appid.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "@%systemroot%\\system32\\srpapi.dll,-101",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": [
+                "FltMgr"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F977A693F",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -20,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AppIDSvc",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AppIDSvc",
+            "service_info": {
+              "name": "AppIDSvc",
+              "display_name": "@%systemroot%\\system32\\appidsvc.dll,-100",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k LocalServiceNetworkRestricted -p",
+              "start_type": "Manual",
+              "service_type": "Win32 Share Process",
+              "description": "@%systemroot%\\system32\\appidsvc.dll,-101",
+              "object_name": "NT Authority\\LocalService",
+              "error_control": "Normal",
+              "dependencies": [
+                "RpcSs",
+                "AppID",
+                "CryptSvc"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 20,
+          "reasons": [
+            "비정상적인 서비스 경로"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FCA09FB98",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: Appinfo",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 90,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\Appinfo",
+            "service_info": {
+              "name": "Appinfo",
+              "display_name": "@%systemroot%\\system32\\appinfo.dll,-100",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k netsvcs -p",
+              "start_type": "Manual",
+              "service_type": "Win32 Share Process",
+              "description": "@%systemroot%\\system32\\appinfo.dll,-101",
+              "object_name": "LocalSystem",
+              "error_control": "Normal",
+              "dependencies": [
+                "RpcSs",
+                "ProfSvc"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 30,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "LocalSystem 권한으로 실행"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FE026BC11",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AppleSSD",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AppleSSD",
+            "service_info": {
+              "name": "AppleSSD",
+              "display_name": "@applessd.inf,%DevDesc1%;Apple Solid State Drive Device",
+              "image_path": "System32\\drivers\\AppleSSD.sys",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F9B4AC12A",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: applockerfltr",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\applockerfltr",
+            "service_info": {
+              "name": "applockerfltr",
+              "display_name": "@%systemroot%\\system32\\srpapi.dll,-102",
+              "image_path": "system32\\drivers\\applockerfltr.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "@%systemroot%\\system32\\srpapi.dll,-103",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": [
+                "FltMgr",
+                "AppID",
+                "AppIDSvc"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F169494B5",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AppReadiness",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 90,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AppReadiness",
+            "service_info": {
+              "name": "AppReadiness",
+              "display_name": "@%SystemRoot%\\System32\\AppReadiness.dll,-1000",
+              "image_path": "%SystemRoot%\\System32\\svchost.exe -k AppReadiness -p",
+              "start_type": "Manual",
+              "service_type": "Win32 Share Process",
+              "description": "@%SystemRoot%\\System32\\AppReadiness.dll,-1001",
+              "object_name": "LocalSystem",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 30,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "LocalSystem 권한으로 실행"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F3C739E1E",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AppXSvc",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 90,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AppXSvc",
+            "service_info": {
+              "name": "AppXSvc",
+              "display_name": "@%SystemRoot%\\system32\\appxdeploymentserver.dll,-1",
+              "image_path": "%systemroot%\\system32\\svchost.exe -k wsappx -p",
+              "start_type": "Manual",
+              "service_type": "Win32 Share Process",
+              "description": "@%SystemRoot%\\system32\\appxdeploymentserver.dll,-2",
+              "object_name": "LocalSystem",
+              "error_control": "Normal",
+              "dependencies": [
+                "rpcss",
+                "staterepository"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 30,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "LocalSystem 권한으로 실행"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F55A02B3E",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -20,
+      "category": "persistence",
+      "title": "의심스러운 서비스: ApxSvc",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\ApxSvc",
+            "service_info": {
+              "name": "ApxSvc",
+              "display_name": "@%SystemRoot%\\system32\\ApxSvc.dll,-200",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k LocalService -p",
+              "start_type": "Manual",
+              "service_type": "Win32 Own Process",
+              "description": "@%SystemRoot%\\system32\\ApxSvc.dll,-201",
+              "object_name": "NT AUTHORITY\\LocalService",
+              "error_control": "Normal",
+              "dependencies": [
+                "rpcss"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 20,
+          "reasons": [
+            "비정상적인 서비스 경로"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FFFC1A314",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: arcsas",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\arcsas",
+            "service_info": {
+              "name": "arcsas",
+              "display_name": "@arcsas.inf,%arcsas_ServiceName%;Adaptec SAS/SATA-II RAID Storport's Miniport Driver",
+              "image_path": "System32\\drivers\\arcsas.sys",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FBAA7FD38",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: ArtDrv",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\ArtDrv",
+            "service_info": {
+              "name": "ArtDrv",
+              "display_name": "ArtDrv",
+              "image_path": "\\??\\C:\\Program Files\\AhnLab\\V3Lite40\\ArtDrv.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "ArtDrv mini-filter driver",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": [
+                "FltMgr"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FA07E153E",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: ascrts_V3LITE40",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.747006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\ascrts_V3LITE40",
+            "service_info": {
+              "name": "ascrts_V3LITE40",
+              "display_name": "ascrts_V3LITE40",
+              "image_path": "\\??\\C:\\Program Files\\AhnLab\\V3Lite40\\asc\\ascrts.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.747006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FBFC07F47",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: asc_kbc_SafeTransaction",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\asc_kbc_SafeTransaction",
+            "service_info": {
+              "name": "asc_kbc_SafeTransaction",
+              "display_name": "asc_kbc_SafeTransaction",
+              "image_path": "\\??\\C:\\Program Files\\AhnLab\\Safe Transaction\\asc\\asc_kbc.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FEF3F5044",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: asc_kbc_V3LITE40",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\asc_kbc_V3LITE40",
+            "service_info": {
+              "name": "asc_kbc_V3LITE40",
+              "display_name": "asc_kbc_V3LITE40",
+              "image_path": "\\??\\C:\\Program Files\\AhnLab\\V3Lite40\\asc\\asc_kbc.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F3A1F096C",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AsyncMac",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AsyncMac",
+            "service_info": {
+              "name": "AsyncMac",
+              "display_name": "@%systemroot%\\system32\\mprmsg.dll,-32000",
+              "image_path": "\\SystemRoot\\System32\\drivers\\asyncmac.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "@%systemroot%\\system32\\mprmsg.dll,-32000",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FA1BC5F69",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: ATamptNt_SafeTransaction",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\ATamptNt_SafeTransaction",
+            "service_info": {
+              "name": "ATamptNt_SafeTransaction",
+              "display_name": "ATamptNt_SafeTransaction",
+              "image_path": "\\??\\C:\\Program Files\\AhnLab\\Safe Transaction\\ATamptNt.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "ATamptNt_SafeTransaction mini-filter driver",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": [
+                "FltMgr"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FC9A3F395",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: ATamptNt_V3LITE40",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\ATamptNt_V3LITE40",
+            "service_info": {
+              "name": "ATamptNt_V3LITE40",
+              "display_name": "ATamptNt_V3LITE40",
+              "image_path": "\\??\\C:\\Program Files\\AhnLab\\V3Lite40\\ATamptNt.sys",
+              "start_type": "System",
+              "service_type": "Kernel Driver",
+              "description": "ATamptNt_V3LITE40 mini-filter driver",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": [
+                "FltMgr"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F1BB0142B",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: atapi",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\atapi",
+            "service_info": {
+              "name": "atapi",
+              "display_name": "@mshdc.inf,%idechannel.DeviceDesc%;IDE Channel",
+              "image_path": "System32\\drivers\\atapi.sys",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Critical",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FA50C245E",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AudioEndpointBuilder",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AudioEndpointBuilder",
+            "service_info": {
+              "name": "AudioEndpointBuilder",
+              "display_name": "@%SystemRoot%\\system32\\AudioEndpointBuilder.dll,-204",
+              "image_path": "%SystemRoot%\\System32\\svchost.exe -k LocalSystemNetworkRestricted -p",
+              "start_type": "Automatic",
+              "service_type": "Win32 Share Process",
+              "description": "@%SystemRoot%\\System32\\AudioEndpointBuilder.dll,-205",
+              "object_name": "LocalSystem",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 35,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "자동 시작 서비스",
+            "LocalSystem 권한으로 실행"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F367D9ED2",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: Audiosrv",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 85,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\Audiosrv",
+            "service_info": {
+              "name": "Audiosrv",
+              "display_name": "@%SystemRoot%\\system32\\audiosrv.dll,-200",
+              "image_path": "%SystemRoot%\\System32\\svchost.exe -k LocalServiceNetworkRestricted -p",
+              "start_type": "Automatic",
+              "service_type": "Win32 Own Process",
+              "description": "@%SystemRoot%\\System32\\audiosrv.dll,-201",
+              "object_name": "NT AUTHORITY\\LocalService",
+              "error_control": "Normal",
+              "dependencies": [
+                "AudioEndpointBuilder",
+                "RpcSs"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 25,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "자동 시작 서비스"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FCBE66BCD",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -20,
+      "category": "persistence",
+      "title": "의심스러운 서비스: autotimesvc",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\autotimesvc",
+            "service_info": {
+              "name": "autotimesvc",
+              "display_name": "@%SystemRoot%\\System32\\autotimesvc.dll,-6",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k autoTimeSvc",
+              "start_type": "Manual",
+              "service_type": "Win32 Own Process",
+              "description": "@%SystemRoot%\\System32\\autotimesvc.dll,-7",
+              "object_name": "NT AUTHORITY\\LocalService",
+              "error_control": "Normal",
+              "dependencies": [
+                "rpcss"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 20,
+          "reasons": [
+            "비정상적인 서비스 경로"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F0824D48E",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: AxInstSV",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 90,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\AxInstSV",
+            "service_info": {
+              "name": "AxInstSV",
+              "display_name": "@%SystemRoot%\\system32\\AxInstSV.dll,-103",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k AxInstSVGroup",
+              "start_type": "Manual",
+              "service_type": "Win32 Share Process",
+              "description": "@%SystemRoot%\\system32\\AxInstSV.dll,-104",
+              "object_name": "LocalSystem",
+              "error_control": "Normal",
+              "dependencies": [
+                "rpcss"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 30,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "LocalSystem 권한으로 실행"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F32E6CF5A",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: b06bdrv",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\b06bdrv",
+            "service_info": {
+              "name": "b06bdrv",
+              "display_name": "@netbvbda.inf,%vbd_srv_desc%;QLogic Network Adapter VBD",
+              "image_path": "System32\\drivers\\bxvbda.sys",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FF5629522",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "critical",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: bam",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\bam",
+            "service_info": {
+              "name": "bam",
+              "display_name": "@%SystemRoot%\\system32\\drivers\\bam.sys,-100",
+              "image_path": "system32\\drivers\\bam.sys",
+              "start_type": "System",
+              "service_type": "Kernel Driver",
+              "description": "@%SystemRoot%\\system32\\drivers\\bam.sys,-101",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 70,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 이름이 너무 짧음",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FC5F53019",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "critical",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BasicDisplay",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BasicDisplay",
+            "service_info": {
+              "name": "BasicDisplay",
+              "display_name": "",
+              "image_path": "\\SystemRoot\\System32\\DriverStore\\FileRepository\\basicdisplay.inf_amd64_2753efdbb0d9a226\\BasicDisplay.sys",
+              "start_type": "System",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Ignore",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 60,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "Display Name이 없음",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FB3D99435",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "critical",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BasicRender",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BasicRender",
+            "service_info": {
+              "name": "BasicRender",
+              "display_name": "",
+              "image_path": "\\SystemRoot\\System32\\DriverStore\\FileRepository\\basicrender.inf_amd64_4a022393fa7795f1\\BasicRender.sys",
+              "start_type": "System",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Ignore",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 60,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "Display Name이 없음",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F1D29038A",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: battlenet_helpersvc",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 90,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\battlenet_helpersvc",
+            "service_info": {
+              "name": "battlenet_helpersvc",
+              "display_name": "Battle.net Update Helper Svc",
+              "image_path": "C:\\ProgramData\\Battle.net_components\\battlenet_helpersvc\\AgentHelper.exe",
+              "start_type": "Manual",
+              "service_type": "Win32 Own Process",
+              "description": "",
+              "object_name": "LocalSystem",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 30,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "LocalSystem 권한으로 실행"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F1BCC5BD9",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BcastDVRUserService",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.748006Z",
+      "confidence": 90,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BcastDVRUserService",
+            "service_info": {
+              "name": "BcastDVRUserService",
+              "display_name": "@%SystemRoot%\\system32\\BcastDVRUserService.dll,-100",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k BcastDVRUserService",
+              "start_type": "Manual",
+              "service_type": "Unknown(96)",
+              "description": "@%SystemRoot%\\system32\\BcastDVRUserService.dll,-101",
+              "object_name": "LocalSystem",
+              "error_control": "Normal",
+              "dependencies": [
+                "RpcSs"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.748006Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 30,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "LocalSystem 권한으로 실행"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F3845AEA5",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -20,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BcastDVRUserService_8f3aa",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.758444Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BcastDVRUserService_8f3aa",
+            "service_info": {
+              "name": "BcastDVRUserService_8f3aa",
+              "display_name": "GameDVR 및 브로드캐스트 사용자 서비스_8f3aa",
+              "image_path": "C:\\WINDOWS\\system32\\svchost.exe -k BcastDVRUserService",
+              "start_type": "Manual",
+              "service_type": "Unknown(224)",
+              "description": "@%SystemRoot%\\system32\\BcastDVRUserService.dll,-101",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.758444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 20,
+          "reasons": [
+            "비정상적인 서비스 경로"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F6BFAB525",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: bcmfn2",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.758444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\bcmfn2",
+            "service_info": {
+              "name": "bcmfn2",
+              "display_name": "@bcmfn2.inf,%bcmfn2.SVCDESC%;bcmfn2 Service",
+              "image_path": "\\SystemRoot\\System32\\drivers\\bcmfn2.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.758444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F0D883602",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BDESVC",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.758444Z",
+      "confidence": 90,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BDESVC",
+            "service_info": {
+              "name": "BDESVC",
+              "display_name": "@%SystemRoot%\\system32\\bdesvc.dll,-100",
+              "image_path": "%SystemRoot%\\System32\\svchost.exe -k netsvcs -p",
+              "start_type": "Manual",
+              "service_type": "Win32 Share Process",
+              "description": "@%SystemRoot%\\system32\\bdesvc.dll,-101",
+              "object_name": "localSystem",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.758444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 30,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "LocalSystem 권한으로 실행"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FCFE43175",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BEService",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.758444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BEService",
+            "service_info": {
+              "name": "BEService",
+              "display_name": "BattlEye Service",
+              "image_path": "\"C:\\Program Files (x86)\\Common Files\\BattlEye\\BEService.exe\"",
+              "start_type": "Manual",
+              "service_type": "Win32 Own Process",
+              "description": "",
+              "object_name": "LocalSystem",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.758444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "LocalSystem 권한으로 실행",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F4C70D9CC",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BFE",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.758444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BFE",
+            "service_info": {
+              "name": "BFE",
+              "display_name": "@%SystemRoot%\\system32\\bfe.dll,-1001",
+              "image_path": "%systemroot%\\system32\\svchost.exe -k LocalServiceNoNetworkFirewall -p",
+              "start_type": "Automatic",
+              "service_type": "Win32 Share Process",
+              "description": "@%SystemRoot%\\system32\\bfe.dll,-1002",
+              "object_name": "NT AUTHORITY\\LocalService",
+              "error_control": "Normal",
+              "dependencies": [
+                "RpcSs"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.758444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 40,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "자동 시작 서비스",
+            "서비스 이름이 너무 짧음"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F5B2EDA0C",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "critical",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: bfs",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.758444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\bfs",
+            "service_info": {
+              "name": "bfs",
+              "display_name": "@%systemroot%\\system32\\drivers\\bfs.sys,-100",
+              "image_path": "\\SystemRoot\\system32\\drivers\\bfs.sys",
+              "start_type": "Automatic",
+              "service_type": "File System Driver",
+              "description": "@%systemroot%\\system32\\drivers\\bfs.sys,-101",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": [
+                "FltMgr"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.758444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 70,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 이름이 너무 짧음",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FBF09DE8D",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: bindflt",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.758444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\bindflt",
+            "service_info": {
+              "name": "bindflt",
+              "display_name": "@%systemroot%\\system32\\drivers\\bindflt.sys,-100",
+              "image_path": "\\SystemRoot\\system32\\drivers\\bindflt.sys",
+              "start_type": "Automatic",
+              "service_type": "File System Driver",
+              "description": "@%systemroot%\\system32\\drivers\\bindflt.sys,-101",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": [
+                "FltMgr"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.758444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FE6E256DC",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BITS",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.758444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BITS",
+            "service_info": {
+              "name": "BITS",
+              "display_name": "@%SystemRoot%\\system32\\qmgr.dll,-1000",
+              "image_path": "%SystemRoot%\\System32\\svchost.exe -k netsvcs -p",
+              "start_type": "Automatic",
+              "service_type": "Win32 Share Process",
+              "description": "@%SystemRoot%\\system32\\qmgr.dll,-1001",
+              "object_name": "LocalSystem",
+              "error_control": "Normal",
+              "dependencies": [
+                "RpcSs"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.758444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 35,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "자동 시작 서비스",
+            "LocalSystem 권한으로 실행"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F5630856A",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BlackCat1",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BlackCat1",
+            "service_info": {
+              "name": "BlackCat1",
+              "display_name": "BlackCat1",
+              "image_path": "\\??\\C:\\ProgramData\\Nexon\\NGS\\BlackCat1.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F318F8847",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -20,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BluetoothUserService",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BluetoothUserService",
+            "service_info": {
+              "name": "BluetoothUserService",
+              "display_name": "@%SystemRoot%\\system32\\Microsoft.Bluetooth.UserService.dll,-101",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k BthAppGroup -p",
+              "start_type": "Manual",
+              "service_type": "Unknown(96)",
+              "description": "@%SystemRoot%\\system32\\Microsoft.Bluetooth.UserService.dll,-102",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": [
+                "bthserv",
+                "rpcss"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 20,
+          "reasons": [
+            "비정상적인 서비스 경로"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F9CCCC717",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -20,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BluetoothUserService_8f3aa",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BluetoothUserService_8f3aa",
+            "service_info": {
+              "name": "BluetoothUserService_8f3aa",
+              "display_name": "Bluetooth 사용자 지원 서비스_8f3aa",
+              "image_path": "C:\\WINDOWS\\system32\\svchost.exe -k BthAppGroup -p",
+              "start_type": "Manual",
+              "service_type": "Unknown(224)",
+              "description": "@%SystemRoot%\\system32\\Microsoft.Bluetooth.UserService.dll,-102",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 20,
+          "reasons": [
+            "비정상적인 서비스 경로"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F96EF0326",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: bowser",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\bowser",
+            "service_info": {
+              "name": "bowser",
+              "display_name": "@%systemroot%\\system32\\wkssvc.dll,-2001",
+              "image_path": "system32\\DRIVERS\\bowser.sys",
+              "start_type": "Manual",
+              "service_type": "File System Driver",
+              "description": "@%systemroot%\\system32\\wkssvc.dll,-2000",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F05FB946D",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BrokerInfrastructure",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BrokerInfrastructure",
+            "service_info": {
+              "name": "BrokerInfrastructure",
+              "display_name": "@%windir%\\system32\\bisrv.dll,-100",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k DcomLaunch -p",
+              "start_type": "Automatic",
+              "service_type": "Win32 Share Process",
+              "description": "@%windir%\\system32\\bisrv.dll,-101",
+              "object_name": "LocalSystem",
+              "error_control": "Normal",
+              "dependencies": [
+                "RpcEptMapper",
+                "DcomLaunch",
+                "RpcSs"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 35,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "자동 시작 서비스",
+            "LocalSystem 권한으로 실행"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F6B7B8F6B",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -20,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BTAGService",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BTAGService",
+            "service_info": {
+              "name": "BTAGService",
+              "display_name": "@%SystemRoot%\\system32\\BTAGService.dll,-101",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k LocalServiceNetworkRestricted",
+              "start_type": "Manual",
+              "service_type": "Win32 Share Process",
+              "description": "@%SystemRoot%\\system32\\BTAGService.dll,-102",
+              "object_name": "NT AUTHORITY\\LocalService",
+              "error_control": "Normal",
+              "dependencies": [
+                "rpcss"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 20,
+          "reasons": [
+            "비정상적인 서비스 경로"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F329E5B48",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BthA2dp",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BthA2dp",
+            "service_info": {
+              "name": "BthA2dp",
+              "display_name": "@microsoft_bluetooth_a2dp.inf,%BthA2dp.ServiceDescription%;Microsoft Bluetooth A2dp driver",
+              "image_path": "\\SystemRoot\\System32\\drivers\\BthA2dp.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F810FFEEC",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -20,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BthAvctpSvc",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BthAvctpSvc",
+            "service_info": {
+              "name": "BthAvctpSvc",
+              "display_name": "@%SystemRoot%\\system32\\BthAvctpSvc.dll,-101",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k LocalService -p",
+              "start_type": "Manual",
+              "service_type": "Win32 Share Process",
+              "description": "@%SystemRoot%\\system32\\BthAvctpSvc.dll,-102",
+              "object_name": "NT AUTHORITY\\LocalService",
+              "error_control": "Normal",
+              "dependencies": [
+                "rpcss"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 20,
+          "reasons": [
+            "비정상적인 서비스 경로"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FEDDCDC9E",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BthEnum",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BthEnum",
+            "service_info": {
+              "name": "BthEnum",
+              "display_name": "@bth.inf,%BthEnum.SVCDESC%;Bluetooth 열거자 서비스",
+              "image_path": "\\SystemRoot\\System32\\drivers\\BthEnum.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F64AD982C",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BthHFAud",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BthHFAud",
+            "service_info": {
+              "name": "BthHFAud",
+              "display_name": "@microsoft_bluetooth_hfp.inf,%BTHHFAUD_DISPLAY_NAME%;Microsoft Bluetooth Hands-Free Audio driver",
+              "image_path": "\\SystemRoot\\System32\\drivers\\BthHfAud.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Ignore",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F21DEB517",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BthHFEnum",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BthHFEnum",
+            "service_info": {
+              "name": "BthHFEnum",
+              "display_name": "@microsoft_bluetooth_hfp.inf,%BTHHFENUM_DISPLAY_NAME%;Microsoft Bluetooth 핸즈프리 프로필 드라이버",
+              "image_path": "\\SystemRoot\\System32\\drivers\\bthhfenum.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FFB80ECD9",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BthLEEnum",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BthLEEnum",
+            "service_info": {
+              "name": "BthLEEnum",
+              "display_name": "@bthleenum.inf,%BthLEEnum.SVCDESC%;Bluetooth Low Energy Driver",
+              "image_path": "\\SystemRoot\\System32\\drivers\\Microsoft.Bluetooth.Legacy.LEEnumerator.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FB9439F1A",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BthMini",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BthMini",
+            "service_info": {
+              "name": "BthMini",
+              "display_name": "@bth.inf,%BTHMINI.SvcDesc%;Bluetooth Radio Driver",
+              "image_path": "\\SystemRoot\\System32\\drivers\\BTHMINI.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F6689789A",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BTHMODEM",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BTHMODEM",
+            "service_info": {
+              "name": "BTHMODEM",
+              "display_name": "@mdmbtmdm.inf,%BthModem.DisplayName%;Bluetooth 모뎀 통신 드라이버",
+              "image_path": "\\SystemRoot\\System32\\drivers\\bthmodem.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FC10446F3",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BthPan",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BthPan",
+            "service_info": {
+              "name": "BthPan",
+              "display_name": "@bthpan.inf,%BthPan.DisplayName%;Bluetooth Device (Personal Area Network)",
+              "image_path": "\\SystemRoot\\System32\\drivers\\bthpan.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "@bthpan.inf,%BthPan.DisplayName%;Bluetooth Device (Personal Area Network)",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F81D2B627",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BTHPORT",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BTHPORT",
+            "service_info": {
+              "name": "BTHPORT",
+              "display_name": "@bth.inf,%BTHPORT.SvcDesc%;Bluetooth 포트 드라이버",
+              "image_path": "\\SystemRoot\\System32\\drivers\\BTHport.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FC991288D",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -20,
+      "category": "persistence",
+      "title": "의심스러운 서비스: bthserv",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 80,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\bthserv",
+            "service_info": {
+              "name": "bthserv",
+              "display_name": "@%SystemRoot%\\System32\\bthserv.dll,-101",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k LocalService -p",
+              "start_type": "Manual",
+              "service_type": "Win32 Share Process",
+              "description": "@%SystemRoot%\\System32\\bthserv.dll,-102",
+              "object_name": "NT AUTHORITY\\LocalService",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 20,
+          "reasons": [
+            "비정상적인 서비스 경로"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F6720D594",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: BTHUSB",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\BTHUSB",
+            "service_info": {
+              "name": "BTHUSB",
+              "display_name": "@bth.inf,%BTHUSB.SvcDesc%;Bluetooth 송수신 장치 USB 드라이버",
+              "image_path": "\\SystemRoot\\System32\\drivers\\BTHUSB.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "FCBBB183B",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: bttflt",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\bttflt",
+            "service_info": {
+              "name": "bttflt",
+              "display_name": "@virtdisk.inf,%service_desc%;Microsoft Hyper-V VHDPMEM BTT Filter",
+              "image_path": "System32\\drivers\\bttflt.sys",
+              "start_type": "Boot",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 55,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "자동 시작 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F668063FC",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "high",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: buttonconverter",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\buttonconverter",
+            "service_info": {
+              "name": "buttonconverter",
+              "display_name": "@buttonconverter.inf,%btnconv.SvcDesc%;Service for Portable Device Control devices",
+              "image_path": "\\SystemRoot\\System32\\drivers\\buttonconverter.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 50,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F4AC17A7C",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "critical",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: CAD",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\CAD",
+            "service_info": {
+              "name": "CAD",
+              "display_name": "@ChargeArbitration.inf,%CAD_DevDesc%;Charge Arbitration Driver",
+              "image_path": "\\SystemRoot\\System32\\drivers\\CAD.sys",
+              "start_type": "Manual",
+              "service_type": "Kernel Driver",
+              "description": "",
+              "object_name": "",
+              "error_control": "Normal",
+              "dependencies": []
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 65,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "커널 레벨 서비스",
+            "서비스 이름이 너무 짧음",
+            "서비스 실행 파일이 존재하지 않음"
+          ],
+          "file_exists": false
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    },
+    {
+      "finding_id": "F39BB00B6",
+      "rule_id": "R_SERVICE_SUSPICIOUS",
+      "severity": "medium",
+      "score_impact": -25,
+      "category": "persistence",
+      "title": "의심스러운 서비스: camsvc",
+      "description": "시스템에서 의심스러운 서비스가 발견되었습니다.",
+      "timestamp": "2025-08-20T13:42:41.759444Z",
+      "confidence": 95,
+      "evidence": {
+        "registry_evidence": [
+          {
+            "source": "registry",
+            "hive": "HKLM",
+            "key": "SYSTEM\\CurrentControlSet\\Services\\camsvc",
+            "service_info": {
+              "name": "camsvc",
+              "display_name": "@%SystemRoot%\\system32\\CapabilityAccessManager.dll,-1",
+              "image_path": "%SystemRoot%\\system32\\svchost.exe -k osprivacy -p",
+              "start_type": "Automatic",
+              "service_type": "Win32 Share Process",
+              "description": "@%SystemRoot%\\system32\\CapabilityAccessManager.dll,-2",
+              "object_name": "LocalSystem",
+              "error_control": "Normal",
+              "dependencies": [
+                "rpcss",
+                "staterepository",
+                "CoreMessagingRegistrar"
+              ]
+            },
+            "timestamp": "2025-08-20T13:42:41.759444Z"
+          }
+        ],
+        "suspicion_details": {
+          "score": 35,
+          "reasons": [
+            "비정상적인 서비스 경로",
+            "자동 시작 서비스",
+            "LocalSystem 권한으로 실행"
+          ],
+          "file_exists": true
+        }
+      },
+      "mitre_attack": {
+        "tactics": [
+          "Persistence",
+          "Privilege Escalation"
+        ],
+        "techniques": [
+          "T1543.003"
+        ],
+        "sub_techniques": []
+      }
+    }
+  ],
+  "system_info": {
+    "operating_system": "Windows 11",
+    "version": "10.0.26100",
+    "architecture": "AMD64",
+    "total_memory_gb": 31.8,
+    "hostname": "junseo",
+    "antivirus": {
+      "product": "Windows Defender",
+      "enabled": true,
+      "real_time_protection": true,
+      "signature_version": "Unknown",
+      "last_update": "Unknown"
+    },
+    "windows_update": {
+      "auto_update_enabled": true,
+      "last_update_installed": "Unknown",
+      "pending_updates": 0
+    },
+    "security_settings": {
+      "uac_enabled": true,
+      "rdp_enabled": false,
+      "firewall_enabled": true,
+      "smb_signing": false
+    }
+  },
+  "statistics": {
+    "events_processed": {
+      "total": 0,
+      "security": 0,
+      "system": 0,
+      "powershell": 0,
+      "rdp": 0
+    },
+    "processing_time": {
+      "total": 0.17,
+      "event_collection": 0.1,
+      "analysis": 0.05,
+      "reporting": 0.02
+    }
+  },
+  "ai_recommendations": {
+    "immediate_actions": [
+      "의심스러운 서비스 중지 검토: 의심스러운 서비스: 1394ohci",
+      "의심스러운 서비스 중지 검토: 의심스러운 서비스: 3ware",
+      "의심스러운 서비스 중지 검토: 의심스러운 서비스: ACPI"
+    ],
+    "short_term_actions": [
+      "보안 솔루션 업그레이드 검토"
+    ],
+    "long_term_actions": [
+      "정기적인 보안 교육 실시",
+      "엔드포인트 보안 솔루션 도입 검토",
+      "보안 모니터링 체계 구축"
+    ]
+  },
+  "schema_version": "1.0",
+  "generated_by": "EDR-Scanner v1.0.0"
+}

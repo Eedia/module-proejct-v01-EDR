@@ -59,8 +59,8 @@ class ServiceAnalyzer:
         for path_name, (hive, subkey) in self.service_registry_paths.items():
             try:
                 # 서비스 키 목록 가져오기
-                service_keys = registry_collector.get_subkeys(hive, subkey)
-                
+                service_keys = registry_collector.enumerate_registry_keys(hive, subkey)
+
                 for service_name in service_keys:
                     service_key_path = f"{subkey}\\{service_name}"
                     

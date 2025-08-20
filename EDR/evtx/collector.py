@@ -137,7 +137,9 @@ class EventLogCollector:
                 cmd,
                 capture_output=True,
                 text=True,
-                encoding='utf-8',
+                # encoding='utf-8',
+                encoding='utf-16',
+                errors='ignore',
                 timeout=300  # 5분 타임아웃
             )
             

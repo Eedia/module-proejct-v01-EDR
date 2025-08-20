@@ -13,7 +13,7 @@ from typing import List, Dict, Any, Optional
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from data_structures import Finding, Severity
+from utils.data_structures import Finding, Severity
 
 logger = logging.getLogger(__name__)
 
@@ -294,6 +294,25 @@ def get_category_analysis(findings: List[Any]) -> Dict[str, Any]:
     """전역 함수로 카테고리 분석"""
     engine = get_scoring_engine()
     return engine.get_category_analysis(findings)
+
+def determine_risk_level(score: int) -> str:
+    """점수를 기반으로 위험도 수준 결정"""
+    from .data_structures import calculate_risk_level
+    return calculate_risk_level(score)
+
+def generate_score_summary(findings: List[Any]) -> Dict[str, Any]:
+    """Finding 목록에 대한 종합 점수 요약 생성"""
+    engine = get_scoring_engine()
+    total = engine.calculate_total_score(findings)
+    risk_level = determine_risk_level(total["total_score"])
+    return {
+        "total_score": total["total_score"],
+        "risk_level": risk_level,
+        "total_findings": total["finding_count"],
+        "findings_by_severity": total["severity_breakdown"],
+        "findings_by_category": total["category_breakdown"],
+    }
+
 
 # 기존 호환성
 scoring_engine = get_scoring_engine()

@@ -1,0 +1,5 @@
+{
+    "mcpServer.confirmNonDestructiveCommands": false,
+    "mcpServer.startOnActivate": true,
+    "mcpServer.confirmationUI": "quickPick"
+}
