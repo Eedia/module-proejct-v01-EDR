@@ -145,6 +145,13 @@ def main():
                 # 6. 분석 완료 메시지
                 show_analysis_complete_message(results)
                 
+                # 7. HTML 리포트 버튼 활성화
+                btn_html = win.findChild(QtWidgets.QPushButton, "btnHTML")
+                if btn_html:
+                    btn_html.setEnabled(True)
+                    btn_html.setStyleSheet("background-color: #4CAF50; color: white; font-weight: bold;")
+                    btn_html.setToolTip("최신 통합 보고서를 브라우저에서 확인하세요")
+                
             except Exception as e:
                 logger.error(f"결과 처리 중 오류: {e}")
                 on_analysis_error(f"결과 처리 실패: {e}")
@@ -238,7 +245,49 @@ def main():
 
     btn_html = win.findChild(QtWidgets.QPushButton, "btnHTML")
     if btn_html:
-        btn_html.clicked.connect(lambda: ReportViewer.show_html_report(win))  # 생성 성공 팝업
+        # 초기에는 비활성화
+        btn_html.setEnabled(False)
+        btn_html.setToolTip("분석 완료 후 종합 보고서를 확인할 수 있습니다")
+        btn_html.clicked.connect(open_comprehensive_report)
+        
+        def open_comprehensive_report():
+            """가장 최신 통합 리포트를 브라우저에서 열기"""
+            try:
+                import glob
+                import webbrowser
+                import os
+                
+                # 가장 최신 통합 리포트 찾기
+                report_pattern = "output/integrated_report_*.html"
+                reports = glob.glob(report_pattern)
+                
+                if not reports:
+                    # 분석 결과가 없는 경우
+                    msg_box = QtWidgets.QMessageBox()
+                    msg_box.setIcon(QtWidgets.QMessageBox.Icon.Information)
+                    msg_box.setWindowTitle("보고서 없음")
+                    msg_box.setText("아직 분석 보고서가 생성되지 않았습니다.")
+                    msg_box.setInformativeText("'분석 시작' 버튼을 클릭하여 보안 분석을 먼저 실행해주세요.")
+                    msg_box.exec()
+                    return
+                
+                # 가장 최신 파일 (생성 시간 기준)
+                latest_report = max(reports, key=os.path.getctime)
+                
+                # 브라우저로 열기
+                abs_path = os.path.abspath(latest_report)
+                webbrowser.open(f"file://{abs_path}")
+                
+                logger.info(f"통합 보고서 열기: {latest_report}")
+                
+            except Exception as e:
+                logger.error(f"보고서 열기 실패: {e}")
+                msg_box = QtWidgets.QMessageBox()
+                msg_box.setIcon(QtWidgets.QMessageBox.Icon.Critical)
+                msg_box.setWindowTitle("오류")
+                msg_box.setText("보고서를 열 수 없습니다.")
+                msg_box.setDetailedText(str(e))
+                msg_box.exec()
 
 
     win.show()
@@ -246,3 +295,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
