@@ -2,7 +2,7 @@ from winreg import *
 from datetime import datetime, timezone
 from typing import List, Tuple, Optional
 
-
+# 레지스트리 키 종류
 TYPE_NAME = {
     REG_NONE: "REG_NONE",
     REG_SZ: "REG_SZ",
@@ -16,22 +16,25 @@ TYPE_NAME = {
     REG_QWORD: "REG_QWORD",
 }
 
+# HIVE
 HIVES = {
     "HKLM": HKEY_LOCAL_MACHINE, 
     "HKCU": HKEY_CURRENT_USER
     }
 
 
-
+# 레지스트리 키 종류 문자열로 반환함
 def type_name(t:int) -> str:
     return TYPE_NAME.get(t, str(t))
 
+# 레지스트리 키 값 읽음(OpenKey)
 def open_reg(hive: str, path: str):
     try:
         return OpenKey(HIVES[hive], path, 0, KEY_READ)
     except OSError:
         return None
 
+# 키 내부값 확인
 def enum_values(hkey) -> List[Tuple[str, object, int]]:
     out=[]; i=0
     if not hkey: return out
@@ -42,6 +45,7 @@ def enum_values(hkey) -> List[Tuple[str, object, int]]:
             break
     return out
 
+# 키 내 서브키 값 나열
 def enum_subkeys(hkey) -> List[str]:
     out=[]; i=0
     if not hkey: return out
@@ -52,6 +56,7 @@ def enum_subkeys(hkey) -> List[str]:
             break
     return out
 
+# 시간대 키값(LastWriteTime) UTC 문자열로 반환
 def lastwrite_iso(hkey) -> Optional[str]:
     try:
         _, _, ft = QueryInfoKey(hkey)
@@ -62,6 +67,7 @@ def lastwrite_iso(hkey) -> Optional[str]:
     except Exception:
         return None
 
+# 지정한 위치 DWORD값 일거어서 정수로 반환
 def get_dword(hive: str, path: str, name: str) -> Optional[int]:
     h = open_reg(hive, path)
     if not h: return None
