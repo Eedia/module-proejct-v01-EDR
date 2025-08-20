@@ -158,9 +158,11 @@ class AISecurityAnalyzer:
             confidence = confidence.get('value', 0)
 
         try:
-            return float(confidence)
+            value = float(confidence)   
         except (TypeError, ValueError):
-            return 0.0
+            value = 0.0
+
+        return max(0.0, min(value, 1.0))
         
     def _calculate_statistics(self, issues: List, scripts: List) -> Dict:
         """AI 통계 계산"""
@@ -170,7 +172,8 @@ class AISecurityAnalyzer:
         total = len(scripts)
         confidences = [self._extract_confidence(s) for s in scripts]
         avg_conf = sum(confidences) / total
-        
+        high_conf = len([s for s in scripts if self._extract_confidence(s) >= 0.8])
+
         # 검증 통계
         safe_scripts = sum(1 for s in scripts if s.get('validation', {}).get('risk_level') == 'safe')
         caution_scripts = sum(1 for s in scripts if s.get('validation', {}).get('risk_level') == 'caution')
@@ -179,7 +182,7 @@ class AISecurityAnalyzer:
         return {
             "total_scripts": total,
             "avg_confidence": avg_conf,
-            "high_confidence": len([c for c in confidences if c >= 0.8]),
+            "high_confidence": high_conf,
             "validation_stats": {
                 "safe": safe_scripts,
                 "caution": caution_scripts,

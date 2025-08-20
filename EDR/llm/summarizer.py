@@ -102,7 +102,7 @@ class SecuritySummarizer(AIBaseModule):
         confidences = [self._extract_confidence(s) for s in remediation_scripts]
         script_stats = {
             'total_scripts': len(remediation_scripts),
-            'high_confidence': len([c for c in confidences if c >= 0.8]),
+            'high_confidence': len([s for s in remediation_scripts if self._extract_confidence(s) >= 0.8]),
             'avg_confidence': sum(confidences) / len(confidences) if confidences else 0
         }
         
@@ -125,9 +125,11 @@ class SecuritySummarizer(AIBaseModule):
             confidence = confidence.get('value', 0)
 
         try:
-            return float(confidence)
+            value = float(confidence)
         except (TypeError, ValueError):
-            return 0.0
+            value = 0.0
+
+        return max(0.0, min(value, 1.0))
         
     def _generate_recommendations(self, categories: Dict) -> List[str]:
         """카테고리별 권장사항 생성"""

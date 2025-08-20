@@ -26,9 +26,12 @@ class RemediationEngine(AIBaseModule):
                 # AI로 해결책 생성 시도
                 script = self._create_remediation_script(finding)
                 
-                if script and script.confidence >= 0.5:
+                conf = self._extract_confidence(script)
+
+                if script and conf >= 0.5:
+                    script.confidence = conf
                     scripts.append(script)
-                    self.logger.info(f"  ✅ AI 해결책 생성 성공 (신뢰도: {script.confidence:.2f})")
+                    self.logger.info(f"  ✅ AI 해결책 생성 성공 (신뢰도: {conf:.2f})")
                 else:
                     fallback_script = self._get_fallback_script(finding)
                     scripts.append(fallback_script)
@@ -40,6 +43,28 @@ class RemediationEngine(AIBaseModule):
         
         self.logger.info(f"총 {len(scripts)}개 해결책 생성 완료")
         return scripts
+    
+    def _extract_confidence(self, script) -> float:
+        """스크립트에서 신뢰도 값을 안전하게 추출"""
+        if script is None:
+            return 0.0
+
+        if hasattr(script, 'confidence'):
+            confidence = script.confidence
+        elif isinstance(script, dict):
+            confidence = script.get('confidence', 0)
+        else:
+            confidence = 0
+
+        if isinstance(confidence, dict):
+            confidence = confidence.get('value', 0)
+
+        try:
+            value = float(confidence)
+        except (TypeError, ValueError):
+            value = 0.0
+
+        return max(0.0, min(value, 1.0))
     
     def _create_remediation_script(self, finding: SecurityIssue) -> Optional[RemediationScript]:
         """단일 보안 이슈에 대해 AI로 해결책 생성"""
@@ -97,7 +122,7 @@ ID: {finding.issue_id}
                     validation_command=result['validation_command'],
                     rollback_command=result['rollback_command'],
                     description=result['description'],
-                    confidence=float(result.get('confidence', 0.5)),
+                    confidence=self._extract_confidence(result),
                     warnings=result.get('warnings', [])
                 )
         
