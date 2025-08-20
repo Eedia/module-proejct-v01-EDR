@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1240</width>
+    <height>920</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>점검 대시보드</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">
+QWidget#centralwidget { background:#1e1f23; color:#e5e7eb; }
+
+/* 패널 공통 */
+QFrame#panel, QFrame#panel2 { background:#2a2c31; border-radius:8px; }
+QLabel.title   { color:#e5e7eb; font-weight:700; }
+QLabel.muted   { color:#a3a7b0; }
+QLabel.good    { color:#6ee777; font-weight:600; }
+QLabel.bad     { color:#ef4444; font-weight:600; }
+QLabel.neutral { color:#cbd5e1; }
+
+/* 진행바 */
+QProgressBar#safeBar {
+  background:#1f2126; border:1px solid #00000066; border-radius:6px; height:14px; text-align:right;
+}
+QProgressBar#safeBar::chunk { background:#22c55e; border-radius:6px; }
+QLabel#redDot { color:#ef4444; font-size:12pt; }
+
+/* 점수 박스 */
+QFrame#scoreBox { background:#2a2c31; border-radius:8px; border:1px solid #00000066; }
+QLabel#scoreTitle { color:#a3a7b0; font-weight:600; }
+QLabel#scoreValue { color:#e5e7eb; font-size:28pt; font-weight:700; }
+QLabel#scoreHint  { color:#a3a7b0; font-size:9pt; }
+
+/* 버튼 */
+QPushButton#btnStart, QPushButton#btnHTML {
+  background:#0ea5ff; color:white; font-weight:600;
+  border:none; border-radius:6px; padding:6px 12px;
+}
+QPushButton#btnStart:hover, QPushButton#btnHTML:hover { background:#0284c7; }
+    </string>
+   </property>
+   <widget class="QFrame" name="panel">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>20</y>
+      <width>728</width>
+      <height>180</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::NoFrame</enum>
+    </property>
+    <widget class="QLabel" name="lblResultTitle">
+     <property name="geometry">
+      <rect>
+       <x>16</x>
+       <y>12</y>
+       <width>200</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>최근 점검 결과</string>
+     </property>
+     <property name="class" stdset="0">
+      <string>title</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblResultTime">
+     <property name="geometry">
+      <rect>
+       <x>500</x>
+       <y>12</y>
+       <width>212</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>2025. 08. 20. 13:23 (결과 전송 완료)</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+     <property name="class" stdset="0">
+      <string>muted</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblSafe">
+     <property name="geometry">
+      <rect>
+       <x>16</x>
+       <y>54</y>
+       <width>40</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>안전</string>
+     </property>
+     <property name="class" stdset="0">
+      <string>good</string>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="safeBar">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>56</y>
+       <width>560</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="value">
+      <number>90</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblSafeCount">
+     <property name="geometry">
+      <rect>
+       <x>630</x>
+       <y>52</y>
+       <width>80</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>9건</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+     <property name="class" stdset="0">
+      <string>good</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblWeakTitle">
+     <property name="geometry">
+      <rect>
+       <x>16</x>
+       <y>88</y>
+       <width>40</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>취약</string>
+     </property>
+     <property name="class" stdset="0">
+      <string>bad</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="redDot">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>86</y>
+       <width>18</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>●</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblWeakCount">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>88</y>
+       <width>80</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>1건</string>
+     </property>
+     <property name="class" stdset="0">
+      <string>bad</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblUnableTitle">
+     <property name="geometry">
+      <rect>
+       <x>16</x>
+       <y>116</y>
+       <width>60</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>점검 불가</string>
+     </property>
+     <property name="class" stdset="0">
+      <string>neutral</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblUnableCount">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>116</y>
+       <width>60</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>0건</string>
+     </property>
+     <property name="class" stdset="0">
+      <string>neutral</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnHTML">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>140</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>HTML 리포트 생성</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QFrame" name="panel2">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>210</y>
+      <width>728</width>
+      <height>248</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QFrame#panel2 { background:#2a2c31; border-radius:8px; }</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::NoFrame</enum>
+    </property>
+    <widget class="QLabel" name="lblTrendTitle">
+     <property name="geometry">
+      <rect>
+       <x>16</x>
+       <y>12</y>
+       <width>200</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>점검 점수 추이</string>
+     </property>
+     <property name="class" stdset="0">
+      <string>title</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblRecent5">
+     <property name="geometry">
+      <rect>
+       <x>610</x>
+       <y>12</y>
+       <width>100</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>최근 5회</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+     <property name="class" stdset="0">
+      <string>muted</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="chartHolder" native="true">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>40</y>
+       <width>704</width>
+       <height>192</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>개발에서 QtCharts QChartView 또는 pyqtgraph PlotWidget으로 교체</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QWidget#chartHolder { background:#1f2126; border:1px solid #00000066; border-radius:6px; }</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QFrame" name="scoreBox">
+    <property name="geometry">
+     <rect>
+      <x>19</x>
+      <y>20</y>
+      <width>251</width>
+      <height>341</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::NoFrame</enum>
+    </property>
+    <widget class="QLabel" name="scoreTitle">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>8</y>
+       <width>196</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>PC 점수</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="scoreValue">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>30</y>
+       <width>196</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>90점</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="scoreHint">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>80</y>
+       <width>196</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>최근 점검 결과 반영</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QWidget" name="donutHolder" native="true">
+     <property name="geometry">
+      <rect>
+       <x>9</x>
+       <y>110</y>
+       <width>231</width>
+       <height>221</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>개발 코드에서 도넛 게이지(QChartView 등) 삽입</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QWidget#donutHolder { background:#1f2126; border:1px solid #00000066; border-radius:8px; }</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="btnStart">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>370</y>
+      <width>221</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>점검 시작</string>
+    </property>
+   </widget>
+   <widget class="QDockWidget" name="chatDock">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>470</y>
+      <width>731</width>
+      <height>340</height>
+     </rect>
+    </property>
+    <property name="features">
+     <set>QDockWidget::DockWidgetFeature::DockWidgetFloatable|QDockWidget::DockWidgetFeature::DockWidgetMovable</set>
+    </property>
+    <property name="windowTitle">
+     <string>AI 채팅</string>
+    </property>
+    <widget class="QWidget" name="dockWidgetContents">
+     <property name="styleSheet">
+      <string notr="true">
+QWidget#dockWidgetContents { background:#1e1f23; }
+QTextBrowser#chatHistory {
+  background:#111217; border:1px solid #00000066; border-radius:6px;
+  padding:8px; color:#e5e7eb;
+}
+QTextEdit#chatInput {
+  background:#0f1115; border:1px solid #00000066; border-radius:6px;
+  padding:8px; color:#e5e7eb;
+}
+QPushButton#btnSend {
+  background:#0ea5ff; color:white; font-weight:600; border:none; border-radius:6px; padding:6px 12px;
+}
+QPushButton#btnSend:hover { background:#0284c7; }
+QPushButton#btnStop {
+  background:#374151; color:#e5e7eb; border:none; border-radius:6px; padding:6px 12px;
+}
+QPushButton#btnStop:hover { background:#4b5563; }
+     </string>
+     </property>
+     <layout class="QVBoxLayout" name="chatDockLayout">
+      <property name="leftMargin">
+       <number>8</number>
+      </property>
+      <property name="topMargin">
+       <number>8</number>
+      </property>
+      <property name="rightMargin">
+       <number>8</number>
+      </property>
+      <property name="bottomMargin">
+       <number>8</number>
+      </property>
+      <item>
+       <widget class="QTextBrowser" name="chatHistory">
+        <property name="minimumSize">
+         <size>
+          <width>280</width>
+          <height>160</height>
+         </size>
+        </property>
+        <property name="openExternalLinks">
+         <bool>false</bool>
+        </property>
+        <property name="openLinks">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTextEdit" name="chatInput">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="tabChangesFocus">
+         <bool>true</bool>
+        </property>
+        <property name="acceptRichText">
+         <bool>false</bool>
+        </property>
+        <property name="placeholderText">
+         <string>메시지를 입력하세요… (Enter 전송, Shift+Enter 줄바꿈)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="chatButtons">
+        <property name="spacing">
+         <number>8</number>
+        </property>
+        <item>
+         <spacer name="hspacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnStop">
+          <property name="text">
+           <string>정지</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnSend">
+          <property name="text">
+           <string>보내기</string>
+          </property>
+          <property name="default">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1240</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
