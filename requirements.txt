@@ -1,0 +1,13 @@
+# AI 모듈 핵심
+# google-generativeai
+openai
+python-dotenv
+
+# 개발 도구
+pytest==7.4.3
+black==23.11.0
+flake8==6.1.0
+
+# 데이터 처리
+pandas==2.1.4
+numpy==1.25.2
