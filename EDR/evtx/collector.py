@@ -106,18 +106,50 @@ class EventLogCollector:
         except Exception as e:
             logger.error(f"Error collecting events: {e}")
             return []
+    # def _decode_output(self, data: bytes) -> str:
+    #     """wevtutil 출력의 인코딩을 자동으로 감지하여 문자열로 반환"""
+    #     if not data:
+    #         return ""
+
+    #     encodings = ["utf-16le", locale.getpreferredencoding(False), "utf-8"]
+    #     for enc in encodings:
+    #         try:
+    #             return data.decode(enc)
+    #         except UnicodeDecodeError:
+    #             continue
+    #     return data.decode("utf-8", errors="ignore")
     def _decode_output(self, data: bytes) -> str:
-        """wevtutil 출력의 인코딩을 자동으로 감지하여 문자열로 반환"""
+        """wevtutil 출력의 인코딩을 안전하게 판별/디코딩"""
         if not data:
             return ""
 
-        encodings = ["utf-16le", locale.getpreferredencoding(False), "utf-8"]
-        for enc in encodings:
+        # 1) BOM 스니핑
+        if data.startswith(b"\xff\xfe"):
+            return data[2:].decode("utf-16le", errors="replace")
+        if data.startswith(b"\xfe\xff"):
+            return data[2:].decode("utf-16be", errors="replace")
+        if data.startswith(b"\xef\xbb\xbf"):
+            return data[3:].decode("utf-8", errors="replace")
+
+        # 2) 널바이트 휴리스틱 (앞부분만 검사)
+        head = data[:200]
+        if b"\x00" in head:
+            # 보통 UTF-16LE가 더 흔함
+            try:
+                return data.decode("utf-16le")
+            except UnicodeDecodeError:
+                return data.decode("utf-16be", errors="replace")
+
+        # 3) 기본은 UTF-8, 폴백은 로캘/기타
+        for enc in ("utf-8", locale.getpreferredencoding(False), "cp949", "mbcs", "latin1"):
             try:
                 return data.decode(enc)
             except UnicodeDecodeError:
                 continue
-        return data.decode("utf-8", errors="ignore")
+
+        return data.decode("utf-8", errors="replace")
+
+
 
     def _collect_events_by_channel(self, channel: str, event_ids: List[int]) -> List[Dict[str, Any]]:
         """특정 채널에서 이벤트 ID 목록으로 이벤트 수집"""
@@ -144,7 +176,7 @@ class EventLogCollector:
                 '/rd:true'
             ]
  
-            print("********Executing command:", ' '.join(cmd))
+            # print("********Executing command:", ' '.join(cmd))
 
             logger.debug(f"Executing: {' '.join(cmd)}")
             
@@ -158,6 +190,13 @@ class EventLogCollector:
             stderr = self._decode_output(result.stderr)
             # stdout = result.stdout
             # stderr = result.stderr
+            os.makedirs("./logs/wevtutil", exist_ok=True)
+            ts = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+            safe_channel = channel.replace("\\", "-").replace("/", "-")
+            out_path = os.path.join("logs", "wevtutil", f"{safe_channel}_{ts}.txt")
+            with open(out_path, "w", encoding="utf-8-sig") as f:  # Notepad 호환 위해 BOM 포함
+                f.write(stdout)
+            logger.info(f"Saved raw stdout to {out_path}")
 
             if result.returncode != 0:
                 logger.warning(f"wevtutil returned error for {channel}: {stderr or None}")
@@ -188,7 +227,14 @@ class EventLogCollector:
             wrapped_xml = f"<Events>{xml_content}</Events>"
             
             root = ET.fromstring(wrapped_xml)
-            
+
+            # wevtutil 결과에는 기본 네임스페이스가 포함되어 있어
+            # ElementTree 탐색 시 태그를 찾지 못하는 문제가 발생한다.
+            # 모든 태그에서 네임스페이스를 제거하여 파싱이 가능하도록 한다.
+            for elem in root.iter():
+                if '}' in elem.tag:
+                    elem.tag = elem.tag.split('}', 1)[1]
+
             for event_elem in root.findall('.//Event'):
                 try:
                     event_data = self._parse_single_event(event_elem, channel)
