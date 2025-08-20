@@ -314,7 +314,10 @@ class IntegratedEDRAnalyzer:
     def ask_question(self, query: str, analysis_results: Dict) -> str:
         """분석 결과에 대한 자연어 질문"""
         try:
-            response = self.ai_analyzer.process_user_query(query, analysis_results)
+            # response = self.ai_analyzer.process_user_query(query, analysis_results)
+            ai_context = analysis_results.get('ai_analysis', {}).copy()
+            ai_context['hostname'] = analysis_results.get('integration_metadata', {}).get('hostname', 'Unknown')
+            response = self.ai_analyzer.process_user_query(query, ai_context)
             return response.get('answer', '답변을 생성할 수 없습니다.')
         except Exception as e:
             logger.error(f"질문 처리 실패: {e}")
