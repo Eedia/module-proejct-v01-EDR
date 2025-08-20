@@ -19,7 +19,7 @@ def test_utils():
     print("=== Utils 모듈 테스트 ===")
     
     try:
-        from utils import generate_finding_id, generate_scan_id, calculate_risk_level
+        from utils.data_structures import generate_finding_id, generate_scan_id, calculate_risk_level
         
         # ID 생성 테스트
         finding_id = generate_finding_id()
@@ -53,7 +53,7 @@ def test_scoring_engine():
     print("\n=== 점수화 엔진 테스트 ===")
     
     try:
-        from utils import generate_score_summary
+        from utils.scoring_engine import generate_score_summary
         
         # 테스트 Finding 데이터
         test_findings = [
@@ -95,7 +95,7 @@ def test_evtx_collector():
     print("\n=== 이벤트 로그 수집기 테스트 ===")
     
     try:
-        from evtx import EventLogCollector
+        from evtx.collector import EventLogCollector
         
         # 짧은 시간 범위로 테스트
         collector = EventLogCollector(time_range_hours=1)
@@ -120,7 +120,7 @@ def test_event_analyzer():
     print("\n=== 이벤트 분석기 테스트 ===")
     
     try:
-        from evtx import EventAnalyzer
+        from evtx.analyzer import EventAnalyzer
         
         analyzer = EventAnalyzer()
         
@@ -159,7 +159,7 @@ def test_file_handler():
     print("\n=== 파일 핸들러 테스트 ===")
     
     try:
-        from utils import FileHandler
+        from utils.file_handler import FileHandler
         
         # 테스트용 출력 디렉토리
         test_output_dir = "test_output"
