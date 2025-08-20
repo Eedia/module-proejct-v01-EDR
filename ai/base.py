@@ -3,7 +3,8 @@ AI 모듈 공통 기반 클래스
 """
 import logging
 from typing import Dict
-from ai.api_client import OpenAIClient
+# from ai.api_client import OpenAIClient
+from ai.api_client import GeminiClient
 from ai.json_utils import JSONCleaner
 
 class AIBaseModule:
@@ -14,7 +15,8 @@ class AIBaseModule:
         self.ai_config = config.get('ai', {})
         
         # 공통 컴포넌트 초기화
-        self.api_client = OpenAIClient()
+        # self.api_client = OpenAIClient()
+        self.api_client = GeminiClient()
         self.json_cleaner = JSONCleaner()
         
         # 로깅 설정

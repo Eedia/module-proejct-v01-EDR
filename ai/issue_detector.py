@@ -44,7 +44,13 @@ class AIIssueDetector(AIBaseModule):
         """보안 분석용 프롬프트 생성"""
         return f"""
 당신은 Windows 보안 전문가입니다.
-다음 이벤트 로그와 레지스트리 데이터를 분석해서 보안 위험 요소를 찾아 주세요.
+
+=== 🚨 중요한 응답 규칙 (반드시 준수) ===
+1. 응답은 반드시 JSON 배열만 작성하세요
+2. 모든 경로는 슬래시(/) 사용: "HKLM:/SOFTWARE/Microsoft"
+3. 역슬래시(\\) 절대 사용 금지
+4. 실제 문제가 있는 항목만 포함
+5. 최대 10개 이슈까지만 보고
 
 === 이벤트 로그 데이터 ===
 {json.dumps(event_logs, ensure_ascii=False, indent=2)}
@@ -52,44 +58,44 @@ class AIIssueDetector(AIBaseModule):
 === 레지스트리 데이터 ===  
 {json.dumps(registry_data, ensure_ascii=False, indent=2)}
 
-다음 보안 위험 요소를 중점적으로 분석하세요:
+=== 분석 우선순위 ===
 
-**이벤트 로그 분석:**
-- Event ID 4688: 의심스러운 프로세스 실행 (PowerShell, cmd 등)
-- Event ID 4624: 비정상적인 로그인 (새벽 시간, RDP 로그인)
-- Event ID 4104: PowerShell 스크립트 블록 로깅 (악성 스크립트)
+**🔍 이벤트 로그 중점 분석:**
+- Event ID 4688: 의심스러운 프로세스 (powershell.exe, cmd.exe)
+  * 명령어에 "-EncodedCommand", "Bypass", "DownloadString" 포함
+  * 새벽/휴일 시간대 실행
+- Event ID 4624: 비정상 로그인 (Type 10=RDP, 새벽 시간)
+- Event ID 4104: PowerShell 스크립트 블록 (악성 명령어)
 - Event ID 1102: 보안 로그 삭제 시도
 
-**레지스트리 분석:**
-- Windows Defender 설정 변조
-- RDP 활성화 여부
-- 자동 실행 프로그램의 의심스러운 항목
-- 중요 서비스 비활성화
+**🔍 레지스트리 중점 분석:**
+- HKLM:/SOFTWARE/Microsoft/Windows Defender/Real-Time Protection
+  * DisableRealtimeMonitoring=1 (위험)
+- HKLM:/SYSTEM/CurrentControlSet/Control/Terminal Server  
+  * fDenyTSConnections=0 (RDP 활성화)
+- HKLM:/SOFTWARE/Microsoft/Windows/CurrentVersion/Run
+  * 의심스러운 자동실행 (Public, Downloads 폴더)
 
-발견된 각 보안 이슈에 대해 다음 JSON 배열로 응답하세요:
+=== 응답 형식 (정확히 따르세요) ===
 [
   {{
     "issue_id": "evt-001",
     "title": "의심스러운 PowerShell 실행",
-    "severity": "high", 
-    "category": "suspicious_activity",
-    "description": "관리자 계정으로 인코딩된 PowerShell 명령어 실행 감지",
+    "severity": "high",
+    "category": "suspicious_activity", 
+    "description": "관리자 권한으로 인코딩된 PowerShell 명령어 실행됨",
     "evidence": {{
       "type": "event_log",
       "event_id": 4688,
-      "details": "powershell -ExecutionPolicy Bypass -EncodedCommand..."
+      "command": "powershell -ExecutionPolicy Bypass",
+      "user": "Administrator",
+      "time": "2025-08-20T02:30:00"
     }},
-    "impact": "악성 코드 실행 가능성",
     "confidence": 0.9
   }}
 ]
 
-중요: 반드시 JSON 배열만 응답하고, 실제 문제가 있는 항목만 포함하세요.
-=== 중요한 JSON 형식 규칙 ===
-- 레지스트리 경로는 반드시 슬래시(/)를 사용하세요
-- 예시: "HKLM:/SOFTWARE/Microsoft/Windows"
-- 역슬래시(\\)는 절대 사용하지 마세요
-- PowerShell 변수는 $변수 형태로 작성하세요
+다시 한번 강조: JSON 배열만 응답하고, 경로는 슬래시(/)만 사용하세요!
 """
     
     def _create_security_issue(self, issue_data: Dict, findings_data: Dict, index: int) -> SecurityIssue:

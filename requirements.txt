@@ -1,6 +1,6 @@
 # AI 모듈 핵심
-# google-generativeai
-openai
+google-generativeai
+# openai
 python-dotenv
 
 # 개발 도구

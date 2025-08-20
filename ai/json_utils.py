@@ -13,65 +13,94 @@ class JSONCleaner:
     
     @staticmethod
     def clean_ai_response(content: str, fallback_type: str = "object") -> str:
-        """AI 응답에서 JSON 부분만 추출하고 정리 (강화된 버전)"""
+        """AI 응답에서 JSON 부분만 추출하고 정리 (최강화 버전 - Gemini 대응)"""
         if not content:
             return JSONCleaner._get_fallback_json(fallback_type)
         
         content = content.strip()
         
+        # 🔧 ANSI 이스케이프 코드 제거 (Gemini가 색상코드 포함할 수 있음)
+        content = re.sub(r'\x1b\[[0-9;]*m', '', content)
+        
         # 마크다운 제거
         content = content.replace('``````', '').strip()
         
-        # JSON 추출 (배열 또는 객체)
+        # JSON 추출
         if fallback_type == "array":
-            start_char, end_char = "[", "]"
             start_idx = content.find("[")
             end_idx = content.rfind("]")
         else:
-            start_char, end_char = "{", "}"
             start_idx = content.find("{")
             end_idx = content.rfind("}")
         
         if start_idx == -1 or end_idx == -1 or end_idx <= start_idx:
-            if fallback_type == "array":
-                return "[]"
-            else:
-                fallback = {
-                    "fix_command": "수동 조치 필요",
-                    "validation_command": "수동 확인", 
-                    "rollback_command": "수동 되돌리기",
-                    "description": "JSON 형식 오류",
-                    "confidence": 0.3,
-                    "warnings": ["JSON 파싱 실패"]
-                }
-                return json.dumps(fallback)
+            return JSONCleaner._get_fallback_json(fallback_type)
         
         json_str = content[start_idx:end_idx+1]
         
-        # 🔧 강력한 역슬래시 문제 해결
         try:
-            # 1. 모든 Windows 경로 패턴을 슬래시로 변경
-            json_str = re.sub(r'HKLM:\\', 'HKLM:/', json_str)
-            json_str = re.sub(r'HKCU:\\', 'HKCU:/', json_str)
+            # 임시 플레이스홀더로 유효한 이스케이프 보호
+            json_str = json_str.replace('\\\\', '<!DOUBLE_BACKSLASH!>')
+            json_str = json_str.replace('\\"', '<!ESCAPED_QUOTE!>')
+            json_str = json_str.replace('\\/', '<!ESCAPED_SLASH!>')
+            json_str = json_str.replace('\\n', '<!NEWLINE!>')
+            json_str = json_str.replace('\\r', '<!CARRIAGE_RETURN!>')
+            json_str = json_str.replace('\\t', '<!TAB!>')
+            
+            # Windows 경로 패턴을 슬래시로 변경
+            json_str = re.sub(r'HKLM:\\?', 'HKLM:/', json_str)
+            json_str = re.sub(r'HKCU:\\?', 'HKCU:/', json_str)  
             json_str = re.sub(r'\\SOFTWARE', '/SOFTWARE', json_str)
             json_str = re.sub(r'\\Microsoft', '/Microsoft', json_str)
             json_str = re.sub(r'\\Windows', '/Windows', json_str)
             json_str = re.sub(r'\\System32', '/System32', json_str)
+            json_str = re.sub(r'\\CurrentVersion', '/CurrentVersion', json_str)
+            json_str = re.sub(r'\\Run', '/Run', json_str)
             
-            # 2. PowerShell 변수는 건드리지 않고 나머지 역슬래시 이중화
-            json_str = re.sub(r'\\(?!["\\/bfnrtu$])', r'\\\\', json_str)
+            # C:\ 드라이브 경로 처리
+            json_str = re.sub(r'C:\\([^"]*)', r'C:/\1', json_str)
+            json_str = re.sub(r'\\Users', '/Users', json_str)
+            json_str = re.sub(r'\\Program Files', '/Program Files', json_str)
+            json_str = re.sub(r'\\Public', '/Public', json_str)
+            json_str = re.sub(r'\\Downloads', '/Downloads', json_str)
+            json_str = re.sub(r'\\AppData', '/AppData', json_str)
             
-            # 3. 쉼표 문제 해결
+            # PowerShell 변수는 보호하고 나머지는 슬래시로
+            json_str = re.sub(r'\\(?!\$)', '/', json_str)
+            
+            # 플레이스홀더 복원
+            json_str = json_str.replace('<!DOUBLE_BACKSLASH!>', '\\\\')
+            json_str = json_str.replace('<!ESCAPED_QUOTE!>', '\\"')
+            json_str = json_str.replace('<!ESCAPED_SLASH!>', '\\/')
+            json_str = json_str.replace('<!NEWLINE!>', '\\n')
+            json_str = json_str.replace('<!CARRIAGE_RETURN!>', '\\r')
+            json_str = json_str.replace('<!TAB!>', '\\t')
+            
+            # 쉼표 문제 해결
             json_str = re.sub(r',\s*}', '}', json_str)
             json_str = re.sub(r',\s*]', ']', json_str)
             
-            # 4. 유효성 검사
-            json.loads(json_str)  # 파싱 테스트
+            # 유효성 검사
+            json.loads(json_str)
             return json_str.strip()
             
+        except json.JSONDecodeError as e:
+            logger.error(f"JSON 파싱 실패 (위치: {e.pos}): {e}")
+            
+            # 모든 역슬래시를 슬래시로 교체
+            try:
+                safe_json_str = re.sub(r'\\(?!["\\/bfnrtu])', '/', json_str)
+                json.loads(safe_json_str)
+                logger.info("역슬래시 전체 교체로 파싱 성공")
+                return safe_json_str.strip()
+            except Exception:
+                logger.error("최종 파싱도 실패, 폴백 사용")
+                return JSONCleaner._get_fallback_json(fallback_type)
+                
         except Exception as e:
-            logger.warning(f"JSON 정리 실패: {e}, 폴백 사용")
+            logger.error(f"JSON 전처리 실패: {e}")
             return JSONCleaner._get_fallback_json(fallback_type)
+
     
     @staticmethod
     def _fix_backslash_issues(json_str: str) -> str:

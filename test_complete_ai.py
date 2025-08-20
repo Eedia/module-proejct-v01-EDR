@@ -27,7 +27,8 @@ def test_complete_ai_workflow():
         print("✅ config.json 로드 성공")
     except FileNotFoundError:
         print("⚠️  config.json 없음 - 기본 설정 사용")
-        config = {"ai": {"provider": "openai", "model": "gpt-4"}}
+        config = {"ai": {"provider": "gemini", "model": "gemini-1.5-flash"}}
+        # config = {"ai": {"provider": "openai", "model": "gpt-4"}}
     
     # 테스트 데이터 로드
     try:
@@ -210,5 +211,4 @@ if __name__ == "__main__":
 
 
     # 테스트 완료 후 종료
-    import sys
     sys.exit(0 if success else 1)
