@@ -104,12 +104,13 @@ class IntegratedEDRAnalyzer:
         all_findings.extend(raw_data['security_settings'])
         
         # 점수 계산
-        total_score = calculate_total_score(all_findings)
-        risk_level = determine_risk_level(total_score)
+        total_score_result = calculate_total_score(all_findings)
+        actual_score = total_score_result.get('total_score', 0) if isinstance(total_score_result, dict) else total_score_result
+        risk_level = determine_risk_level(actual_score)
         
         return {
             'findings': all_findings,
-            'total_score': total_score,
+            'total_score': total_score_result,
             'risk_level': risk_level,
             'scan_summary': {
                 'total_findings': len(all_findings),
