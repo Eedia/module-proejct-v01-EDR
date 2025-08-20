@@ -235,7 +235,7 @@ QPushButton#btnStart:hover, QPushButton#btnHTML:hover { background:#0284c7; }
       </rect>
      </property>
      <property name="text">
-      <string>HTML 리포트 생성</string>
+      <string>HTML 리포트 열기</string>
      </property>
     </widget>
    </widget>

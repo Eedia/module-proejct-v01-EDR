@@ -248,7 +248,7 @@ def main():
         # 초기에는 비활성화
         btn_html.setEnabled(False)
         btn_html.setToolTip("분석 완료 후 종합 보고서를 확인할 수 있습니다")
-        btn_html.clicked.connect(open_comprehensive_report)
+        
         
         def open_comprehensive_report():
             """가장 최신 통합 리포트를 브라우저에서 열기"""
@@ -289,7 +289,7 @@ def main():
                 msg_box.setDetailedText(str(e))
                 msg_box.exec()
 
-
+        btn_html.clicked.connect(open_comprehensive_report)
     win.show()
     sys.exit(app.exec())
 
