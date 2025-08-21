@@ -251,6 +251,7 @@ class RuleEngine:
             
             # 최종 점수 계산
             final_score = int(base_score * severity_weight * category_weight * rule_weight * confidence_factor)
+
             
             # 점수 범위 제한
             max_score = self.scoring_weights.get('scoring_formula', {}).get('max_score', 100)

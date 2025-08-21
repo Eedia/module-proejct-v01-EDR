@@ -565,7 +565,7 @@
 
     {
       "rule_id": "CFG_UAC_ENABLELUA_OFF",
-      "category": "impact",
+      "category": "access",
       "subcategory": "security_settings",
       "title": "보안 설정 미준수",
       "description": "UAC가 비활성화 되어 있음(EnableLUA=0)",
@@ -581,7 +581,7 @@
     },
     {
       "rule_id": "CFG_UAC_NO_PROMPT_ADMIN",
-      "category": "impact",
+      "category": "access",
       "subcategory": "security_settings",
       "title": "보안 설정 미준수",
       "description": "관리자 동의 프롬프트가 꺼짐(ConsentPromptBehaviorAdmin=0)",
@@ -653,7 +653,7 @@
     },
     {
       "rule_id": "CFG_FIREWALL_DOMAIN_OFF",
-      "category": "impact",
+      "category": "persistence",
       "subcategory": "security_settings",
       "title": "보안 설정 미준수",
       "description": "도메인 프로필 방화벽 비활성(EnableFirewall=0)",
@@ -669,7 +669,7 @@
     },
     {
       "rule_id": "CFG_FIREWALL_PUBLIC_OFF",
-      "category": "impact",
+      "category": "persistence",
       "subcategory": "security_settings",
       "title": "보안 설정 미준수",
       "description": "퍼블릭 프로필 방화벽 비활성(EnableFirewall=0)",
@@ -685,7 +685,7 @@
     },
     {
       "rule_id": "CFG_DEFENDER_RT_OFF",
-      "category": "impact",
+      "category": "access",
       "subcategory": "security_settings",
       "title": "보안 설정 미준수",
       "description": "Defender 실시간 보호 꺼짐(DisableRealtimeMonitoring=1)",
@@ -762,7 +762,7 @@
     },
     {
       "rule_id": "CFG_MESSENGER_PREVENT_RUN_OFF",
-      "category": "impact",
+      "category": "access",
       "subcategory": "security_settings",
       "title": "보안 설정 미준수",
       "description": "Windows Messenger 실행 차단 미설정(PreventRun=0 또는 없음)",
@@ -778,7 +778,7 @@
     },
     {
       "rule_id": "CFG_FIREWALL_STANDARD_OFF",
-      "category": "impact",
+      "category": "persistence",
       "subcategory": "security_settings",
       "title": "보안 설정 미준수",
       "description": "표준 프로필 방화벽 비활성(EnableFirewall=0 또는 없음)",
@@ -795,7 +795,7 @@
     },
     {
       "rule_id": "CFG_RECOVERY_CONSOLE_AUTOLOGON_ENABLED",
-      "category": "impact",
+      "category": "access",
       "subcategory": "security_settings",
       "title": "보안 설정 미준수",
       "description": "복구 콘솔 자동 로그온 허용(SecurityLevel=1)",
@@ -814,7 +814,7 @@
     }, 
     {
       "rule_id": "CFG_IE_CACHE_PERSISTENT_ON",
-      "category": "impact",
+      "category": "access",
       "subcategory": "security_settings",
       "title": "보안 설정 미준수",
       "description": "IE 캐시 비우기 미설정(Persistent=1 또는 없음)",
@@ -830,7 +830,7 @@
     },
     {
       "rule_id": "CFG_WU_NO_AUTO_UPDATE",
-      "category": "impact", "subcategory": "security_settings",
+      "category": "access", "subcategory": "security_settings",
       "title": "보안 설정 미준수",
       "description": "자동 업데이트 비활성(NoAutoUpdate=1)",
       "severity": "medium", "confidence": 90,
