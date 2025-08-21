@@ -6,5 +6,5 @@ logs/wevtutil
 *.pyc
 *.bat
 build.py
-/backup_original_code/
-/backup_rules/
+backup_original_code/
+backup_rules/
