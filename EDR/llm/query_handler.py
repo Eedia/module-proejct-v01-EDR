@@ -21,6 +21,13 @@ class QueryHandler(AIBaseModule):
             alerts = findings_data.get('detected_issues', findings_data.get('alerts', []))  # 키 이름 변경 대응
             total_real_issues = len(alerts)
             hostname = findings_data.get('hostname', 'Unknown')
+
+            # 조치 스크립트 매핑
+            remediation_map = {}
+            for script in findings_data.get('ai_remediation', []):
+                issue_id = script.get('issue_id')
+                if issue_id:
+                    remediation_map[issue_id] = script          
             
             # 실제 이슈 목록 생성
             issue_details = ""
@@ -30,7 +37,18 @@ class QueryHandler(AIBaseModule):
                     title = alert.get('title', 'Unknown issue')
                     severity = alert.get('severity', 'unknown').upper()
                     confidence = alert.get('confidence', 0) * 100
+                    issue_id = alert.get('issue_id') or alert.get('finding_id')
                     issue_details += f"{i}. [{severity}] {title} (신뢰도: {confidence:.0f}%)\n"
+
+                    script = remediation_map.get(issue_id)
+                    if script:
+                        fix_cmd = script.get('fix_command', 'N/A')
+                        risk = script.get('validation', {}).get('risk_level', 'unknown')
+                        warnings = ', '.join(script.get('warnings', []))
+                        issue_details += f"   - 권장 조치: {fix_cmd}\n"
+                        issue_details += f"   - 명령어 위험도: {risk}\n"
+                        if warnings:
+                            issue_details += f"   - 주의사항: {warnings}\n"
             
             # 🔧 강력한 프롬프트 (데이터 강제 주입)
             prompt = f"""

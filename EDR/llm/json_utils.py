@@ -5,6 +5,8 @@ json-repair 라이브러리 활용한 강화된 JSON 처리
 import json
 import re
 import logging
+from pathlib import Path
+from typing import Dict, Any
 
 # json-repair 라이브러리가 없다면 기본 처리 사용
 try:
@@ -114,3 +116,20 @@ class JSONCleaner:
             return json.loads(json_str)
         except:
             return fallback_value if fallback_value is not None else {}
+
+# Load all JSON files in a directory        
+def load_all_json_files(directory: str) -> Dict[str, Any]:
+    """지정된 디렉토리 내 모든 JSON 파일 로드"""
+    results: Dict[str, Any] = {}
+    dir_path = Path(directory)
+    if not dir_path.exists():
+        logger.warning(f"JSON 디렉토리를 찾을 수 없습니다: {directory}")
+        return results
+
+    for path in dir_path.rglob("*.json"):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                results[path.name] = json.load(f)
+        except Exception as e:
+            logger.warning(f"JSON 파일 로드 실패: {path} - {e}")
+    return results
