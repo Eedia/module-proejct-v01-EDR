@@ -1,0 +1,69 @@
+{
+  "metadata": {
+    "version": "1.1.0",
+    "description": "EDR 점수 계산을 위한 가중치 설정 - Medium 이하는 정상 시스템 구성으로 감점 제외",
+    "last_updated": "2025-08-21T10:00:00"
+  },
+  "severity_weights": {
+    "critical": 3.0,
+    "high": 2.0,
+    "medium": 0.0,
+    "low": 0.0,
+    "info": 0.0
+  },
+  "category_weights": {
+    "execution": 0.9,
+    "persistence": 0.8,
+    "access": 0.5,
+    "configuration": 0.5,
+    "discovery": 0.0,
+    "collection": 0.0,
+    "exfiltration": 0.7,
+    "impact": 0.7, 
+    "default": 0.0
+  },
+  "confidence_settings": {
+    "min_confidence": 50,
+    "max_confidence": 100,
+    "weight_factor": 0.01
+  },
+  "rule_specific_weights": {
+    "R_LOLBIN_RUNDLL32_JS": 1.5,
+    "R_LOLBIN_RUNDLL32_URL": 1.4,
+    "R_LOLBIN_REGSVR32_URL": 1.5,
+    "R_POWERSHELL_ENCODED": 1.2,
+    "R_POWERSHELL_BYPASS_POLICY": 1.1,
+    "R_POWERSHELL_AMSI_BYPASS": 1.4,
+    "R_RDP_NONBUSINESS_HOURS": 1.0,
+    "R_ADMIN_RDP_LOGON": 1.1,
+    "R_SERVICE_TEMP_PATH": 1.3,
+    
+    "R_SERVICE_SUSPICIOUS": 1.0,
+    "R_AUTORUN_SUSPICIOUS": 1.0,
+    "R_SECURITY_SETTINGS_NON_COMPLIANT": 0.0,
+
+    "CFG_FIREWALL_PUBLIC_OFF": 0.8,
+    "CFG_FIREWALL_STANDARD_OFF": 0.8,
+    "CFG_FIREWALL_DOMAIN_OFF": 0.8,
+    "CFG_DEFENDER_RT_OFF": 0.8,
+    "CFG_SMB_AUTOSHARE_SERVER_ON": 0.9,
+    "CFG_SMB_AUTOSHARE_WKS_ON": 0.7,
+    "CFG_SMB_SERVER_SIGNING_NOT_REQUIRED": 0.6,
+    "CFG_WDIGEST_USE_LOGON_CRED": 1.1,
+    "CFG_RDP_ENABLED": 1.0,
+    "CFG_RDP_NLA_OFF": 1.0,
+    "CFG_RDP_SECURITYLAYER_WEAK": 1.1,
+    "CFG_RDP_MINENCRYPTIONLEVEL_LOW": 1.1,
+    "CFG_WU_NO_AUTO_UPDATE": 1.0,
+    "CFG_LLMNR_ENABLED": 0.9,
+    "CFG_MESSENGER_PREVENT_RUN_OFF": 1.0,
+    "CFG_RECOVERY_CONSOLE_AUTOLOGON_ENABLED": 0.8,
+    "CFG_IE_CACHE_PERSISTENT_ON": 0.2
+  },
+  "scoring_formula": {
+    "description": "final_score = base_score * severity_weight * category_weight * rule_weight * confidence_factor. Medium/Low/Info 레벨은 정상 운영 요소로 감점하지 않음",
+    "base_score": 10,
+    "max_score": 100,
+    "min_score": 1
+  }
+}
