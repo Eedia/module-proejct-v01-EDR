@@ -196,7 +196,11 @@ class ScoringEngine:
             severity_counts[severity] = severity_counts.get(severity, 0) + 1
         
         # 최종 점수 계산 (100점에서 감점)
-        final_score = max(0, 100 - total_deduction)
+        # 최종 점수 계산 (100점에서 감점, 감점 상한선 적용)
+        # 너무 많은 medium 등급 발견사항으로 인한 과도한 감점 방지  
+        max_deduction = 80  # 최대 80점까지만 감점 (최소 20점 보장)
+        adjusted_deduction = min(total_deduction, max_deduction)
+        final_score = max(20, 100 - adjusted_deduction)
         
         # 등급 결정
         grade = self._determine_grade(final_score)
@@ -207,7 +211,7 @@ class ScoringEngine:
             "finding_count": len(findings),
             "category_breakdown": category_scores,
             "severity_breakdown": severity_counts,
-            "deduction_total": total_deduction
+            "deduction_total": adjusted_deduction
         }
     
     def _determine_grade(self, score: int) -> str:
