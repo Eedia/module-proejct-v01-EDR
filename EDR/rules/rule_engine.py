@@ -118,6 +118,8 @@ class RuleEngine:
                         
             except Exception as e:
                 self.logger.error(f"룰 {rule_id} 처리 중 오류: {e}")
+
+        
         
         return findings
     
@@ -179,6 +181,18 @@ class RuleEngine:
                     return False
             else:  # OR
                 if not any(pattern.lower() in reg_value for pattern in value_contains):
+                    return False
+        
+        # Ruleset 에 value_name_contains 필터 추가
+        value_name_contains = conditions.get('value_name_contains', [])
+        if value_name_contains:
+            name = str(registry_data.get('value_name', '')).lower()
+            logic = conditions.get('logic', 'OR')
+            if logic == 'AND':
+                if not all(p.lower() in name for p in value_name_contains):
+                    return False
+            else:
+                if not any(p.lower() in name for p in value_name_contains):
                     return False
         
         return True

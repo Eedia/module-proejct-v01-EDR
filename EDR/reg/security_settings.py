@@ -29,12 +29,55 @@ class SecuritySettingsAnalyzer:
         
         # 중요한 보안 설정들과 경로
         self.security_settings_paths = {
+
+            # Defender 관련 설정
             'windows_defender': ('HKLM', r'SOFTWARE\Microsoft\Windows Defender\Real-Time Protection'),
+
+            # UAC 관련 설정
             'uac_settings': ('HKLM', r'SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'),
+            
+            # RDP 관련 설정
             'rdp_settings': ('HKLM', r'SYSTEM\CurrentControlSet\Control\Terminal Server'),
+            'rdp_tcp':  ('HKLM', r'SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp'),
+            'rdp_policy': ('HKLM', r'SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services'),
+
+
+            # FireWall 관련 설정
             'firewall_settings': ('HKLM', r'SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy'),
+            'firewall_standard': ('HKLM', r'SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile'),
+            'firewall_domain':   ('HKLM', r'SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile'),
+            'firewall_public':   ('HKLM', r'SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile'),
+
+            # SMB 관련 설정
             'smb_settings': ('HKLM', r'SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters'),
+            'lanman_workstation': ('HKLM', r'SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters'),
+
+            # Windows Update 관련 설정
             'update_settings': ('HKLM', r'SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update'),
+            'wu_policy':   ('HKLM', r'SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate'),
+            'wu_policy_au':('HKLM', r'SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU'),
+
+            # Windows 메신저 차단
+            'messenger_policy': ('HKLM', r'SOFTWARE\Policies\Microsoft\Messenger\Client'),
+
+            # Recovery Console
+            'recovery_console_a': ('HKLM', r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Setup\RecoveryConsole'),
+            'recovery_console_b': ('HKLM', r'SOFTWARE\Microsoft\WindowsNT\CurrentVersion\Setup\RecoveryConsole'),  # 구형
+
+            # IE 캐시
+            'ie_cache_persistent': ('HKCU', r'SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Cache'),
+
+            
+            # PowerShell 로깅/실행정책
+            'ps_scriptblock':   ('HKLM', r'SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging'),
+            'ps_modulelog':     ('HKLM', r'SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging'),
+            'ps_transcription': ('HKLM', r'SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription'),
+            'ps_execpolicy':    ('HKLM', r'SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell'),
+
+            # 이름해석/인증
+            'dnsclient_policy': ('HKLM', r'SOFTWARE\Policies\Microsoft\Windows NT\DNSClient'),
+            'wdigest': ('HKLM', r'SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest'),
+            'lsa':     ('HKLM', r'SYSTEM\CurrentControlSet\Control\Lsa'),
         }
         
         logger.info("보안 설정 분석기 초기화 완료 - 룰 엔진 기반")
