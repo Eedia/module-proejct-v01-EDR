@@ -230,10 +230,16 @@ def main():
             msg_box.setIcon(QtWidgets.QMessageBox.Icon.Information)
             msg_box.setWindowTitle("분석 완료")
             msg_box.setText("🎉 EDR 보안 분석이 완료되었습니다!")
+            timestamp_iso = results.get('ai_analysis', {}).get('timestamp')
+            if timestamp_iso:
+                ts = datetime.fromisoformat(timestamp_iso.replace('Z', '')).strftime('%Y%m%d_%H%M%S')
+                report_path = f"output/reports/{ts}"
+            else:
+                report_path = "output/reports"
             msg_box.setInformativeText(
                 f"• 룰 기반 탐지: {total_findings}개 발견\n"
                 f"• AI 보안 이슈: {total_issues}개 발견\n"
-                f"• 결과는 output/ 폴더에 저장되었습니다."
+                f"• 결과는 {report_path}/ 폴더에 저장되었습니다.",
             )
             msg_box.exec()
         
@@ -258,7 +264,7 @@ def main():
                 import os
                 
                 # 가장 최신 통합 리포트 찾기
-                report_pattern = "output/integrated_report_*.html"
+                report_pattern = "output/reports/*/integrated_report.html"
                 reports = glob.glob(report_pattern)
                 
                 if not reports:

@@ -7,6 +7,7 @@ import json
 from typing import Dict, List
 import logging
 from datetime import datetime
+from pathlib import Path
 
 from .issue_detector import AIIssueDetector
 from .remediation import RemediationEngine
@@ -232,15 +233,17 @@ class AISecurityAnalyzer:
     
     def _save_complete_results(self, analysis_result: AnalysisResult) -> None:
         """결과 저장"""
-        os.makedirs('output', exist_ok=True)
+        timestamp = datetime.fromisoformat(analysis_result.timestamp.replace("Z", "")).strftime("%Y%m%d_%H%M%S")
+        output_dir = Path("output") / "reports" / timestamp
+        output_dir.mkdir(parents=True, exist_ok=True)
         
         # 1. 전체 분석 결과 저장
-        with open('output/ai_analysis_complete.json', 'w', encoding='utf-8') as f:
+        with open(output_dir / "ai_analysis_complete.json", 'w', encoding='utf-8') as f:
             json.dump(analysis_result.to_dict(), f, ensure_ascii=False, indent=2)
         
         # 2. AI 해결책만 별도 저장
         remediation_data = [script for script in analysis_result.ai_remediation]
-        with open('output/ai_remediation_validated.json', 'w', encoding='utf-8') as f:
+        with open(output_dir / "ai_remediation_validated.json", 'w', encoding='utf-8') as f:
             json.dump(remediation_data, f, ensure_ascii=False, indent=2)
         
         # 3. 요약 보고서 저장
@@ -252,7 +255,7 @@ class AISecurityAnalyzer:
             "total_issues": analysis_result.total_issues
         }
         
-        with open('output/executive_summary.json', 'w', encoding='utf-8') as f:
+        with open(output_dir / "executive_summary.json", 'w', encoding='utf-8') as f:
             json.dump(summary_report, f, ensure_ascii=False, indent=2)
         
-        self.logger.info("📁 분석 결과가 output/ 폴더에 저장되었습니다.")
+        self.logger.info(f"📁 분석 결과가 {output_dir}/ 폴더에 저장되었습니다.")

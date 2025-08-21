@@ -166,7 +166,8 @@ class IntegratedEDRAnalyzer:
                 'detected_issues': ai_results['detected_issues'],
                 'ai_remediation': ai_results['ai_remediation'],
                 'executive_summary': ai_results['executive_summary'],
-                'ai_statistics': ai_results['statistics']
+                'ai_statistics': ai_results['statistics'],
+                'timestamp': ai_results.get('timestamp')
             },
             
             # 통합 메타데이터
@@ -187,20 +188,24 @@ class IntegratedEDRAnalyzer:
         save_findings_json(results['rule_based_analysis'], scan_id)
         
         # 2. 통합 결과 저장
-        output_dir = Path('output')
-        output_dir.mkdir(exist_ok=True)
-        
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        timestamp_iso = results.get('ai_analysis', {}).get('timestamp')
+        if timestamp_iso:
+            folder_name = datetime.fromisoformat(timestamp_iso.replace('Z', '')).strftime('%Y%m%d_%H%M%S')
+        else:
+            folder_name = datetime.now().strftime('%Y%m%d_%H%M%S')
+
+        output_dir = Path('output') / 'reports' / folder_name
+        output_dir.mkdir(parents=True, exist_ok=True)
         
         # 통합 JSON 저장
         import json
-        with open(output_dir / f'integrated_analysis_{timestamp}.json', 'w', encoding='utf-8') as f:
+        with open(output_dir / 'integrated_analysis.json', 'w', encoding='utf-8') as f:
             json.dump(results, f, ensure_ascii=False, indent=2)
         
         # HTML 리포트 생성 (AI 결과 포함)
-        self._generate_enhanced_html_report(results, output_dir / f'integrated_report_{timestamp}.html')
-        
-        logger.info(f"📁 통합 결과 저장 완료: output/integrated_*_{timestamp}.*")
+        self._generate_enhanced_html_report(results, output_dir / 'integrated_report.html')
+
+        logger.info(f"📁 통합 결과 저장 완료: {output_dir}/integrated_*")
     
     def _generate_enhanced_html_report(self, results: Dict, output_path: Path):
         """AI 결과가 포함된 강화된 HTML 리포트"""
