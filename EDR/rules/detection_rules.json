@@ -210,7 +210,7 @@
         "logic": "OR"
       },
       "weight": 1.0,
-      "enabled": true
+      "enabled": false
     },
     {
       "rule_id": "R_AUTORUN_SUSPICIOUS",
@@ -232,7 +232,7 @@
         "logic": "OR"
       },
       "weight": 1.0,
-      "enabled": true
+      "enabled": false
     },
     {
       "rule_id": "R_SECURITY_SETTINGS_NON_COMPLIANT",
@@ -255,6 +255,301 @@
       },
       "weight": 0.8,
       "enabled": true
+    },
+    {
+      "rule_id": "R_SERVICE_IMAGEPATH_TEMP_EXE",
+      "category": "persistence",
+      "subcategory": "service",
+      "title": "의심스러운 서비스",
+      "description": "알려진 악성 서비스나 의심스러운 패턴의 서비스 탐지",
+      "severity": "medium",
+      "confidence": 70,
+      "tactics": ["persistence"],
+      "techniques": ["T1543.003"],
+      "data_source": "registry",
+      "registry_keys": ["HKLM\\SYSTEM\\CurrentControlSet\\Services"],
+      "conditions": { "value_contains": ["\\temp\\", ".exe"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_SERVICE_IMAGEPATH_TMP_EXE",
+      "category": "persistence",
+      "subcategory": "service",
+      "title": "의심스러운 서비스",
+      "description": "알려진 악성 서비스나 의심스러운 패턴의 서비스 탐지",
+      "severity": "medium",
+      "confidence": 70,
+      "tactics": ["persistence"],
+      "techniques": ["T1543.003"],
+      "data_source": "registry",
+      "registry_keys": ["HKLM\\SYSTEM\\CurrentControlSet\\Services"],
+      "conditions": { "value_contains": ["\\tmp\\", ".exe"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_SERVICE_IMAGEPATH_USERS_EXE",
+      "category": "persistence",
+      "subcategory": "service",
+      "title": "의심스러운 서비스",
+      "description": "알려진 악성 서비스나 의심스러운 패턴의 서비스 탐지",
+      "severity": "medium",
+      "confidence": 70,
+      "tactics": ["persistence"],
+      "techniques": ["T1543.003"],
+      "data_source": "registry",
+      "registry_keys": ["HKLM\\SYSTEM\\CurrentControlSet\\Services"],
+      "conditions": { "value_contains": ["\\users\\", ".exe"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_SERVICE_IMAGEPATH_APPDATA_EXE",
+      "category": "persistence",
+      "subcategory": "service",
+      "title": "의심스러운 서비스",
+      "description": "알려진 악성 서비스나 의심스러운 패턴의 서비스 탐지",
+      "severity": "medium",
+      "confidence": 70,
+      "tactics": ["persistence"],
+      "techniques": ["T1543.003"],
+      "data_source": "registry",
+      "registry_keys": ["HKLM\\SYSTEM\\CurrentControlSet\\Services"],
+      "conditions": { "value_contains": ["\\appdata\\", ".exe"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_SERVICE_IMAGEPATH_UNC_EXE",
+      "category": "persistence",
+      "subcategory": "service",
+      "title": "의심스러운 서비스",
+      "description": "알려진 악성 서비스나 의심스러운 패턴의 서비스 탐지",
+      "severity": "medium",
+      "confidence": 70,
+      "tactics": ["persistence"],
+      "techniques": ["T1543.003"],
+      "data_source": "registry",
+      "registry_keys": ["HKLM\\SYSTEM\\CurrentControlSet\\Services"],
+      "conditions": { "value_contains": ["\\\\", ".exe"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_SERVICE_IMAGEPATH_DOUBLEEXT_EXE",
+      "category": "persistence",
+      "subcategory": "service",
+      "title": "의심스러운 서비스",
+      "description": "알려진 악성 서비스나 의심스러운 패턴의 서비스 탐지",
+      "severity": "medium",
+      "confidence": 70,
+      "tactics": ["persistence"],
+      "techniques": ["T1543.003"],
+      "data_source": "registry",
+      "registry_keys": ["HKLM\\SYSTEM\\CurrentControlSet\\Services"],
+      "conditions": { "value_contains": [".jpg.exe"], "logic": "OR" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_AUTORUN_TEMP_EXE",
+      "category": "persistence",
+      "subcategory": "autorun",
+      "title": "의심스러운 자동실행 항목",
+      "description": "임시 경로나 사용자 디렉토리의 자동실행 항목 탐지",
+      "severity": "medium",
+      "confidence": 75,
+      "tactics": ["persistence"],
+      "techniques": ["T1547.001"],
+      "data_source": "registry",
+      "registry_keys": [
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+      ],
+      "conditions": { "value_contains": ["\\temp\\", ".exe"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_AUTORUN_TMP_EXE",
+      "category": "persistence",
+      "subcategory": "autorun",
+      "title": "의심스러운 자동실행 항목",
+      "description": "임시 경로나 사용자 디렉토리의 자동실행 항목 탐지",
+      "severity": "medium",
+      "confidence": 75,
+      "tactics": ["persistence"],
+      "techniques": ["T1547.001"],
+      "data_source": "registry",
+      "registry_keys": [
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+      ],
+      "conditions": { "value_contains": ["\\tmp\\", ".exe"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_AUTORUN_USERS_EXE",
+      "category": "persistence",
+      "subcategory": "autorun",
+      "title": "의심스러운 자동실행 항목",
+      "description": "임시 경로나 사용자 디렉토리의 자동실행 항목 탐지",
+      "severity": "medium",
+      "confidence": 75,
+      "tactics": ["persistence"],
+      "techniques": ["T1547.001"],
+      "data_source": "registry",
+      "registry_keys": [
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+      ],
+      "conditions": { "value_contains": ["\\users\\", ".exe"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_AUTORUN_APPDATA_EXE",
+      "category": "persistence",
+      "subcategory": "autorun",
+      "title": "의심스러운 자동실행 항목",
+      "description": "임시 경로나 사용자 디렉토리의 자동실행 항목 탐지",
+      "severity": "medium",
+      "confidence": 75,
+      "tactics": ["persistence"],
+      "techniques": ["T1547.001"],
+      "data_source": "registry",
+      "registry_keys": [
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+      ],
+      "conditions": { "value_contains": ["\\appdata\\", ".exe"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_AUTORUN_UNC_EXE",
+      "category": "persistence",
+      "subcategory": "autorun",
+      "title": "의심스러운 자동실행 항목",
+      "description": "임시 경로나 사용자 디렉토리의 자동실행 항목 탐지",
+      "severity": "medium",
+      "confidence": 75,
+      "tactics": ["persistence"],
+      "techniques": ["T1547.001"],
+      "data_source": "registry",
+      "registry_keys": [
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+      ],
+      "conditions": { "value_contains": ["\\\\", ".exe"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_AUTORUN_DOUBLEEXT_EXE",
+      "category": "persistence",
+      "subcategory": "autorun",
+      "title": "의심스러운 자동실행 항목",
+      "description": "임시 경로나 사용자 디렉토리의 자동실행 항목 탐지",
+      "severity": "medium",
+      "confidence": 75,
+      "tactics": ["persistence"],
+      "techniques": ["T1547.001"],
+      "data_source": "registry",
+      "registry_keys": [
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+      ],
+      "conditions": { "value_contains": [".jpg.exe"], "logic": "OR" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_AUTORUN_USERS_PS1",
+      "category": "persistence",
+      "subcategory": "autorun",
+      "title": "의심스러운 자동실행 항목",
+      "description": "임시 경로나 사용자 디렉토리의 자동실행 항목 탐지",
+      "severity": "medium",
+      "confidence": 75,
+      "tactics": ["persistence"],
+      "techniques": ["T1547.001"],
+      "data_source": "registry",
+      "registry_keys": [
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+      ],
+      "conditions": { "value_contains": ["\\users\\", ".ps1"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_AUTORUN_USERS_VBS",
+      "category": "persistence",
+      "subcategory": "autorun",
+      "title": "의심스러운 자동실행 항목",
+      "description": "임시 경로나 사용자 디렉토리의 자동실행 항목 탐지",
+      "severity": "medium",
+      "confidence": 75,
+      "tactics": ["persistence"],
+      "techniques": ["T1547.001"],
+      "data_source": "registry",
+      "registry_keys": [
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+      ],
+      "conditions": { "value_contains": ["\\users\\", ".vbs"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
+    },
+    {
+      "rule_id": "R_AUTORUN_USERS_JS",
+      "category": "persistence",
+      "subcategory": "autorun",
+      "title": "의심스러운 자동실행 항목",
+      "description": "임시 경로나 사용자 디렉토리의 자동실행 항목 탐지",
+      "severity": "medium",
+      "confidence": 75,
+      "tactics": ["persistence"],
+      "techniques": ["T1547.001"],
+      "data_source": "registry",
+      "registry_keys": [
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+      ],
+      "conditions": { "value_contains": ["\\users\\", ".js"], "logic": "AND" },
+      "weight": 1.0,
+      "enabled": true
     }
+
   ]
 }
