@@ -197,6 +197,10 @@ def main():
         
         def update_recent_findings(window, results):
             """최근 점검 결과 UI 업데이트"""
+            safe_count = 0
+            high_risk_count = 0
+            total_checks = 0
+            
             try:
                 rule_findings = results.get("rule_based_analysis", {}).get(
                     "findings", []
@@ -211,18 +215,24 @@ def main():
 
                 # 발견 사항 카운트 (AI 기반)
                 
-                # 발견 사항 카운트
-                high_risk_count = 0
+                # # 발견 사항 카운트
+                # high_risk_count = 0
 
-                
+                # 취약: AI가 탐지한 High 이상 이슈 수
+
                 for issue in ai_issues:
                     if issue.get("severity", "").lower() in ["high", "critical"]:
                         high_risk_count += 1
                 
-               
-                # total_checks = len(rule_findings) + len(ai_issues)
-                total_checks = len(ai_issues)
-                safe_count = max(total_checks - high_risk_count, 0)
+                
+                # 안전: 이벤트 로그 및 레지스트리 발견사항 중 High 미만만 집계
+                safe_count = sum(
+                    1
+                    for f in rule_findings
+                    if f.get("severity", "").lower() not in ["high", "critical"]
+                )
+
+                total_checks = safe_count + high_risk_count
 
                 # UI 라벨 업데이트
                 safe_label = window.findChild(QtWidgets.QLabel, "lblSafeCount")
@@ -256,7 +266,7 @@ def main():
                     )
 
                 logger.info(
-                    f"최근 점검 결과 업데이트 (AI 기반): 안전 {safe_count}건, 취약 {high_risk_count}건, 총 {total_checks}건"
+                    f"최근 점검 결과 업데이트: 안전 {safe_count}건, 취약 {high_risk_count}건, 총 {total_checks}건",
                 )
 
             except Exception as e:
@@ -297,7 +307,7 @@ def main():
                     )
 
                 logger.info(
-                    f"최근 점검 결과 업데이트 (AI 기반): 안전 {safe_count}건, 취약 {high_risk_count}건, 총 {total_checks}건"
+                    f"최근 점검 결과 업데이트: 안전 {safe_count}건, 취약 {high_risk_count}건, 총 {total_checks}건"
                 )
 
         def on_analysis_error(error_message):
