@@ -212,23 +212,44 @@ def main():
                     if issue.get('severity', '').lower() in ['high', 'critical']:
                         high_risk_count += 1
                 
-                # 위험 라벨 업데이트 (UI에 해당 라벨이 있다면)
-                risk_label = window.findChild(QtWidgets.QLabel, "riskCount")
-                if risk_label:
-                    if high_risk_count > 0:
-                        risk_label.setText(f"위험 ● {high_risk_count}건")
-                        risk_label.setStyleSheet("color: #ff4444; font-weight: bold;")
-                    else:
-                        risk_label.setText("위험 ● 0건")
-                        risk_label.setStyleSheet("color: #44ff44; font-weight: bold;")
-                
-                # 점검 완료 건수 업데이트
+           
                 total_checks = len(rule_findings) + len(ai_issues)
-                check_label = window.findChild(QtWidgets.QLabel, "checkCount")
-                if check_label:
-                    check_label.setText(f"점검 완료 {total_checks}건")
-                
-                logger.info(f"최근 점검 결과 업데이트: 위험 {high_risk_count}건, 총 {total_checks}건")
+
+
+                safe_count = max(total_checks - high_risk_count, 0)
+
+                # UI 라벨 업데이트
+                safe_label = window.findChild(QtWidgets.QLabel, "lblSafeCount")
+                if safe_label:
+                    safe_label.setText(f"{safe_count}건")
+
+                weak_label = window.findChild(QtWidgets.QLabel, "lblWeakCount")
+                if weak_label:
+                    weak_label.setText(f"{high_risk_count}건")
+
+                unable_label = window.findChild(QtWidgets.QLabel, "lblUnableCount")
+                if unable_label:
+                    unable_label.setText("0건")
+
+                safe_bar = window.findChild(QtWidgets.QProgressBar, "safeBar")
+                if safe_bar:
+                    percent = int((safe_count / total_checks) * 100) if total_checks else 0
+                    safe_bar.setMaximum(100)
+                    safe_bar.setValue(percent)
+
+                # 결과 시간 업데이트
+                time_label = window.findChild(QtWidgets.QLabel, "lblResultTime")
+                if time_label:
+                    ts = results.get('integration_metadata', {}).get('timestamp')
+                    try:
+                        dt = datetime.fromisoformat(ts.replace('Z', '')) if ts else datetime.now()
+                    except Exception:
+                        dt = datetime.now()
+                    time_label.setText(dt.strftime('%Y. %m. %d. %H:%M (결과 전송 완료)'))
+
+                logger.info(
+                    f"최근 점검 결과 업데이트: 안전 {safe_count}건, 취약 {high_risk_count}건, 총 {total_checks}건"
+                )
                 
             except Exception as e:
                 logger.error(f"최근 점검 결과 업데이트 실패: {e}") 
