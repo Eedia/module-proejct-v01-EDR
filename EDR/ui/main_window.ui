@@ -85,7 +85,7 @@ QPushButton#btnStart:hover, QPushButton#btnHTML:hover { background:#0284c7; }
       </rect>
      </property>
      <property name="text">
-      <string>2025. 08. 20. 13:23 (결과 전송 완료)</string>
+      <string>점검 결과 없음</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -136,7 +136,7 @@ QPushButton#btnStart:hover, QPushButton#btnHTML:hover { background:#0284c7; }
       </rect>
      </property>
      <property name="text">
-      <string>9건</string>
+      <string>0건</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -187,7 +187,7 @@ QPushButton#btnStart:hover, QPushButton#btnHTML:hover { background:#0284c7; }
       </rect>
      </property>
      <property name="text">
-      <string>1건</string>
+      <string>0건</string>
      </property>
      <property name="class" stdset="0">
       <string>bad</string>
