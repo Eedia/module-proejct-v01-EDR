@@ -6,7 +6,9 @@
 import json
 import logging
 import os
+import sys
 from datetime import datetime, time
+from pathlib import Path
 from typing import Dict, List, Any, Optional
 
 from utils.data_structures import Finding
@@ -14,8 +16,8 @@ from utils.data_structures import Finding
 class RuleEngine:
     """JSON 기반 통합 룰 엔진"""
     
-    def __init__(self, rules_dir: str = "rules"):
-        self.rules_dir = rules_dir
+    def __init__(self, rules_dir: Optional[str] = None):
+        self.rules_dir = self._resolve_rules_dir(rules_dir)
         self.logger = logging.getLogger(__name__)
         
         # 룰과 가중치 로드
@@ -23,6 +25,29 @@ class RuleEngine:
         self.scoring_weights = self._load_scoring_weights()
         
         self.logger.info(f"룰 엔진 초기화: {len(self.detection_rules)}개 룰 로드됨")
+    
+    @staticmethod
+    def _resolve_rules_dir(provided: Optional[str]) -> str:
+        """Determine the directory containing rule JSON files.
+
+        When running from source this is the ``rules`` package directory.
+        When frozen by PyInstaller, data files live under ``sys._MEIPASS``.
+        If a path was explicitly provided but does not exist, fall back to
+        the discovered location so the executable behaves like the source.
+        """
+        if provided:
+            candidate = Path(provided)
+            if candidate.exists():
+                return str(candidate)
+
+        # PyInstaller onefile extracts data under _MEIPASS
+        if hasattr(sys, "_MEIPASS"):
+            candidate = Path(sys._MEIPASS) / "rules"
+            if candidate.exists():
+                return str(candidate)
+
+        # Default to package directory when running from source
+        return str(Path(__file__).resolve().parent) 
     
     def _load_detection_rules(self) -> Dict[str, Dict[str, Any]]:
         """탐지 룰 JSON 파일 로드"""
