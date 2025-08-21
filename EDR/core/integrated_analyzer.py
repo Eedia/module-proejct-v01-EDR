@@ -147,15 +147,26 @@ class IntegratedEDRAnalyzer:
     
     def _prepare_ai_data(self, raw_data: Dict, rule_results: Dict) -> Dict:
         """AI 분석용 데이터 준비"""
+
+        # High 이상 심각도의 발견사항만 선별
+        high_findings = [
+            f
+            for f in rule_results["findings"]
+            if f.get("severity", "").lower() in ("high", "critical")
+        ]
+
+        # 기존 룰 결과를 AI 호환 형식으로 변환 (필터된 발견사항 사용)
+        filtered_rule_results = dict(rule_results)
+        filtered_rule_results["findings"] = high_findings
+
         
-        # 기존 룰 결과를 AI 호환 형식으로 변환
         structured_data = {
             "scan_metadata": rule_results["scan_metadata"],
             "scan_summary": rule_results["scan_summary"],
-            "findings": rule_results["findings"],
+            "findings": high_findings,
             # AI가 인식할 수 있는 다양한 경로로 데이터 제공
-            "existing_findings": rule_results["findings"],
-            "rule_analysis": rule_results,
+            "existing_findings": high_findings,
+            "rule_analysis": filtered_rule_results
         }
         
         # AI 모듈이 이해할 수 있는 형식으로 정규화
@@ -163,6 +174,16 @@ class IntegratedEDRAnalyzer:
     
     def _run_ai_analysis(self, ai_data: Dict) -> Dict:
         """AI 통합 분석 실행"""
+        if not ai_data.get("existing_findings"):
+            logger.info("AI 분석 생략: High 이상 발견사항 없음")
+            return {
+                "detected_issues": [],
+                "ai_remediation": [],
+                "executive_summary": "High 이상 발견사항이 없습니다.",
+                "total_issues": 0,
+                "statistics": {},
+            }
+        
         try:
             ai_result = self.ai_analyzer.analyze_raw_data(ai_data)
             return ai_result.to_dict() if hasattr(ai_result, "to_dict") else ai_result
@@ -224,7 +245,9 @@ class IntegratedEDRAnalyzer:
         # 2. 통합 결과 저장
         timestamp_iso = results.get("ai_analysis", {}).get("timestamp")
         if timestamp_iso:
-            folder_name = datetime.fromisoformat(timestamp_iso.replace('Z', '')).strftime('%Y%m%d_%H%M%S')
+            folder_name = datetime.fromisoformat(
+                timestamp_iso.replace("Z", "")
+            ).strftime("%Y%m%d_%H%M%S")
         else:
             folder_name = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -249,6 +272,19 @@ class IntegratedEDRAnalyzer:
         rule_analysis = results["rule_based_analysis"]
         ai_analysis = results["ai_analysis"]
         metadata = results["integration_metadata"]
+        
+
+        def _filter_and_sort(items):
+            """High 이상 항목만 severity 기준으로 정렬"""
+            order = {"critical": 2, "high": 1, "medium": 0, "low": -1}
+            filtered = [
+                i for i in items if order.get(i.get("severity", "").lower(), -1) >= 1
+            ]
+            return sorted(
+                filtered,
+                key=lambda x: order.get(x.get("severity", "").lower(), -1),
+                reverse=True,
+            )
         
         html_content = f"""
 <!DOCTYPE html>
@@ -288,8 +324,9 @@ class IntegratedEDRAnalyzer:
         <ul>
 """
         
-        # 룰 기반 발견사항 추가
-        for finding in rule_analysis["findings"][:10]:  # 상위 10개만
+        # 룰 기반 발견사항 추가 (High 이상 10개)
+        for finding in _filter_and_sort(rule_analysis["findings"])[:15]:
+
             severity_class = finding.get("severity", "medium").lower()
             html_content += f'<li class="{severity_class}">[{finding.get("severity", "UNKNOWN").upper()}] {finding.get("description", "설명 없음")}</li>\n'
         
@@ -314,8 +351,8 @@ class IntegratedEDRAnalyzer:
         <h3>🛠️ AI 해결책:</h3>
 """
         
-        # AI 해결책 추가
-        for script in ai_analysis['ai_remediation'][:5]:  # 상위 5개만
+        # AI 해결책 추가 (High 이상 10개)
+        for script in _filter_and_sort(ai_analysis["ai_remediation"])[:10]:
             html_content += f"""
         <div class="remediation">
             <h4>{script.get('description', '해결책')}</h4>
