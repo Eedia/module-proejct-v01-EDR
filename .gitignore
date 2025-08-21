@@ -10,5 +10,4 @@ backup_original_code/
 backup_rules/
 .env
 build/
-dist/
 *.spec

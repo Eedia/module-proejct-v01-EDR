@@ -1,0 +1,61 @@
+# EDR Scanner Configuration
+
+# Application Settings
+app:
+  name: "EDR Scanner"
+  version: "5.0.0"
+  
+# Scan Settings
+scan:
+  time_range_hours: 24
+  max_events: 10000
+  timeout_seconds: 300
+  
+# Event Log Settings
+event_logs:
+  channels:
+    Security: [4688, 4624, 4625, 4634, 4647, 4672, 4697, 4719]
+    System: [7045, 7036, 1100, 1102, 104]
+    "Microsoft-Windows-PowerShell/Operational": [4104, 4103]
+    "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational": [21, 24, 25, 40, 41, 42]
+    "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational": [261, 1149]
+
+# Scoring Settings
+scoring:
+  base_score: 100
+  severity_weights:
+    critical: -20
+    high: -15
+    medium: -10
+    low: -5
+    info: -1
+  
+  category_weights:
+    execution: 1.5
+    persistence: 1.3
+    remote_access: 1.2
+    account_logon: 1.1
+    security_settings: 1.0
+
+# Business Hours (for detection rules)
+business_hours:
+  start: "09:00"
+  end: "18:00"
+  weekdays_only: true
+
+# Output Settings
+output:
+  directory: "output"
+  formats: ["json", "html", "csv"]
+  
+# Logging Settings
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+# API Settings (will be overridden by environment variables)
+api:
+  openai:
+    model: "gemini-1.5-flash"
+    max_tokens: 800
+    temperature: 0.1

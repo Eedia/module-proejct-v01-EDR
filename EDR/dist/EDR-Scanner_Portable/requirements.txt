@@ -1,0 +1,32 @@
+# EDR 프로젝트 의존성 패키지
+
+# --- GUI / Qt ---
+PyQt6==6.9.1
+PyQt6-Charts==6.9.0
+qt-material==2.17
+
+# --- Runtime ---
+psutil==7.0.0
+python-dotenv==1.1.1
+json-repair==0.50.0
+google-generativeai==0.8.5
+
+# --- Build ---
+pyinstaller==6.15.0
+
+# --- Windows 전용(필요 시) ---
+pywin32>=306 ; sys_platform == "win32"
+
+# 참고: 아래 패키지들은 Python 표준 라이브러리에 포함되어 별도 설치 불필요
+# - logging: 로깅 (표준)
+# - json: JSON 처리 (표준) 
+# - os, sys: 시스템 관련 (표준)
+# - subprocess: 프로세스 실행 (표준)
+# - datetime: 날짜/시간 (표준)
+# - typing: 타입 힌트 (표준)
+# - dataclasses: 데이터 클래스 (표준)
+# - enum: 열거형 (표준)
+# - uuid: UUID 생성 (표준)
+# - xml.etree.ElementTree: XML 파싱 (표준)
+# - re: 정규표현식 (표준)
+# - locale: 로케일 처리 (표준)

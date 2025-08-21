@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>점검 리포트</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg:#1e1f23; --panel:#2a2c31; --ink:#e5e7eb; --muted:#a3a7b0;
+    --good:#22c55e; --bad:#ef4444; --track:#1f2126; --border:#00000066;
+    --safe-pct: 0%; /* 파이썬에서 치환될 자리 */
+  }
+  body {
+    margin:0; padding:24px; background:var(--bg); color:var(--ink);
+    font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,
+         "Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  }
+  .panel {
+    background:var(--panel); border-radius:10px; border:1px solid var(--border);
+    padding:16px 16px 22px; max-width:1200px; margin:0 auto;
+  }
+  .row { display:flex; align-items:center; gap:16px; }
+  .space { flex:1; }
+  h2 { margin:0 0 10px; font-size:18px; font-weight:700; }
+  .muted { color:var(--muted); font-size:16px; font-weight:600; }
+
+  .grid { display:grid; grid-template-columns:120px 1fr 80px; gap:12px; align-items:center; }
+  .good { color:var(--good); font-weight:600; }
+  .bad  { color:var(--bad);  font-weight:600; }
+  .neutral { color:#cbd5e1; }
+  .line { margin:12px 0; }
+
+  .bar-wrap { display:flex; align-items:center; }
+  .bar {
+    height:18px; border-radius:9px; overflow:hidden; position:relative;
+    background:var(--track); border:1px solid var(--border); width:100%;
+  }
+  .bar > span { 
+    position:absolute; inset:0 auto 0 0; 
+    width: var(--safe-pct); 
+    background:var(--good); 
+  }
+  .dot { width:10px; height:10px; border-radius:50%; background:var(--bad); display:inline-block; }
+  .right { text-align:right; }
+</style>
+</head>
+<body>
+  <section class="panel">
+    <div class="row">
+      <h2>최근 점검 결과</h2>
+      <div class="space"></div>
+      <div class="muted">%NOW%</div>
+    </div>
+
+    <div class="grid line">
+      <div class="good">안전</div>
+      <div class="bar-wrap"><div class="bar"><span></span></div></div>
+      <div class="good right">%SAFE_CNT%</div>
+    </div>
+
+    <div class="grid line">
+      <div class="bad">취약</div>
+      <div><span class="dot"></span></div>
+      <div class="bad">%WEAK_CNT%</div>
+    </div>
+
+    <div class="grid line">
+      <div class="neutral">점검 불가</div>
+      <div></div>
+      <div class="neutral">%UN_CNT%</div>
+    </div>
+  </section>
+</body>
+</html>
