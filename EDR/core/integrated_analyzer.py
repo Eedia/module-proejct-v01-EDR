@@ -130,7 +130,10 @@ class IntegratedEDRAnalyzer:
         structured_data = {
             'scan_metadata': rule_results['scan_metadata'],
             'scan_summary': rule_results['scan_summary'],
-            'findings': rule_results['findings']
+            'findings': rule_results['findings'],
+            # AI가 인식할 수 있는 다양한 경로로 데이터 제공
+            'existing_findings': rule_results['findings'],
+            'rule_analysis': rule_results
         }
         
         # AI 모듈이 이해할 수 있는 형식으로 정규화
@@ -160,6 +163,9 @@ class IntegratedEDRAnalyzer:
             # 기존 룰 기반 결과
             'rule_based_analysis': {
                 'findings': rule_results['findings'],
+            # AI가 인식할 수 있는 다양한 경로로 데이터 제공
+            'existing_findings': rule_results['findings'],
+            'rule_analysis': rule_results,
                 'total_score': rule_results['total_score'],
                 'risk_level': rule_results['risk_level'],
                 'scan_summary': rule_results['scan_summary']

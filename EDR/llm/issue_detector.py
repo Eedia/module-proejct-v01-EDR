@@ -14,7 +14,37 @@ class AIIssueDetector(AIBaseModule):
     def analyze_findings(self, findings_data: Dict) -> List[SecurityIssue]:
         """기존 탐지 이슈들을 AI로 분석하여 요약과 해설 생성 (새로운 이슈 생성 금지)"""
         
-        existing_findings = findings_data.get('existing_findings', [])
+        existing_findings = []
+        
+        # 다양한 경로에서 발견사항 추출 시도
+        # 1. existing_findings 경로
+        if 'existing_findings' in findings_data:
+            existing_findings = findings_data['existing_findings']
+        
+        # 2. findings 경로 (일반적인 경우)
+        elif 'findings' in findings_data:
+            existing_findings = findings_data['findings']
+        
+        # 3. 직접 발견사항 리스트인 경우
+        elif isinstance(findings_data, list):
+            existing_findings = findings_data
+        
+        # 4. 레지스트리 분석 결과에서 추출
+        elif 'registry_analysis' in findings_data:
+            registry_findings = findings_data['registry_analysis'].get('findings', [])
+            existing_findings.extend(registry_findings)
+        
+        # 5. 이벤트 로그 분석 결과에서 추출
+        if 'event_analysis' in findings_data:
+            event_findings = findings_data['event_analysis'].get('findings', [])
+            existing_findings.extend(event_findings)
+        
+        # 6. 통합 분석 결과에서 추출
+        if 'rule_analysis' in findings_data:
+            rule_findings = findings_data['rule_analysis'].get('findings', [])
+            existing_findings.extend(rule_findings)
+        
+        self.logger.info(f"🔍 AI 분석할 발견사항: {len(existing_findings)}개")
         
         if not existing_findings:
             self.logger.warning("분석할 기존 탐지 이슈가 없습니다.")

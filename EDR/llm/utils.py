@@ -81,6 +81,8 @@ def normalize_findings_data(raw_data: Dict) -> Dict:
         'hostname': metadata.get('hostname', 'Unknown'),
         'scan_metadata': metadata,
         'scan_summary': summary,
+        # AI 모듈들이 기존 탐지 이슈를 그대로 분석할 수 있도록 전달
+        'existing_findings': findings,
         'original_findings': findings  # 원본 보존
     }
 

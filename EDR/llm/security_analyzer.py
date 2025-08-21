@@ -87,6 +87,82 @@ class AISecurityAnalyzer:
         self.logger.info(f"✅ AI 분석 완료: {len(detected_issues)}개 이슈, {len(validated_scripts)}개 해결책")
         return analysis_result
     
+    def _calculate_statistics(self, detected_issues: List, validated_scripts: List) -> Dict:
+        """AI 분석 통계 및 위험도 계산"""
+        
+        # 심각도별 이슈 집계
+        severity_counts = {
+            'critical': 0,
+            'high': 0, 
+            'medium': 0,
+            'low': 0,
+            'info': 0
+        }
+        
+        # 이슈들의 심각도 집계
+        for issue in detected_issues:
+            if hasattr(issue, 'severity'):
+                severity = issue.severity.lower()
+            elif isinstance(issue, dict):
+                severity = issue.get('severity', 'low').lower()
+            else:
+                severity = 'low'
+            
+            if severity in severity_counts:
+                severity_counts[severity] += 1
+            else:
+                severity_counts['low'] += 1
+        
+        # AI 위험도 계산 로직
+        total_issues = len(detected_issues)
+        risk_level = self._determine_ai_risk_level(severity_counts, total_issues)
+        
+        # 신뢰도 계산 (이슈가 많을수록, 심각도가 높을수록 신뢰도 증가)
+        confidence = min(0.95, 0.5 + (total_issues * 0.1) + (severity_counts['critical'] * 0.15) + (severity_counts['high'] * 0.1))
+        
+        statistics = {
+            'total_issues': total_issues,
+            'severity_breakdown': severity_counts,
+            'risk_level': risk_level,
+            'confidence': round(confidence, 2),
+            'remediation_scripts': len(validated_scripts),
+            'analysis_timestamp': datetime.now().isoformat()
+        }
+        
+        self.logger.info(f"📊 AI 위험도 계산: {risk_level} (이슈: {total_issues}개, 신뢰도: {confidence:.2f})")
+        
+        return statistics
+    
+    def _determine_ai_risk_level(self, severity_counts: Dict, total_issues: int) -> str:
+        """이슈 심각도와 수량을 기반으로 AI 위험도 결정"""
+        
+        # 임계치 기반 위험도 계산
+        critical_count = severity_counts.get('critical', 0)
+        high_count = severity_counts.get('high', 0) 
+        medium_count = severity_counts.get('medium', 0)
+        
+        # Critical 이슈가 있으면 무조건 high
+        if critical_count > 0:
+            return 'high'
+        
+        # High 이슈 기준
+        if high_count >= 3:  # High 이슈 3개 이상
+            return 'high'
+        elif high_count >= 1:  # High 이슈 1개 이상
+            return 'medium'
+        
+        # Medium 이슈만 있는 경우
+        if medium_count >= 5:  # Medium 이슈 5개 이상
+            return 'medium'
+        elif medium_count >= 2:  # Medium 이슈 2개 이상
+            return 'low'
+        
+        # 이슈가 거의 없거나 모두 낮은 심각도
+        if total_issues <= 1:
+            return 'low'
+        
+        return 'low'
+    
     def process_user_query(self, query: str, context_data: Dict) -> Dict:
         """사용자 자연어 질문 처리"""
         
