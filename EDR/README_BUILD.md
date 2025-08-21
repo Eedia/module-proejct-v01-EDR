@@ -55,6 +55,11 @@ python build.py --spec-only
 # 7. 정리만 수행
 python build.py --clean-only
 ```
+# 8. 디버그 정보 제거(파일 크기 감소)
+python build.py --strip
+
+# 9. UPX 압축 비활성화
+python build.py --no-upx
 
 ## 빌드 옵션 설명
 
@@ -62,7 +67,8 @@ python build.py --clean-only
 - **이름**: EDR-Scanner.exe
 - **타입**: 단일 파일 (--onefile)
 - **콘솔**: 숨김 (GUI 애플리케이션)
-- **압축**: UPX 사용
+- **압축**: UPX 자동 적용 (설치되어 있을 때)
+- **디버그 심볼 제거**: `--strip` 옵션으로 선택적 적용
 
 ### 포함되는 데이터 파일
 - 스크립트가 프로젝트 디렉터리의 **모든 비-Python 리소스**를 자동으로 수집합니다.
@@ -149,7 +155,10 @@ python build.py
 
 #### 4. 실행 파일 크기 과대
 **증상**: 200MB 이상의 큰 실행 파일
-**해결**: `exclude_modules`에 불필요한 모듈 추가
+**해결**:
+- UPX 설치 후 기본 빌드 실행 혹은 `python build.py` (없다면 설치 안내)
+- `python build.py --strip`으로 디버그 심볼 제거
+- `exclude_modules`에 불필요한 모듈 추가
 
 #### 5. Windows Defender 오탐
 **증상**: 실행 파일이 바이러스로 오탐지
@@ -198,8 +207,8 @@ BUILD_CONFIG = {
 ### 실행 파일 크기 최적화
 - 불필요한 모듈을 `exclude_modules`에 추가
 - UPX 압축률 조정
-- 데이터 파일 최소화
-
+- `--strip` 옵션으로 디버그 심볼 제거
+- UPX 압축률 조정 또는 `--no-upx`로 압축 비활성화
 ---
 
 ## 문의 및 지원
