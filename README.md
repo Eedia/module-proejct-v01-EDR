@@ -112,7 +112,7 @@ EDR/
 │
 ├── output/                       # 출력 결과 저장
 │   ├── scan_results/             # 스캔 결과 JSON
-│   ├── reports/                  # HTML/PDF 리포트
+│   ├── reports/                  # 분석 보고서 (타임스탬프별 하위 폴더)
 │   └── scripts/                  # 생성된 PS1 스크립트
 │
 ├── tests/                        # 테스트 코드
