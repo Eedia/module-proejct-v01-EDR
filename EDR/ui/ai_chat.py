@@ -182,8 +182,18 @@ def generate_analysis_summary_message(results):
         
         total_findings = metadata.get('total_rule_findings', 0)
         total_issues = metadata.get('total_ai_issues', 0)
-        overall_score = rule_analysis.get('overall_score', 0)
+
+        # 실제 룰 기반 점수 계산 (total_score 우선 사용)
+        rule_score = rule_analysis.get('total_score')
+        if rule_score is None:
+            rule_score = rule_analysis.get('overall_score')
+        if rule_score is None:
+            rule_score = rule_analysis.get('scan_summary', {}).get('total_score', 0)
+
+        # AI 위험도에 따른 페널티 적용
         risk_level = ai_analysis.get('risk_level', 'unknown')
+        risk_penalty = {'high': 20, 'medium': 10, 'low': 0}.get(risk_level, 0)
+        overall_score = max((rule_score or 0) - risk_penalty, 0)
         
         risk_emoji = {
             'high': '🔴',

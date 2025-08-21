@@ -27,7 +27,21 @@ def main():
     except Exception:
         pass
 
-    win = uic.loadUi("ui/main_window.ui")
+    # 스크립트가 있는 디렉토리를 기준으로 UI 파일 경로 설정
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    ui_file = os.path.join(script_dir, "ui", "main_window.ui")
+    
+    if not os.path.exists(ui_file):
+        print(f"❌ UI 파일을 찾을 수 없습니다: {ui_file}")
+        print(f"현재 작업 디렉토리: {os.getcwd()}")
+        print(f"스크립트 디렉토리: {script_dir}")
+        sys.exit(1)
+    
+    try:
+        win = uic.loadUi(ui_file)
+    except Exception as e:
+        print(f"❌ UI 파일 로드 실패: {e}")
+        sys.exit(1)
     setup_chat_ui(win)
 
     # 초기 점수
@@ -112,14 +126,34 @@ def main():
             
             try:
                 # 1. 실제 보안 점수 계산
-                rule_score = results.get('rule_based_analysis', {}).get('overall_score', 85)
-                ai_risk_level = results.get('ai_analysis', {}).get('risk_level', 'low')
+                rule_analysis = results.get('rule_based_analysis', {})
+                
+                # 룰 기반 분석에서 계산된 점수 우선 사용
+                if 'total_score' in rule_analysis:
+                    rule_score = rule_analysis['total_score']
+                    logger.info(f"룰 기반 점수: {rule_score}")
+                elif 'overall_score' in rule_analysis:
+                    rule_score = rule_analysis['overall_score']
+                    logger.info(f"룰 기반 점수: {rule_score}")
+
+                else:
+                    # 스캔 요약에서 점수 찾기
+                    rule_score = rule_analysis.get('scan_summary', {}).get('total_score')
+                    if rule_score is not None:
+                        logger.info(f"스캔 요약 점수 사용: {rule_score}")
+                    else:
+                        rule_score = 100  # 최후의 기본값
+                        logger.warning("점수를 찾을 수 없어 기본값 100사용")
+                  
+                ai_analysis = results.get('ai_analysis', {})
+                ai_risk_level = ai_analysis.get('risk_level', 'low')
+                logger.info(f"AI 위험도: {ai_risk_level}")
                 
                 # 리스크 레벨에 따른 점수 조정
                 risk_penalty = {'high': 20, 'medium': 10, 'low': 0}.get(ai_risk_level, 0)
                 final_score = max(rule_score - risk_penalty, 0)
                 
-                logger.info(f"계산된 보안 점수: {final_score}")
+                logger.info(f"최종 보안 점수: {final_score} (기본: {rule_score}, 페널티: {risk_penalty})")
                 
                 # 2. UI 업데이트
                 win.donut.animate_to(final_score, duration_ms=1500)

@@ -17,10 +17,13 @@ class SecurityIssue:
     evidence: Dict = None
     detected_at: str = None
     rule_name: str = None
+    ai_analysis: Dict = None  # AI 분석 결과 추가
     
     def __post_init__(self):
         if self.evidence is None:
             self.evidence = {}
+        if self.ai_analysis is None:
+            self.ai_analysis = {}
     
     def to_dict(self) -> Dict:
         return asdict(self)

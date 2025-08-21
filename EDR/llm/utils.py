@@ -12,7 +12,7 @@ def normalize_findings_data(raw_data: Dict) -> Dict:
     summary = raw_data.get('scan_summary', {})
     findings = raw_data.get('findings', [])
     
-    print(f"📊 원본 데이터: {len(findings)}개 발견사항")
+    print(f"📊 레지스트리 원본 데이터: {len(findings)}개 발견사항")
     findings_by_severity = summary.get('findings_by_severity', {})
     print(f"   🔴 Critical: {findings_by_severity.get('critical', 0)}개")
     print(f"   🟠 High: {findings_by_severity.get('high', 0)}개") 
