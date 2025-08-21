@@ -128,22 +128,23 @@ def main():
                 # 1. 실제 보안 점수 계산
                 rule_analysis = results.get('rule_based_analysis', {})
                 
-                # 실제 계산된 점수가 있으면 사용, 없으면 total_score에서 가져오기
-                if 'overall_score' in rule_analysis:
+                # 룰 기반 분석에서 계산된 점수 우선 사용
+                if 'total_score' in rule_analysis:
+                    rule_score = rule_analysis['total_score']
+                    logger.info(f"룰 기반 점수: {rule_score}")
+                elif 'overall_score' in rule_analysis:
                     rule_score = rule_analysis['overall_score']
                     logger.info(f"룰 기반 점수: {rule_score}")
-                elif 'total_score' in results:
-                    # total_score가 딕셔너리인 경우 actual_score 추출
-                    total_score_data = results['total_score']
-                    if isinstance(total_score_data, dict):
-                        rule_score = total_score_data.get('total_score', 100)
-                        logger.info(f"총 점수에서 추출: {rule_score}")
-                    else:
-                        rule_score = total_score_data
-                        logger.info(f"총 점수 직접 사용: {rule_score}")
+
                 else:
-                    rule_score = 100  # 최후의 기본값
-                    logger.warning("점수를 찾을 수 없어 기본값 100사용")
+                    # 스캔 요약에서 점수 찾기
+                    rule_score = rule_analysis.get('scan_summary', {}).get('total_score')
+                    if rule_score is not None:
+                        logger.info(f"스캔 요약 점수 사용: {rule_score}")
+                    else:
+                        rule_score = 100  # 최후의 기본값
+                        logger.warning("점수를 찾을 수 없어 기본값 100사용")
+                  
                 ai_analysis = results.get('ai_analysis', {})
                 ai_risk_level = ai_analysis.get('risk_level', 'low')
                 logger.info(f"AI 위험도: {ai_risk_level}")
