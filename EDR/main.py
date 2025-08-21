@@ -198,22 +198,30 @@ def main():
         def update_recent_findings(window, results):
             """최근 점검 결과 UI 업데이트"""
             try:
-                
-                rule_findings = results.get('rule_based_analysis', {}).get('findings', [])
-                ai_issues = results.get('ai_analysis', {}).get('detected_issues', [])
+                rule_findings = results.get("rule_based_analysis", {}).get(
+                    "findings", []
+                )
+                ai_issues = results.get("ai_analysis", {}).get("detected_issues", [])
+
+                logger.info(
+                    "🔍 결과 요약: 룰 기반 %d개, AI 분석 %d개",
+                    len(rule_findings),
+                    len(ai_issues),
+                )
+
+                # 발견 사항 카운트 (AI 기반)
                 
                 # 발견 사항 카운트
                 high_risk_count = 0
-                for finding in rule_findings:
-                    if finding.get('severity', '').lower() in ['high', 'critical']:
-                        high_risk_count += 1
+
                 
                 for issue in ai_issues:
-                    if issue.get('severity', '').lower() in ['high', 'critical']:
+                    if issue.get("severity", "").lower() in ["high", "critical"]:
                         high_risk_count += 1
                 
                
-                total_checks = len(rule_findings) + len(ai_issues)
+                # total_checks = len(rule_findings) + len(ai_issues)
+                total_checks = len(ai_issues)
                 safe_count = max(total_checks - high_risk_count, 0)
 
                 # UI 라벨 업데이트
@@ -238,19 +246,21 @@ def main():
                 # 결과 시간 업데이트
                 time_label = window.findChild(QtWidgets.QLabel, "lblResultTime")
                 if time_label:
-                    ts = results.get('integration_metadata', {}).get('timestamp')
+                    ts = results.get("integration_metadata", {}).get("timestamp")
                     try:
                         dt = datetime.fromisoformat(ts.replace('Z', '')) if ts else datetime.now()
                     except Exception:
                         dt = datetime.now()
-                    time_label.setText(dt.strftime('%Y. %m. %d. %H:%M (결과 전송 완료)'))
+                    time_label.setText(
+                        dt.strftime("%Y. %m. %d. %H:%M (결과 전송 완료)")
+                    )
 
                 logger.info(
-                    f"최근 점검 결과 업데이트: 안전 {safe_count}건, 취약 {high_risk_count}건, 총 {total_checks}건"
+                    f"최근 점검 결과 업데이트 (AI 기반): 안전 {safe_count}건, 취약 {high_risk_count}건, 총 {total_checks}건"
                 )
 
             except Exception as e:
-                logger.error(f"최근 점검 결과 업데이트 실패: {e}") 
+                logger.error(f"최근 점검 결과 업데이트 실패: {e}")
 
                 # UI 라벨 업데이트
                 safe_label = window.findChild(QtWidgets.QLabel, "lblSafeCount")
@@ -267,22 +277,27 @@ def main():
 
                 safe_bar = window.findChild(QtWidgets.QProgressBar, "safeBar")
                 if safe_bar:
-                    percent = int((safe_count / total_checks) * 100) if total_checks else 0
+                    percent = (
+                        int((safe_count / total_checks) * 100) if total_checks else 0
+                    )
                     safe_bar.setMaximum(100)
                     safe_bar.setValue(percent)
 
                 # 결과 시간 업데이트
                 time_label = window.findChild(QtWidgets.QLabel, "lblResultTime")
                 if time_label:
-                    ts = results.get('integration_metadata', {}).get('timestamp')
+                    ts = results.get("integration_metadata", {}).get("timestamp")
                     try:
                         dt = datetime.fromisoformat(ts.replace('Z', '')) if ts else datetime.now()
                     except Exception:
                         dt = datetime.now()
-                    time_label.setText(dt.strftime('%Y. %m. %d. %H:%M (결과 전송 완료)'))
+                    
+                    time_label.setText(
+                        dt.strftime("%Y. %m. %d. %H:%M (결과 전송 완료)")
+                    )
 
                 logger.info(
-                    f"최근 점검 결과 업데이트: 안전 {safe_count}건, 취약 {high_risk_count}건, 총 {total_checks}건"
+                    f"최근 점검 결과 업데이트 (AI 기반): 안전 {safe_count}건, 취약 {high_risk_count}건, 총 {total_checks}건"
                 )
 
         def on_analysis_error(error_message):
@@ -308,17 +323,19 @@ def main():
         
         def show_analysis_complete_message(results):
             """분석 완료 메시지 표시"""
-            metadata = results.get('integration_metadata', {})
-            total_findings = metadata.get('total_rule_findings', 0)
-            total_issues = metadata.get('total_ai_issues', 0)
+            metadata = results.get("integration_metadata", {})
+            total_findings = metadata.get("total_rule_findings", 0)
+            total_issues = metadata.get("total_ai_issues", 0)
             
             msg_box = QtWidgets.QMessageBox()
             msg_box.setIcon(QtWidgets.QMessageBox.Icon.Information)
             msg_box.setWindowTitle("분석 완료")
             msg_box.setText("🎉 EDR 보안 분석이 완료되었습니다!")
-            timestamp_iso = results.get('ai_analysis', {}).get('timestamp')
+            timestamp_iso = results.get("ai_analysis", {}).get("timestamp")
             if timestamp_iso:
-                ts = datetime.fromisoformat(timestamp_iso.replace('Z', '')).strftime('%Y%m%d_%H%M%S')
+                ts = datetime.fromisoformat(timestamp_iso.replace("Z", "")).strftime(
+                    "%Y%m%d_%H%M%S"
+                )
                 report_path = f"output/reports/{ts}"
             else:
                 report_path = "output/reports"
@@ -359,7 +376,9 @@ def main():
                     msg_box.setIcon(QtWidgets.QMessageBox.Icon.Information)
                     msg_box.setWindowTitle("보고서 없음")
                     msg_box.setText("아직 분석 보고서가 생성되지 않았습니다.")
-                    msg_box.setInformativeText("'분석 시작' 버튼을 클릭하여 보안 분석을 먼저 실행해주세요.")
+                    msg_box.setInformativeText(
+                        "'분석 시작' 버튼을 클릭하여 보안 분석을 먼저 실행해주세요."
+                    )
                     msg_box.exec()
                     return
                 

@@ -99,28 +99,50 @@ class IntegratedEDRAnalyzer:
         # 모든 발견사항 통합
         all_findings = []
         all_findings.extend(event_findings)
-        all_findings.extend(raw_data['autorun_entries'])
-        all_findings.extend(raw_data['services'])
-        all_findings.extend(raw_data['security_settings'])
-        
+        all_findings.extend(raw_data["autorun_entries"])
+        all_findings.extend(raw_data["services"])
+        all_findings.extend(raw_data["security_settings"])
+
+        # 소스별 개수 집계 및 로그
+        event_count = len(event_findings)
+        registry_count = (
+            len(raw_data["autorun_entries"])
+            + len(raw_data["services"])
+            + len(raw_data["security_settings"])
+        )
+        logger.info(
+            "룰 기반 탐지 요약: 이벤트 %d개, 레지스트리 %d개, 총 %d개",
+            event_count,
+            registry_count,
+            len(all_findings),
+        )
+
         # 점수 계산
         score_details = calculate_total_score(all_findings)
-        actual_score = score_details.get('total_score', 0) if isinstance(score_details, dict) else score_details
+        actual_score = (
+            score_details.get("total_score", 0)
+            if isinstance(score_details, dict)
+            else score_details
+        )
         risk_level = determine_risk_level(actual_score)
         
         scan_summary = {
-            'total_score': actual_score,
-            'risk_level': risk_level,
-            'total_findings': len(all_findings),
-            'findings_by_severity': self._count_by_severity(all_findings)
+            "total_score": actual_score,
+            "risk_level": risk_level,
+            "total_findings": len(all_findings),
+            "findings_by_severity": self._count_by_severity(all_findings),
+            "findings_by_source": {
+                "events": event_count,
+                "registry": registry_count,
+            },
         }
         return {
-            'findings': all_findings,
-            'total_score': actual_score,
-            'risk_level': risk_level,
-            'score_details': score_details,
-            'scan_summary': scan_summary,
-            'scan_metadata': raw_data['scan_metadata']
+            "findings": all_findings,
+            "total_score": actual_score,
+            "risk_level": risk_level,
+            "score_details": score_details,
+            "scan_summary": scan_summary,
+            "scan_metadata": raw_data["scan_metadata"],
         }
     
     def _prepare_ai_data(self, raw_data: Dict, rule_results: Dict) -> Dict:
@@ -128,12 +150,12 @@ class IntegratedEDRAnalyzer:
         
         # 기존 룰 결과를 AI 호환 형식으로 변환
         structured_data = {
-            'scan_metadata': rule_results['scan_metadata'],
-            'scan_summary': rule_results['scan_summary'],
-            'findings': rule_results['findings'],
+            "scan_metadata": rule_results["scan_metadata"],
+            "scan_summary": rule_results["scan_summary"],
+            "findings": rule_results["findings"],
             # AI가 인식할 수 있는 다양한 경로로 데이터 제공
-            'existing_findings': rule_results['findings'],
-            'rule_analysis': rule_results
+            "existing_findings": rule_results["findings"],
+            "rule_analysis": rule_results,
         }
         
         # AI 모듈이 이해할 수 있는 형식으로 정규화
@@ -143,86 +165,90 @@ class IntegratedEDRAnalyzer:
         """AI 통합 분석 실행"""
         try:
             ai_result = self.ai_analyzer.analyze_raw_data(ai_data)
-            return ai_result.to_dict() if hasattr(ai_result, 'to_dict') else ai_result
+            return ai_result.to_dict() if hasattr(ai_result, "to_dict") else ai_result
         except Exception as e:
             logger.error(f"AI 분석 실패: {e}")
             return {
-                'detected_issues': [],
-                'ai_remediation': [],
-                'executive_summary': 'AI 분석을 수행할 수 없습니다.',
-                'total_issues': 0,
-                'statistics': {}
+                "detected_issues": [],
+                "ai_remediation": [],
+                "executive_summary": "AI 분석을 수행할 수 없습니다.",
+                "total_issues": 0,
+                "statistics": {},
             }
     
-    def _merge_results(self, rule_results: Dict, ai_results: Dict, start_time: datetime) -> Dict:
+    def _merge_results(
+        self, rule_results: Dict, ai_results: Dict, start_time: datetime
+    ) -> Dict:
         """룰 기반 + AI 결과 통합"""
         
         analysis_duration = (datetime.now() - start_time).total_seconds()
         
         return {
             # 기존 룰 기반 결과
-            'rule_based_analysis': {
-                'findings': rule_results['findings'],
-            # AI가 인식할 수 있는 다양한 경로로 데이터 제공
-            'existing_findings': rule_results['findings'],
-            'rule_analysis': rule_results,
-                'total_score': rule_results['total_score'],
-                'risk_level': rule_results['risk_level'],
-                'scan_summary': rule_results['scan_summary']
+            "rule_based_analysis": {
+                "findings": rule_results["findings"],
+                # AI가 인식할 수 있는 다양한 경로로 데이터 제공
+                "existing_findings": rule_results["findings"],
+                "rule_analysis": rule_results,
+                "total_score": rule_results["total_score"],
+                "risk_level": rule_results["risk_level"],
+                "scan_summary": rule_results["scan_summary"],
             },
             
             # AI 분석 결과
-            'ai_analysis': {
-                'detected_issues': ai_results['detected_issues'],
-                'ai_remediation': ai_results['ai_remediation'],
-                'executive_summary': ai_results['executive_summary'],
-                'ai_statistics': ai_results['statistics'],
-                'timestamp': ai_results.get('timestamp')
+            "ai_analysis": {
+                "detected_issues": ai_results["detected_issues"],
+                "ai_remediation": ai_results["ai_remediation"],
+                "executive_summary": ai_results["executive_summary"],
+                "ai_statistics": ai_results["statistics"],
+                "timestamp": ai_results.get("timestamp"),
             },
             
             # 통합 메타데이터
-            'integration_metadata': {
-                'scan_id': generate_scan_id(),
-                'timestamp': get_current_timestamp(),
-                'analysis_duration_seconds': analysis_duration,
-                'total_rule_findings': len(rule_results['findings']),
-                'total_ai_issues': ai_results['total_issues'],
-                'hostname': rule_results['scan_metadata']['hostname']
-            }
+            "integration_metadata": {
+                "scan_id": generate_scan_id(),
+                "timestamp": get_current_timestamp(),
+                "analysis_duration_seconds": analysis_duration,
+                "total_rule_findings": len(rule_results["findings"]),
+                "total_ai_issues": ai_results["total_issues"],
+                "hostname": rule_results["scan_metadata"]["hostname"],
+            },
         }
     
     def _save_integrated_results(self, results: Dict, scan_id: str):
         """통합 결과 저장"""
         
         # 1. 기존 형식으로 저장 (호환성)
-        save_findings_json(results['rule_based_analysis'], scan_id)
+        save_findings_json(results["rule_based_analysis"], scan_id)
         
         # 2. 통합 결과 저장
-        timestamp_iso = results.get('ai_analysis', {}).get('timestamp')
+        timestamp_iso = results.get("ai_analysis", {}).get("timestamp")
         if timestamp_iso:
             folder_name = datetime.fromisoformat(timestamp_iso.replace('Z', '')).strftime('%Y%m%d_%H%M%S')
         else:
-            folder_name = datetime.now().strftime('%Y%m%d_%H%M%S')
+            folder_name = datetime.now().strftime("%Y%m%d_%H%M%S")
 
         output_dir = Path('output') / 'reports' / folder_name
         output_dir.mkdir(parents=True, exist_ok=True)
         
         # 통합 JSON 저장
         import json
-        with open(output_dir / 'integrated_analysis.json', 'w', encoding='utf-8') as f:
+        with open(output_dir / "integrated_analysis.json", "w", encoding="utf-8") as f:
             json.dump(results, f, ensure_ascii=False, indent=2)
         
         # HTML 리포트 생성 (AI 결과 포함)
-        self._generate_enhanced_html_report(results, output_dir / 'integrated_report.html')
+        self._generate_enhanced_html_report(
+            results, output_dir / "integrated_report.html"
+        )
 
         logger.info(f"📁 통합 결과 저장 완료: {output_dir}/integrated_*")
     
     def _generate_enhanced_html_report(self, results: Dict, output_path: Path):
         """AI 결과가 포함된 강화된 HTML 리포트"""
         
-        rule_analysis = results['rule_based_analysis']
-        ai_analysis = results['ai_analysis']
-        metadata = results['integration_metadata']
+        rule_analysis = results["rule_based_analysis"]
+        ai_analysis = results["ai_analysis"]
+        metadata = results["integration_metadata"]
         
         html_content = f"""
 <!DOCTYPE html>
@@ -263,8 +289,8 @@ class IntegratedEDRAnalyzer:
 """
         
         # 룰 기반 발견사항 추가
-        for finding in rule_analysis['findings'][:10]:  # 상위 10개만
-            severity_class = finding.get('severity', 'medium').lower()
+        for finding in rule_analysis["findings"][:10]:  # 상위 10개만
+            severity_class = finding.get("severity", "medium").lower()
             html_content += f'<li class="{severity_class}">[{finding.get("severity", "UNKNOWN").upper()}] {finding.get("description", "설명 없음")}</li>\n'
         
         html_content += """
@@ -278,8 +304,8 @@ class IntegratedEDRAnalyzer:
 """
         
         # AI 탐지 이슈 추가
-        for issue in ai_analysis['detected_issues']:
-            severity_class = issue.get('severity', 'medium').lower()
+        for issue in ai_analysis["detected_issues"]:
+            severity_class = issue.get("severity", "medium").lower()
             html_content += f'<li class="{severity_class}">[{issue.get("severity", "UNKNOWN").upper()}] {issue.get("title", "제목 없음")} (신뢰도: {issue.get("confidence", 0)*100:.0f}%)</li>\n'
         
         html_content += """
