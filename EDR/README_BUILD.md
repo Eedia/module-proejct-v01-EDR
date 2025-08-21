@@ -65,12 +65,8 @@ python build.py --clean-only
 - **압축**: UPX 사용
 
 ### 포함되는 데이터 파일
-- `ui/main_window.ui` - 메인 UI 파일
-- `ui/templates/*` - UI 템플릿들
-- `config/config.yaml` - 설정 파일
-- `rules/detection_rules.json` - 탐지 룰
-- `rules/scoring_weights.json` - 점수 가중치
-- `templates/*` - 리포트 템플릿
+- 스크립트가 프로젝트 디렉터리의 **모든 비-Python 리소스**를 자동으로 수집합니다.
+- `.env` 파일은 기본 실행 파일에 포함되지 않으며 `--portable` 옵션 사용 시에만 복사됩니다.
 
 ### Hidden Imports / Data Collection
 - 빌드 스크립트에서 `--collect-all=qt_material` 옵션을 사용해 테마/리소스를 수집합니다.
@@ -90,16 +86,15 @@ python build.py --clean-only
 ### 디렉토리 구조
 ```
 dist/
-├── EDR-Scanner.exe                 # 메인 실행 파일
-├── README.md                       # 사용 설명서 (복사됨)
-├── .env.example                    # 환경 변수 예제 (복사됨)
+├── EDR-Scanner.exe                 # 메인 실행 파일                   
 └── EDR-Scanner_Portable/           # 포터블 패키지 (--portable 옵션)
     ├── EDR-Scanner.exe
     ├── config/
-    │   └── config.yaml
     ├── README.md
+    ├── rules/
+    ├── ui/
     ├── .env.example
-    └── 사용설명서.txt
+    └── (.env)                      # 존재할 경우 복사
 ```
 
 ### 파일 크기
@@ -136,7 +131,7 @@ python build.py --portable
 
 #### 1. 모듈 import 오류
 **증상**: 실행 시 "ModuleNotFoundError" 발생
-**해결**: `build.py`의 `hidden_imports`에 누락된 모듈 추가
+**해결**: 자동 수집이 되지 않을 경우 `EXCLUDE_DIRS`/`EXCLUDE_FILES` 설정을 확인하여 리소스가 제외되지 않았는지 점검
 
 #### 2. 데이터 파일 없음 오류
 **증상**: 실행 시 UI 파일 또는 설정 파일을 찾을 수 없음
