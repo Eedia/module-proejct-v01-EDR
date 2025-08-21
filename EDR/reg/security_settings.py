@@ -54,28 +54,16 @@ class SecuritySettingsAnalyzer:
 
             # Windows Update 관련 설정
             'update_settings': ('HKLM', r'SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update'),
-            'wu_policy':   ('HKLM', r'SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate'),
-            'wu_policy_au':('HKLM', r'SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU'),
-
-            # Windows 메신저 차단
-            'messenger_policy': ('HKLM', r'SOFTWARE\Policies\Microsoft\Messenger\Client'),
 
             # Recovery Console
             'recovery_console_a': ('HKLM', r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Setup\RecoveryConsole'),
-            'recovery_console_b': ('HKLM', r'SOFTWARE\Microsoft\WindowsNT\CurrentVersion\Setup\RecoveryConsole'),  # 구형
 
             # IE 캐시
             'ie_cache_persistent': ('HKCU', r'SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Cache'),
 
-            
-            # PowerShell 로깅/실행정책
-            'ps_scriptblock':   ('HKLM', r'SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging'),
-            'ps_modulelog':     ('HKLM', r'SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging'),
-            'ps_transcription': ('HKLM', r'SOFTWARE\Policies\Microsoft\Windows\PowerShell\Transcription'),
             'ps_execpolicy':    ('HKLM', r'SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell'),
 
             # 이름해석/인증
-            'dnsclient_policy': ('HKLM', r'SOFTWARE\Policies\Microsoft\Windows NT\DNSClient'),
             'wdigest': ('HKLM', r'SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest'),
             'lsa':     ('HKLM', r'SYSTEM\CurrentControlSet\Control\Lsa'),
         }
