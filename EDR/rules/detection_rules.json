@@ -648,7 +648,7 @@
       "tactics": ["defense_evasion"], "techniques": ["T1112"],
       "data_source": "registry",
       "registry_keys": ["HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-Tcp"],
-      "conditions": { "value_name_contains": ["MinEncryptionLevel"], "value_contains": ["0","1","2"], "logic": "OR" },
+      "conditions": { "value_name_contains": ["MinEncryptionLevel"], "value_contains": ["0","1"], "logic": "OR" },
       "weight": 0.8, "enabled": true
     },
     {
