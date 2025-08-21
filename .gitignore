@@ -3,3 +3,8 @@ output
 */logs/wevtutil
 logs/wevtutil
 .venv
+*.pyc
+*.bat
+build.py
+backup_original_code/
+backup_rules/
