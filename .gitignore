@@ -5,6 +5,12 @@ logs/wevtutil
 .venv
 *.pyc
 *.bat
+<<<<<<< HEAD
 build.py
 backup_original_code/
 backup_rules/
+=======
+ build.py
+/backup_original_code/
+/backup_rules/
+>>>>>>> ea1fe907727f51743f927e111d0d7df1f6f805e0

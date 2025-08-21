@@ -212,8 +212,10 @@ def main():
                     if issue.get('severity', '').lower() in ['high', 'critical']:
                         high_risk_count += 1
                 
-               
+           
                 total_checks = len(rule_findings) + len(ai_issues)
+
+
                 safe_count = max(total_checks - high_risk_count, 0)
 
                 # UI 라벨 업데이트
@@ -248,7 +250,7 @@ def main():
                 logger.info(
                     f"최근 점검 결과 업데이트: 안전 {safe_count}건, 취약 {high_risk_count}건, 총 {total_checks}건"
                 )
-
+                
             except Exception as e:
                 logger.error(f"최근 점검 결과 업데이트 실패: {e}") 
 
