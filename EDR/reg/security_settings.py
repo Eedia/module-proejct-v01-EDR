@@ -54,11 +54,16 @@ class SecuritySettingsAnalyzer:
 
             # Windows Update 관련 설정
             'update_settings': ('HKLM', r'SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update'),
+
+            # Recovery Console
+            'recovery_console_a': ('HKLM', r'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Setup\RecoveryConsole'),
+
             # IE 캐시
             'ie_cache_persistent': ('HKCU', r'SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Cache'),
 
             'ps_execpolicy':    ('HKLM', r'SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell'),
 
+            # 이름해석/인증
             'wdigest': ('HKLM', r'SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest'),
             'lsa':     ('HKLM', r'SYSTEM\CurrentControlSet\Control\Lsa'),
         }
