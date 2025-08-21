@@ -8,3 +8,4 @@ logs/wevtutil
 build.py
 backup_original_code/
 backup_rules/
+requirements_test.txt
